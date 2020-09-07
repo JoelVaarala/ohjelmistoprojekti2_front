@@ -1,0 +1,12 @@
+{
+  "name": "Ohpro2Front",
+  "displayName": "Ohpro2Front",
+  "expo": {
+    "name": "Ohpro2Front",
+    "slug": "Ohpro2Front",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
