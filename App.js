@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import SwipeCards from './SwipeCards.js'
+import SwipeCards from './components/SwipeCards.js'
 
 export default function App() {
   return (
