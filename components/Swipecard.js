@@ -2,7 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function StartingScreen() {
+//tämä on yksittäinen krotti johon on bindattu  tapahtuman/eventin tieto. Swipeämällä tämän oikealle/vasemmalle backkiin lähtee tieto päätöksestaä
+export default function Swipecard() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>

@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+
+//Tämä on chatti mätsin kanssa
 export default function Chat() {
   return (
     <View style={styles.container}>

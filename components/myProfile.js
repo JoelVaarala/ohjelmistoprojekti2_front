@@ -2,7 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function StartingScreen() {
+//Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
+export default function MyProfile() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
