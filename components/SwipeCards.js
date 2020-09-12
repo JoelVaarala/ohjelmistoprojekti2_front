@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import SwipeCards from 'react-native-swipe-cards';
+
+
 
 class Card extends React.Component {
   constructor(props) {
     super(props);
   }
 
+
   render() {
     return (
-      <View style={[styles.card, {backgroundColor: this.props.backgroundColor}]}>
-        <Text>{this.props.text}</Text>
+      <View style={{ flex: 1 }}>
+        <View style={[styles.card, { backgroundColor: this.props.backgroundColor }]}>
+
+          <TouchableOpacity
+            style={styles.button}>
+            <Image source={{ uri: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg' }} style={{ width: 400, height: 400 }} />
+          </TouchableOpacity>
+
+          <View style={{ position: 'absolute', top: 0, left: 0, right: 150, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start' }}>
+            <Text style={{ fontSize: 40, color: 'white'}}>Nimi Ikä</Text>
+            <Text style={{ fontSize: 20, color: 'white' }}>Paikalla viimeksi</Text>
+            <Text style={{ fontSize: 20, color: 'white' }}>3 km</Text>
+          </View>
+        </View>
       </View>
     )
   }
@@ -30,30 +45,30 @@ class NoMoreCards extends Component {
   }
 }
 
- // korttien data on tässä
+// korttien data on tässä
 export default class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       cards: [
-        {text: 'Tomato', backgroundColor: 'red'},
-        {text: 'Aubergine', backgroundColor: 'purple'},
-        {text: 'Courgette', backgroundColor: 'green'},
-        {text: 'Blueberry', backgroundColor: 'blue'},
-        {text: 'Umm...', backgroundColor: 'cyan'},
-        {text: 'orange', backgroundColor: 'orange'},
+        { text: 'Tomato', backgroundColor: 'red' },
+        { text: 'Aubergine', backgroundColor: 'purple' },
+        { text: 'Courgette', backgroundColor: 'green' },
+        { text: 'Blueberry', backgroundColor: 'blue' },
+        { text: 'Umm...', backgroundColor: 'cyan' },
+        { text: 'orange', backgroundColor: 'orange' },
       ]
     };
   }
 
   // konsoliin tieto mihin swipettiin
-  handleYup (card) {
+  handleYup(card) {
     console.log(`Yup for ${card.text}`)
   }
-  handleNope (card) {
+  handleNope(card) {
     console.log(`Nope for ${card.text}`)
   }
-  handleMaybe (card) {
+  handleMaybe(card) {
     console.log(`Maybe for ${card.text}`)
   }
   render() {
