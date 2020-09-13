@@ -6,6 +6,7 @@ import MyProfile from './components/MyProfile'
 import SwipingPage from './components/SwipingPage'
 import Matches from './components/Matches'
 import Chat from './components/Chat'
+import FirebaseSaato from './components/FirebaseSaato'
 
 export default function App() {
   return (
