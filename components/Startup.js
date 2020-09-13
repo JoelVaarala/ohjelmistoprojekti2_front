@@ -93,6 +93,11 @@ export default function Startup(props) {
                 containerStyle={{ paddingHorizontal: 10 }}
             />
             <Text>{msg}</Text>
+
+            <Button
+                onPress={login} title="REKISTERÖIDY"
+                containerStyle={{ paddingHorizontal: 10 }}
+            />
         </View>
     );
 }
