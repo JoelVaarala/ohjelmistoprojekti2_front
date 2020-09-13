@@ -9,17 +9,19 @@ class Card extends React.Component {
     super(props);
   }
 
-
+//13092020 TODO lisää manuaaliset napit kyllä/eille
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 , justifyContent : 'center'}}>
         <View style={[styles.card, { backgroundColor: this.props.backgroundColor }]}>
 
           <TouchableOpacity
             style={styles.button}>
-            <Image source={{ uri: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg' }} style={{ width: 300, height: 300 }} />
+            <Image source={{ uri: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg' }} style={{ width:350, height: 700 , alignItems : 'stretch'}} />
           </TouchableOpacity>
 
+
+          
           <View style={{ position: 'absolute', top: 0, left: 0, right: 150, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start' }}>
             <Text style={{ fontSize: 40, color: 'white'}}>Nimi Ikä</Text>
             <Text style={{ fontSize: 20, color: 'white' }}>Paikalla viimeksi</Text>
