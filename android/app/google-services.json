@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "670372768079",
+    "firebase_url": "https://ohpro2-f30e5.firebaseio.com",
+    "project_id": "ohpro2-f30e5",
+    "storage_bucket": "ohpro2-f30e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670372768079:android:b62172ada7a7d0ab67bd3a",
+        "android_client_info": {
+          "package_name": "com.ohpro2front"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "670372768079-cq4vben79a96dj5uf0b3mmru2ofteou1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxLirCxt_GMVJ3BMFgH62riDAwI90TJ3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670372768079-cq4vben79a96dj5uf0b3mmru2ofteou1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
