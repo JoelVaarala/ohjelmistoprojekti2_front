@@ -25,9 +25,18 @@ export default function App() {
 
   }
 
-  
+  //Substacki tällä tai sitten luodaa vaa erillsiet sivut joissa on takaisin nappula että toi toolbari piilottuu
+  const ProfiiliSettingsStack = () => {
+    return (
+      <ListStack.Navigator>
+        <ListStack.Screen name="Profile" component={MyProfile}/>
+        {/* <ListStack.Screen name="Asetukset" component={}/>
+        <ListStack.Screen name="Lisää kuva" component={}/>
+        <ListStack.Screen name="Profiili" component={}/> */}
+      </ListStack.Navigator>
+    );
+  }
 
-  
   return (
     // <View> 
     //   <Text asd></Text> 
@@ -42,7 +51,7 @@ export default function App() {
 
             <Tab.Screen name="Swipes" component={SwipeCards} />
             <Tab.Screen name="Matches" component={Chat} />
-            <Tab.Screen name="Profile" component={MyProfile} />
+            <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
 
             {/* <Tab.Screen name="Messages" component={Chat} />
             <Tab.Screen name="Profiili" component={MyProfile} /> */}
