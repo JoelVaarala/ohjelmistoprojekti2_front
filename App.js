@@ -12,10 +12,12 @@ import Startup from './components/Startup'
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 
 
-const Tab = createBottomTabNavigator();
+
+const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 export default function App() {
@@ -47,7 +49,13 @@ export default function App() {
           <Stack.Screen name="Login" >{() => <Startup asetaLogin={asetaLogin} />}</Stack.Screen>
         </Stack.Navigator>
       ) : (
-          <Tab.Navigator>
+          <Tab.Navigator
+          tabBarOptions={{
+            labelStyle: { fontSize: 12 },
+            tabStyle: { width: 100 },
+            style: { backgroundColor: 'powderblue', paddingTop : 30 },
+          }}
+          >
 
             <Tab.Screen name="Swipes" component={SwipeCards} />
             <Tab.Screen name="Matches" component={Chat} />
