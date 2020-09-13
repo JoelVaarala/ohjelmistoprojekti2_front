@@ -30,6 +30,7 @@ export default function MyProfile() {
         <View style={{ justifyContent: 'flex-end' }}>
           <Icon reverse name='image' />
           <Text>Lisää kuva</Text>
+          
         </View>
         <View>
           <Icon reverse name='edit' />
