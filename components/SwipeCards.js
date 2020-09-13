@@ -17,7 +17,7 @@ class Card extends React.Component {
 
           <TouchableOpacity
             style={styles.button}>
-            <Image source={{ uri: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg' }} style={{ width: 400, height: 400 }} />
+            <Image source={{ uri: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg' }} style={{ width: 300, height: 300 }} />
           </TouchableOpacity>
 
           <View style={{ position: 'absolute', top: 0, left: 0, right: 150, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start' }}>
@@ -77,9 +77,11 @@ export default class extends React.Component {
     return (
       <SwipeCards
         cards={this.state.cards}
+        // loop={false}
+        //cardRemoved={this.cardRemoved.bind(this)}
+        useNativeDriver = {true}
         renderCard={(cardData) => <Card {...cardData} />}
         renderNoMoreCards={() => <NoMoreCards />}
-
         handleYup={this.handleYup}
         handleNope={this.handleNope}
         handleMaybe={this.handleMaybe}
