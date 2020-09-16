@@ -29,6 +29,7 @@ export default function Startup(props) {
       auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
         // Send token to your backend via HTTPS
         // ...
+        tallennaToken(idToken); //tallennetaan asyncciin, voitas kyl tallentaa vaikka globaliin myös? 
       }).catch(function(error) {
         // Handle error
       });
