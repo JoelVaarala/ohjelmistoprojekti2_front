@@ -21,6 +21,21 @@ export default function Startup(props) {
     }, []);
 
 
+    //https://firebase.google.com/docs/auth/admin/verify-id-tokens#web
+    //hakee käyttäjän webbtokenin jota tarvitaan kun lähetetään viestejä, swipejä tms backendpalvelimelle.
+    function testausta()
+    {
+
+      auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+        // Send token to your backend via HTTPS
+        // ...
+      }).catch(function(error) {
+        // Handle error
+      });
+    }
+
+
+
     const yritaKirjautua = async () => {
         try {
           let value = await AsyncStorage.getItem('kirjautumisTiedot');
