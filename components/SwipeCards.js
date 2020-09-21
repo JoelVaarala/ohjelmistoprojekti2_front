@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { color } from "react-native-reanimated";
 import SwipeCards from "react-native-swipe-cards";
+import { Icon, Avatar } from "react-native-elements";
 
 class Card extends React.Component {
   constructor(props) {
@@ -24,6 +25,13 @@ class Card extends React.Component {
               <Text style={{ fontSize: 12, color: "white" }}>Sijainti/Etäisyys</Text>
             </View>
           </TouchableOpacity>
+        </View>
+        <View style={{ paddingTop: 50 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+            <Icon reverse name="edit" />
+            <Icon reverse name="close" />
+            <Icon reverse name="star" />
+          </View>
         </View>
       </View>
     );
