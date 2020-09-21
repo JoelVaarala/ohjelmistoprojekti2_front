@@ -10,9 +10,6 @@ export default function MyProfile() {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1 }}>
-        <Text>TÄNNE NAVI</Text>
-      </View>
       <View style={{ alignItems: "center" }}>
         <Text value={{ count }}>{count}</Text>
 
@@ -23,15 +20,15 @@ export default function MyProfile() {
 
       <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
         <View>
-          <Icon reverse name="settings" />
+          <Icon size={30} reverse name="settings" />
           <Text>Asetukset</Text>
         </View>
         <View style={{ justifyContent: "flex-end" }}>
-          <Icon reverse name="image" />
+          <Icon size={30} reverse name="image" />
           <Text>Lisää kuva</Text>
         </View>
         <View>
-          <Icon reverse name="edit" />
+          <Icon size={30} reverse name="edit" />
           <Text>Omat tiedot</Text>
         </View>
       </View>
