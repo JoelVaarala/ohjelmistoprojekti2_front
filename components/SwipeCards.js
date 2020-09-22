@@ -9,7 +9,6 @@ class Card extends React.Component {
     super(props);
   }
 
-
   render() {
     return (
       <View style={{ flex: 1 }}>
