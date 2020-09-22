@@ -1,35 +1,41 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import SwipeCards from 'react-native-swipe-cards';
-
-
+import React, { Component } from "react";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { color } from "react-native-reanimated";
+import SwipeCards from "react-native-swipe-cards";
+import { Icon, Avatar } from "react-native-elements";
 
 class Card extends React.Component {
   constructor(props) {
     super(props);
   }
 
-//13092020 TODO lisää manuaaliset napit kyllä/eille
+
   render() {
     return (
-      <View style={{ flex: 1 , justifyContent : 'center'}}>
-        <View style={[styles.card, { backgroundColor: this.props.backgroundColor }]}>
-
-          <TouchableOpacity
-            style={styles.button}>
-            <Image source={{ uri: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg' }} style={{ width:350, height: 700 , alignItems : 'stretch'}} />
+      <View style={{ flex: 1 }}>
+        <View style={[{ backgroundColor: this.props.backgroundColor }]}>
+          <TouchableOpacity style={styles.button}>
+            <Image source={{ uri: "https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg" }} style={styles.card} />
+            <View style={{ position: "absolute", top: 0, left: 15, right: 150, bottom: -20, justifyContent: "flex-end", alignItems: "flex-start" }}>
+              <Image
+                source={require("../pictures/darkish.png")}
+                style={{ height: 400, width: 350, bottom: -67, right: 15, opacity: 0.9, borderRadius: 5 }}
+              />
+              <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>Mikael MooMoo, 35</Text>
+              <Text style={{ fontSize: 12, color: "white" }}>Paikalla viimeksi</Text>
+              <Text style={{ fontSize: 12, color: "white" }}>Sijainti/Etäisyys</Text>
+            </View>
           </TouchableOpacity>
-
-
-          
-          <View style={{ position: 'absolute', top: 0, left: 0, right: 150, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start' }}>
-            <Text style={{ fontSize: 40, color: 'white'}}>Nimi Ikä</Text>
-            <Text style={{ fontSize: 20, color: 'white' }}>Paikalla viimeksi</Text>
-            <Text style={{ fontSize: 20, color: 'white' }}>3 km</Text>
+        </View>
+        <View style={{ paddingTop: 50 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+            <Icon reverse name="edit" />
+            <Icon reverse name="close" />
+            <Icon reverse name="star" />
           </View>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -43,7 +49,7 @@ class NoMoreCards extends Component {
       <View>
         <Text style={styles.noMoreCardsText}>No more cards</Text>
       </View>
-    )
+    );
   }
 }
 
@@ -53,25 +59,25 @@ export default class extends React.Component {
     super(props);
     this.state = {
       cards: [
-        { text: 'Tomato', backgroundColor: 'red' },
-        { text: 'Aubergine', backgroundColor: 'purple' },
-        { text: 'Courgette', backgroundColor: 'green' },
-        { text: 'Blueberry', backgroundColor: 'blue' },
-        { text: 'Umm...', backgroundColor: 'cyan' },
-        { text: 'orange', backgroundColor: 'orange' },
-      ]
+        { text: "Tomato" },
+        { text: "Aubergine", backgroundColor: "purple" },
+        { text: "Courgette", backgroundColor: "green" },
+        { text: "Blueberry", backgroundColor: "blue" },
+        { text: "Umm...", backgroundColor: "cyan" },
+        { text: "orange", backgroundColor: "orange" },
+      ],
     };
   }
 
   // konsoliin tieto mihin swipettiin
   handleYup(card) {
-    console.log(`Yup for ${card.text}`)
+    console.log(`Yup for ${card.text}`);
   }
   handleNope(card) {
-    console.log(`Nope for ${card.text}`)
+    console.log(`Nope for ${card.text}`);
   }
   handleMaybe(card) {
-    console.log(`Maybe for ${card.text}`)
+    console.log(`Maybe for ${card.text}`);
   }
   render() {
     // If you want a stack of cards instead of one-per-one view, activate stack mode
@@ -81,7 +87,7 @@ export default class extends React.Component {
         cards={this.state.cards}
         // loop={false}
         //cardRemoved={this.cardRemoved.bind(this)}
-        useNativeDriver = {true}
+        useNativeDriver={true}
         renderCard={(cardData) => <Card {...cardData} />}
         renderNoMoreCards={() => <NoMoreCards />}
         handleYup={this.handleYup}
@@ -89,18 +95,23 @@ export default class extends React.Component {
         handleMaybe={this.handleMaybe}
         hasMaybeAction
       />
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   card: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 300,
-    height: 300,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 350,
+    height: 445,
+    resizeMode: "cover",
+    borderWidth: 2,
+    borderColor: "black",
+    borderRadius: 5,
+    top: 30,
   },
   noMoreCardsText: {
     fontSize: 22,
-  }
-})
+  },
+});
