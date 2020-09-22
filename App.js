@@ -51,7 +51,7 @@ export default function App() {
             style: { backgroundColor: "powderblue", paddingTop: 30 },
           }}
         >
-          <Tab.Screen name="Swipes" component={SwipeCards} />
+          <Tab.Screen name="Swipes" component={SwipingPage} />
           <Tab.Screen name="Matches" component={Chat} />
           <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
 

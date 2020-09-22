@@ -13,30 +13,27 @@ class Card extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <View style={[{ backgroundColor: this.props.backgroundColor }]}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity>
             <Image source={{ uri: "https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg" }} style={styles.card} />
-            <View style={{ position: "absolute", top: 0, left: 15, right: 150, bottom: -20, justifyContent: "flex-end", alignItems: "flex-start" }}>
+            <View style={{ position: "absolute", top: 0, left: 15, right: 150, justifyContent: "flex-end", alignItems: "flex-start" }}>
               <Image
                 source={require("../pictures/darkish.png")}
-                style={{ height: 400, width: 350, bottom: -67, right: 15, opacity: 0.9, borderRadius: 5 }}
+                style={{ height: 400, width: 350, right: 15, top: 45, opacity: 0.9, borderRadius: 5 }}
               />
-              <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>Mikael MooMoo, 35</Text>
-              <Text style={{ fontSize: 12, color: "white" }}>Paikalla viimeksi</Text>
-              <Text style={{ fontSize: 12, color: "white" }}>Sijainti/Etäisyys</Text>
+              <View style={{ bottom: 25 }}>
+                <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>Mikael MooMoo, 35</Text>
+                <Text style={{ fontSize: 12, color: "white" }}>Paikalla viimeksi</Text>
+                <Text style={{ fontSize: 12, color: "white" }}>Sijainti/Etäisyys</Text>
+              </View>
             </View>
           </TouchableOpacity>
-        </View>
-        <View style={{ paddingTop: 50 }}>
-          <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-            <Icon reverse name="edit" />
-            <Icon reverse name="close" />
-            <Icon reverse name="star" />
-          </View>
         </View>
       </View>
     );
   }
 }
+
+<Image source={require("../pictures/darkish.png")} style={{ height: 400, width: 350, bottom: -40, right: 15, opacity: 0.9, borderRadius: 5 }} />;
 
 class NoMoreCards extends Component {
   constructor(props) {
@@ -108,7 +105,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     borderRadius: 5,
-    top: 30,
   },
   noMoreCardsText: {
     fontSize: 22,
