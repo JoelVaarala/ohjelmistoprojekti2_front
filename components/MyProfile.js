@@ -6,10 +6,12 @@ import { Icon, Avatar } from "react-native-elements";
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function MyProfile() {
   const [count, setCount] = React.useState("");
+
   const onPress = () => setCount("KUVA AVAUTUU");
 
   return (
     <View style={styles.container}>
+    
       <View style={{ alignItems: "center" }}>
         <Text value={{ count }}>{count}</Text>
 
