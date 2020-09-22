@@ -21,6 +21,22 @@ export default function Startup(props) {
     }, []);
 
 
+    //https://firebase.google.com/docs/auth/admin/verify-id-tokens#web
+    //hakee käyttäjän webbtokenin jota tarvitaan kun lähetetään viestejä, swipejä tms backendpalvelimelle.
+    function testausta()
+    {
+
+      auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+        // Send token to your backend via HTTPS
+        // ...
+        tallennaToken(idToken); //tallennetaan asyncciin, voitas kyl tallentaa vaikka globaliin myös? 
+      }).catch(function(error) {
+        // Handle error
+      });
+    }
+
+
+
     const yritaKirjautua = async () => {
         try {
           let value = await AsyncStorage.getItem('kirjautumisTiedot');
@@ -93,6 +109,11 @@ export default function Startup(props) {
                 containerStyle={{ paddingHorizontal: 10 }}
             />
             <Text>{msg}</Text>
+
+            <Button
+                onPress={login} title="REKISTERÖIDY"
+                containerStyle={{ paddingHorizontal: 10 }}
+            />
         </View>
     );
 }
