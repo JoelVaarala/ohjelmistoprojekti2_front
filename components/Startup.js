@@ -3,7 +3,22 @@ import React from 'react';
 import { View, AsyncStorage, Text } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
+//import firebase from
 import './Globaalit';
+import firebase from 'react-native-firebase';
+import firestore from '@react-native-firebase/firestore';
+// import  'firebaseconfig';
+//import { firebaseConfig } from 'firebase-functions';
+var firebaseConfig = {
+  apiKey: "AIzaSyCSaMZ5QC9BM8UGMssDrasyfVz7ZQuJ9jk",
+  authDomain: "ohpro2-f30e5.firebaseapp.com",
+  databaseURL: "https://ohpro2-f30e5.firebaseio.com",
+  projectId: "ohpro2-f30e5",
+  storageBucket: "ohpro2-f30e5.appspot.com",
+  messagingSenderId: "670372768079",
+  appId: "1:670372768079:web:1ed4eb81ee4c5e6b67bd3a",
+  measurementId: "G-D5W1V0RGK8"
+};
 
 
 export default function Startup(props) {
@@ -12,12 +27,18 @@ export default function Startup(props) {
     const [salasana, setSalasana] = React.useState('secretPassword');
     const [msg, setMsg] = React.useState('');
     const [isRegisterScreen, setIsRegisterScreen] = React.useState(true);
-  const [vaihto, setVaihto] = React.useState(true);
+    const [vaihto, setVaihto] = React.useState(true);
 
+   
     global.fbtoken ="";
 
     React.useEffect(() => {
-       yritaKirjautua();
+      console.log("use effect")
+      //firebase.initializeApp()
+      firebase.initializeApp(firebaseConfig);
+      console.log(firebase.config.toString())
+       //yritaKirjautua();
+
     }, []);
 
 
@@ -63,6 +84,7 @@ export default function Startup(props) {
         .then(() => {
           console.log('User account created & signed in!');
         })
+        
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
             console.log('That email address is already in use!');
@@ -86,6 +108,19 @@ export default function Startup(props) {
             console.log('Async error: ' + error);
             }
     }
+
+    const blabla = async () => {
+      try {
+        const t_kayttajat = await firestore().collection('messages').doc('8vrpX2NsjbtVuATcsiqC').get();   
+        console.log(t_kayttajat);
+        //console.log('asyncista tullut:' + value);
+
+      } catch (error) {
+        console.log(error);
+       
+      }
+    }
+  
 
 
     return (
@@ -111,7 +146,7 @@ export default function Startup(props) {
             <Text>{msg}</Text>
 
             <Button
-                onPress={login} title="REKISTERÖIDY"
+                onPress={blabla} title="REKISTERÖIDY"
                 containerStyle={{ paddingHorizontal: 10 }}
             />
         </View>
