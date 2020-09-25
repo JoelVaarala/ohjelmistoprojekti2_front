@@ -18,7 +18,7 @@ const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 export default function App() {
-  const [vaihto, setVaihto] = React.useState(false);
+  const [vaihto, setVaihto] = React.useState(true);
 
   const asetaLogin = () => {};
 

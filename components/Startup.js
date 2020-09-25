@@ -3,7 +3,9 @@ import React from 'react';
 import { View, AsyncStorage, Text } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
+//import firebase from
 import './Globaalit';
+import firebase from 'react-native-firebase';
 
 
 export default function Startup(props) {
@@ -17,7 +19,10 @@ export default function Startup(props) {
     global.fbtoken ="";
 
     React.useEffect(() => {
+      console.log("use effect")
+      firebase.initializeApp();
        yritaKirjautua();
+
     }, []);
 
 
