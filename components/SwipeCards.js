@@ -18,9 +18,9 @@ class Card extends React.Component {
             <View style={{ position: "absolute", top: 0, left: 15, right: 150, justifyContent: "flex-end", alignItems: "flex-start" }}>
               <Image
                 source={require("../pictures/darkish.png")}
-                style={{ height: 400, width: 350, right: 15, top: 45, opacity: 0.9, borderRadius: 5 }}
+                style={{ height: 400, width: 350, right: 15, top: 25, opacity: 0.9, borderRadius: 5 }}
               />
-              <View style={{ bottom: 25 }}>
+              <View style={{ bottom: 45 }}>
                 <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>Mikael MooMoo, 35</Text>
                 <Text style={{ fontSize: 12, color: "white" }}>Paikalla viimeksi</Text>
                 <Text style={{ fontSize: 12, color: "white" }}>Sijainti/Etäisyys</Text>
@@ -42,8 +42,13 @@ class NoMoreCards extends Component {
 
   render() {
     return (
-      <View>
-        <Text style={styles.noMoreCardsText}>No more cards</Text>
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <View>
+          <Text style={styles.noMoreCardsText}>No more cards</Text>
+        </View>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Icon reverse name="refresh" />
+        </View>
       </View>
     );
   }
@@ -105,6 +110,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     borderRadius: 5,
+    bottom: 20,
   },
   noMoreCardsText: {
     fontSize: 22,
