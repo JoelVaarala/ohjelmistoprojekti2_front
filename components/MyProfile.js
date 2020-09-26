@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import { Icon, Avatar } from "react-native-elements";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
@@ -11,37 +11,33 @@ export default function MyProfile() {
 
   return (
     <View style={styles.container}>
-    
       <View style={{ alignItems: "center" }}>
         <Text value={{ count }}>{count}</Text>
 
         <Avatar size="xlarge" rounded source={{ uri: "https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg" }} />
 
-        <Text>Nimi, ikä</Text>
+        <Text style={{ fontSize: 20, top: 5 }}>Nimi, ikä</Text>
       </View>
-
-      <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
+      <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around", top: 20 }}>
         <View>
-          <Icon size={30} reverse name="settings" />
+          <Icon size={28} reverse name="settings" />
           <Text>Asetukset</Text>
         </View>
-        <View style={{ justifyContent: "flex-end" }}>
-          <Icon size={30} reverse name="image" />
+        <View>
+          <Icon size={28} reverse name="image" />
           <Text>Lisää kuva</Text>
         </View>
         <View>
-          <Icon size={30} reverse name="edit" />
+          <Icon size={28} reverse name="edit" />
           <Text>Omat tiedot</Text>
         </View>
       </View>
-      <View style={{ flex: 2 }}></View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
     flex: 1,
     backgroundColor: "#fff",
   },

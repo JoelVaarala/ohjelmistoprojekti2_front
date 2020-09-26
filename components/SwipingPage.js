@@ -12,13 +12,13 @@ export default function SwipingPage() {
       </View>
       <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
         <View style={styles.icons}>
-          <Icon reverse name="cancel" />
+          <Icon size={27} reverse name="cancel" />
         </View>
         <View style={styles.icons}>
-          <Icon reverse name="info" />
+          <Icon size={27} reverse name="info" />
         </View>
         <View style={styles.icons}>
-          <Icon reverse name="favorite" />
+          <Icon size={27} reverse name="favorite" />
         </View>
       </View>
     </View>
@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
   icons: {
     paddingLeft: 20,
     paddingRight: 20,
-    paddingBottom: 10,
+    paddingBottom: 20,
   },
 });
