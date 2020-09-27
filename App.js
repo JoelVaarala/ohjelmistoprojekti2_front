@@ -53,7 +53,9 @@ export default function App() {
           }}
         >
           <Tab.Screen name="Swipes" component={SwipingPage} />
-          <Tab.Screen name="Matches" component={Chat} />
+          <Tab.Screen name="Chat" component={Chat} />
+          <Tab.Screen name="Matches" component={Matches} />
+
           <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
           <Tab.Screen name="Login" component={Startup} />
 

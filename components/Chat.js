@@ -10,7 +10,7 @@ import firebase from 'react-native-firebase';
 
 
 //Tämä on chatti mätsin kanssa
-export default function Chat() {
+export default function Chat(props) {
 
 // States
 const [messages, setMessages] = useState([]);
@@ -19,21 +19,28 @@ const [chatters, setChatters] = useState([]);
 const post = [];
 
 
+//Tämä on heitetty nyt App.js , kutsutaan kerran ja vain täältä.
 //firebase.app();
-React.useEffect(() => {
-  console.log("use effect")
-  //firebase.initializeApp()
-  firebase.initializeApp(global.firebaseConfig);
-  console.log(firebase.config.toString())
-   //yritaKirjautua();
+// React.useEffect(() => {
+//   console.log("use effect")
+//   //firebase.initializeApp()
+//   firebase.initializeApp(global.firebaseConfig);
+//   console.log(firebase.config.toString())
+//    //yritaKirjautua();
 
-}, []);
+// }, []);
 
+
+  
+useEffect(() => {
+  getConversationdataFromDoc()
+}, []);  
 
 // chat user id's of specific doc
 const getChatterUID = async () => {
   try{
     // this returns whole result of 'doc'
+    //vaihdetaan global.matches propsiin 
     const get_users_from_doc = await firestore().collection(global.matches).doc(global.keskusteluDOC).get();
     setChatters(get_users_from_doc.data().users)
   }
@@ -47,13 +54,14 @@ const getConversationdataFromDoc = async () => {
   try {
 
     // calls for getChatters function to resolve chatter id's
-    getChatterUID();
-    console.log(chatters)
+    //Näitä ei kai nyt tarvita
+   // getChatterUID();
+    //console.log(chatters)
 
     // source firestore
     firestore()
     // specify route to desired collection / document__________________ this orders fetched content according timestamp  (ordered by id, default) 
-    .collection('messages').doc(global.keskusteluDOC).collection('messages').orderBy('timestamp') 
+    .collection(global.matches).doc(global.keskusteluDOC).collection('messages').orderBy('timestamp') 
     .get()
     .then(querySnapshot => {
       // querySnapshot = result (messages collection)
@@ -71,8 +79,9 @@ const getConversationdataFromDoc = async () => {
         console.log('message : ',  documentSnapshot.data().message);
       });
 
-      // Chat näkyviin a'la Jaani
+      // Chat näkyviin a'la Jaani. Nyt all ja ylläoleva tekee about samat, poistetaan toinen seuraavassa spintissä-
       const o = []
+      //reverse koska giftedchatin dokumentaatiota tutkimalla siellä on defaulttina reverse, ja sitä parametriä ei nyt käytetä niin tässä tehdään oma reverse. "Korjataan" seuraavassa sprintissä
       post.reverse();
       post.forEach((element) => {
         console.log(element.message)
@@ -92,7 +101,7 @@ const getConversationdataFromDoc = async () => {
       setMessages(o)
 
       // useless for now
-      setPosti(post)
+      // setPosti(post)
     });
 
   } catch (error) {
@@ -100,26 +109,8 @@ const getConversationdataFromDoc = async () => {
    
   }
 }
-  
-  useEffect(() => {
-    // ln: 48
-    getConversationdataFromDoc()
-                
-    /*setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ])*/
-  }, []);  
 
-  
+
   // invert shit chatin kääntelyyn mahd.
   const onSend = useCallback((messages = []) => {
     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
