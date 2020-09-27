@@ -13,6 +13,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import firebase from 'react-native-firebase';
+
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -23,17 +25,42 @@ export default function App() {
 
   const asetaLogin = () => {};
 
+  //Tämä hoitaa kirjautumisen ja initializen appii, kutsutaan vain kerran ja tässä.
+  React.useEffect(() => {
+    console.log("use effect")
+    //firebase.initializeApp()
+    firebase.initializeApp(global.firebaseConfig);
+    //console.log(firebase.config.toString())
+     //yritaKirjautua();
+  
+  }, []);
+
+
+
   //Substacki tällä tai sitten luodaa vaa erillsiet sivut joissa on takaisin nappula että toi toolbari piilottuu
   const ProfiiliSettingsStack = () => {
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Profile" component={MyProfile} />
-        {/* <ListStack.Screen name="Asetukset" component={}/>
-        <ListStack.Screen name="Lisää kuva" component={}/>
+        {/* <ListStack.Screen name="Chat" component={Chat}/> */}
+        {/* <ListStack.Screen name="Lisää kuva" component={}/>
         <ListStack.Screen name="Profiili" component={}/> */}
       </ListStack.Navigator>
     );
   };
+
+  const MatchStack = () => {
+    return (
+      <ListStack.Navigator>
+        <ListStack.Screen name="Matches" component={Matches} />
+        <ListStack.Screen name="Chat" component={Chat}/>
+        {/* <ListStack.Screen name="Lisää kuva" component={}/>
+        <ListStack.Screen name="Profiili" component={}/> */}
+      </ListStack.Navigator>
+    );
+  };
+
+
 
   return (
     // <View>
@@ -53,7 +80,9 @@ export default function App() {
           }}
         >
           <Tab.Screen name="Swipes" component={SwipingPage} />
-          <Tab.Screen name="Matches" component={Chat} />
+          {/* <Tab.Screen name="Chat" component={Chat} /> */}
+          <Tab.Screen name="Matches" component={MatchStack} />
+
           <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
           <Tab.Screen name="Login" component={Startup} />
 
