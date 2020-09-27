@@ -109,20 +109,6 @@ export default function Startup(props) {
             }
     }
 
-    const blabla = async () => {
-      try {
-        const t_kayttajat = await firestore().collection('messages').doc('8vrpX2NsjbtVuATcsiqC').get();   
-        console.log(t_kayttajat);
-        //console.log('asyncista tullut:' + value);
-
-      } catch (error) {
-        console.log(error);
-       
-      }
-    }
-  
-
-
     return (
         <View>
             <Input
@@ -146,9 +132,9 @@ export default function Startup(props) {
             <Text>{msg}</Text>
 
             <Button
-                onPress={blabla} title="REKISTERÖIDY"
+                onPress={login} title="REKISTERÖIDY"
                 containerStyle={{ paddingHorizontal: 10 }}
-            />
+            />  
         </View>
     );
 }
