@@ -4,7 +4,7 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import Startup from './Startup';
 import firestore from '@react-native-firebase/firestore';
-import firebase from 'react-native-firebase';
+// import firebase from 'react-native-firebase';
 
 
 

@@ -1,13 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { Avatar, ListItem } from 'react-native-elements';
+import { Avatar, ListItem, Overlay } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
-export default function Matches() {
+export default function Matches({ navigation, route }) {
 
   const [myMatches, setMyMatches] = React.useState([]);
   const myUserID = "qREmoPw72NRHB2JA6uBCKJyuWhY2";
+  const [overlay, setOverlay] = React.useState(true);
 
   React.useEffect(() => {
 
@@ -28,8 +29,6 @@ export default function Matches() {
       
       let temparray = [];
       matches.docs.map(doc => {
-        //tarvitaan dokumentin nimi  vielä referenssinä
-        console.log(doc.id)
         let matchname = "";
         doc._data.users.forEach((user) => {
           if (user != myUserID) {
@@ -37,6 +36,7 @@ export default function Matches() {
           }
           
         })
+
         //käyteään namessa UID siihen asti kunnes fetchataan oikea nimi
         //Lisätään myöhemmin  tsekkaamana että onko viestejä, jos on niin 
         //Matchid: dokumentin id
@@ -104,7 +104,12 @@ export default function Matches() {
 
   //Tämän pitäisi myös pistää linkki chatkomponenttiin johon passataan parametrinä keskustelkun id
   const renderItem = ({ item }) => (
-    <ListItem>
+    <ListItem
+    onPress={() => {
+      console.log(item.matchid)
+     navigation.navigate('Chat', { chatti: item.matchid})
+    }}
+    >
       <Avatar source={{ uri: item.avatar_url }} />
     </ListItem>
   );
