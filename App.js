@@ -18,7 +18,8 @@ const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 export default function App() {
-  const [vaihto, setVaihto] = React.useState(true);
+  // true -> false, bypass jolla jättää login pagen välistä
+  const [vaihto, setVaihto] = React.useState(false);
 
   const asetaLogin = () => {};
 
@@ -54,6 +55,7 @@ export default function App() {
           <Tab.Screen name="Swipes" component={SwipingPage} />
           <Tab.Screen name="Matches" component={Chat} />
           <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
+          <Tab.Screen name="Login" component={Startup} />
 
           {/* <Tab.Screen name="Messages" component={Chat} />
             <Tab.Screen name="Profiili" component={MyProfile} /> */}

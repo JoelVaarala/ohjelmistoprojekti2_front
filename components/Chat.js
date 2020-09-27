@@ -1,15 +1,111 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useCallback, useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat'
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
+import Startup from './Startup';
+import firestore from '@react-native-firebase/firestore';
+import firebase from 'react-native-firebase';
+
+
+
 
 //Tämä on chatti mätsin kanssa
 export default function Chat() {
 
-  const [messages, setMessages] = useState([]);
+// States
+const [messages, setMessages] = useState([]);
+const [posti, setPosti] = useState([]);
+const [chatters, setChatters] = useState([]);
+const post = [];
 
+
+//firebase.app();
+React.useEffect(() => {
+  console.log("use effect")
+  //firebase.initializeApp()
+  firebase.initializeApp(global.firebaseConfig);
+  console.log(firebase.config.toString())
+   //yritaKirjautua();
+
+}, []);
+
+
+// chat user id's of specific doc
+const getChatterUID = async () => {
+  try{
+    // this returns whole result of 'doc'
+    const get_users_from_doc = await firestore().collection('messages').doc(global.keskusteluDOC).get();
+    setChatters(get_users_from_doc.data().users)
+  }
+  catch(error){
+      console.log(error)
+  }
+}
+
+// getting data from firebase
+const getConversationdataFromDoc = async () => {
+  try {
+
+    // calls for getChatters function to resolve chatter id's
+    getChatterUID();
+    console.log(chatters)
+
+    // source firestore
+    firestore()
+    // specify route to desired collection / document__________________ this orders fetched content according timestamp  (ordered by id, default) 
+    .collection('messages').doc(global.keskusteluDOC).collection('messages').orderBy('timestamp') 
+    .get()
+    .then(querySnapshot => {
+      // querySnapshot = result (messages collection)
+      console.log('Total messages: ', querySnapshot.size);
+      // forEach (documentSnapshot = individual doc inside the messages collection)
+      querySnapshot.forEach(documentSnapshot => {
+
+        post.push({text : documentSnapshot.data().message, dt: documentSnapshot.data().timestamp, sender: documentSnapshot.data().sender})
+        
+        // logs convo/message id and its content of each result
+        console.log('message ID + content : ', documentSnapshot.id, documentSnapshot.data());
+
+        // logs only the text content <String> of each message
+        // specific fields can be referenced as shown below extracting wanted field after doc.data(). + 'field'
+        console.log('message : ',  documentSnapshot.data().message);
+      });
+
+      // Chat näkyviin a'la Jaani
+      const o = []
+      post.reverse();
+      post.forEach((element) => {
+        console.log(element.message)
+          let sender = 2;
+          if(element.sender == 'qREmoPw72NRHB2JA6uBCKJyuWhY2'){
+            sender = 1;}
+            o.push({
+            _id: o.length+1,
+            text: element.text,
+            createdAt: new Date(element.dt._seconds * 1000),
+            user: {
+              _id: sender,          
+            }
+          })       
+      }) 
+      // asets 'o' array to chat   
+      setMessages(o)
+
+      // useless for now
+      setPosti(post)
+    });
+
+  } catch (error) {
+    console.log(error);
+   
+  }
+}
+  
   useEffect(() => {
-    setMessages([
+    // ln: 48
+    getConversationdataFromDoc()
+                
+    /*setMessages([
       {
         _id: 1,
         text: 'Hello developer',
@@ -20,9 +116,11 @@ export default function Chat() {
           avatar: 'https://placeimg.com/140/140/any',
         },
       },
-    ])
-  }, [])
+    ])*/
+  }, []);  
 
+  
+  // invert shit chatin kääntelyyn mahd.
   const onSend = useCallback((messages = []) => {
     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
   }, [])
@@ -33,9 +131,14 @@ export default function Chat() {
       <GiftedChat
       messages={messages}
       onSend={messages => onSend(messages)}
+      //onSend={handleSend}
       user={{
         _id: 1,
       }}
+    />
+    <Button 
+    onPress={getConversationdataFromDoc} title="hae docs + log it"
+    containerStyle={{ paddingHorizontal: 10 }}
     />
     </View>
   );
@@ -46,3 +149,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+
+/*  // err = "The caller does not have permission to execute the specified operation"
+    const sendMessage = () => {
+      firestore()
+      .collection('messages').doc('8vrpX2NsjbtVuATcsiqC').collection('messages')
+      .add({
+        message: 'Harmillista',
+        sender: 'user1uid',
+        timestamp: 1601103600
+      })
+      .then(() => {
+        console.log('message send!');
+      });
+    } */
