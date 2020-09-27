@@ -21,6 +21,8 @@ let jaaninlocalhost =  'http://192.168.56.1:5001/ohpro2-f30e5/us-central1/'; //k
 //tätä käytetään globaalina variablena että voidaan eri  classeista helposti accessaa frontin/backin osoitteet. 
 //masterissa/productionissa käytetään aina tuotantopolkua, ei omia testipatheja
 
+global.matches = "messages"; //kertoo  collectionin nimen, nyt on messages mutta muutetaan tulevaisuudessa matcheihin tms.
+
 global.url = jaaninlocalhost;
 
 global.firebaseConfig = fireConf;

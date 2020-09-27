@@ -34,7 +34,7 @@ React.useEffect(() => {
 const getChatterUID = async () => {
   try{
     // this returns whole result of 'doc'
-    const get_users_from_doc = await firestore().collection('messages').doc(global.keskusteluDOC).get();
+    const get_users_from_doc = await firestore().collection(global.matches).doc(global.keskusteluDOC).get();
     setChatters(get_users_from_doc.data().users)
   }
   catch(error){
