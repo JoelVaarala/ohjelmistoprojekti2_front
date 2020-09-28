@@ -31,7 +31,7 @@ const [chatters, setChatters] = useState([]);
 
 //Tämä on debuggausta varten, testataan viestin lähettämistä
 React.useEffect(() => {
-LahetaViestiFirebaseen()
+//LahetaViestiFirebaseen()
 }, []);
 
 
@@ -39,15 +39,14 @@ LahetaViestiFirebaseen()
 //Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
 function LahetaViestiFirebaseen(viesti)
 {
-  console.log("Dummy viesti")
+  console.log("Dummy viesti" + viesti)
   firestore()
   .collection(global.matches).doc(global.keskusteluDOC).collection("messages")
   .add({
-    message: viesti,
-    sender: auth().currentUser.uid,
+    message: viesti
   })
   .then(() => {
-    console.log('User added!');
+    console.log('Message added!');
   });
 
 }
@@ -134,6 +133,8 @@ const getConversationdataFromDoc = async () => {
   // invert shit chatin kääntelyyn mahd.
   const onSend = useCallback((messages = []) => {
     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+    //console.log(messages[0].text)
+    LahetaViestiFirebaseen(messages[0].text);
   }, [])
 
 
