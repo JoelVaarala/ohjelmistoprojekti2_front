@@ -40,16 +40,16 @@ React.useEffect(() => {
 //Tällä pystyy lähettää viestinm parametrinä tulee viestin teksti.
 //Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
 
+//TODO Timestamppi oikein.
 function LahetaViestiFirebaseen(viesti)
 {
-
   console.log("Lähetä viesti firebaseen: " + viesti)
   firestore()
   .collection(global.matches).doc(global.keskusteluDOC).collection("messages")
   .add({
     message: viesti,
     sender : auth().currentUser.uid,
-    timestamp : 0
+    timestamp : null
   })
   .then(() => {
     console.log('Message added!');
