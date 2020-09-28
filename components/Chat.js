@@ -4,6 +4,8 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import Startup from './Startup';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+
 // import firebase from 'react-native-firebase';
 
 
@@ -35,15 +37,19 @@ React.useEffect(() => {
 }, []);
 
 
-//Tällä pystyy lähettää viestinm parametrinä tulee viestin sisältö.
+//Tällä pystyy lähettää viestinm parametrinä tulee viestin teksti.
 //Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
+
 function LahetaViestiFirebaseen(viesti)
 {
-  console.log("Dummy viesti" + viesti)
+
+  console.log("Lähetä viesti firebaseen: " + viesti)
   firestore()
   .collection(global.matches).doc(global.keskusteluDOC).collection("messages")
   .add({
-    message: viesti
+    message: viesti,
+    sender : auth().currentUser.uid,
+    timestamp : 0
   })
   .then(() => {
     console.log('Message added!');

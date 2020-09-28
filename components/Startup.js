@@ -35,11 +35,8 @@ export default function Startup(props) {
   global.fbtoken = "";
 
   React.useEffect(() => {
-    console.log("use effect")
     //firebase.initializeApp()
     firebase.initializeApp(firebaseConfig);
-    //console.log(firebase.config.toString())
-    //yritaKirjautua();
     login();
   }, []);
 
@@ -82,7 +79,8 @@ export default function Startup(props) {
         console.log('User account created & signed in!');
         //console.log(auth().currentUser)
         UpdateLocation();
-        LahetaViestiFirebaseen();
+        //Debugin takia tässä, poistettu 28.9.2020
+        //LahetaViestiFirebaseen();
       })
 
       .catch(error => {
@@ -123,20 +121,6 @@ export default function Startup(props) {
   }
 
 
-  function LahetaViestiFirebaseen(viesti)
-{
-  console.log("Dummy viesti")
-  firestore()
-  .collection(global.matches).doc(global.keskusteluDOC).collection("messages")
-  .add({
-    message: 'Hyvä viesti',
-    sender: auth().currentUser.uid,
-  })
-  .then(() => {
-    console.log('User added!');
-  });
-
-}
 
 
 
