@@ -4,6 +4,8 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import Startup from './Startup';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+
 // import firebase from 'react-native-firebase';
 
 
@@ -16,7 +18,6 @@ export default function Chat(props) {
 const [messages, setMessages] = useState([]);
 const [posti, setPosti] = useState([]);
 const [chatters, setChatters] = useState([]);
-const post = [];
 
 
 //Tämä on heitetty nyt App.js , kutsutaan kerran ja vain täältä.
@@ -30,9 +31,39 @@ const post = [];
 
 // }, []);
 
+//Tämä on debuggausta varten, testataan viestin lähettämistä
+React.useEffect(() => {
+//LahetaViestiFirebaseen()
+}, []);
+
+
+//Tällä pystyy lähettää viestinm parametrinä tulee viestin teksti.
+//Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
+
+function LahetaViestiFirebaseen(viesti)
+{
+
+  console.log("Lähetä viesti firebaseen: " + viesti)
+  firestore()
+  .collection(global.matches).doc(global.keskusteluDOC).collection("messages")
+  .add({
+    message: viesti,
+    sender : auth().currentUser.uid,
+    timestamp : 0
+  })
+  .then(() => {
+    console.log('Message added!');
+  });
+
+}
+
+
+
+
 
   
 useEffect(() => {
+  console.log("Chatin us effect")
   getConversationdataFromDoc()
 }, []);  
 
@@ -41,6 +72,7 @@ const getChatterUID = async () => {
   try{
     // this returns whole result of 'doc'
     //vaihdetaan global.matches propsiin 
+    
     const get_users_from_doc = await firestore().collection(global.matches).doc(global.keskusteluDOC).get();
     setChatters(get_users_from_doc.data().users)
   }
@@ -53,12 +85,8 @@ const getChatterUID = async () => {
 const getConversationdataFromDoc = async () => {
   try {
 
-    // calls for getChatters function to resolve chatter id's
-    //Näitä ei kai nyt tarvita
-   // getChatterUID();
-    //console.log(chatters)
 
-    // source firestore
+    const post = [];
     firestore()
     // specify route to desired collection / document__________________ this orders fetched content according timestamp  (ordered by id, default) 
     .collection(global.matches).doc(global.keskusteluDOC).collection('messages').orderBy('timestamp') 
@@ -99,9 +127,6 @@ const getConversationdataFromDoc = async () => {
       }) 
       // asets 'o' array to chat   
       setMessages(o)
-
-      // useless for now
-      // setPosti(post)
     });
 
   } catch (error) {
@@ -114,6 +139,8 @@ const getConversationdataFromDoc = async () => {
   // invert shit chatin kääntelyyn mahd.
   const onSend = useCallback((messages = []) => {
     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+    //console.log(messages[0].text)
+    LahetaViestiFirebaseen(messages[0].text);
   }, [])
 
 
