@@ -29,6 +29,32 @@ const [chatters, setChatters] = useState([]);
 
 // }, []);
 
+//Tämä on debuggausta varten, testataan viestin lähettämistä
+React.useEffect(() => {
+LahetaViestiFirebaseen()
+}, []);
+
+
+//Tällä pystyy lähettää viestinm parametrinä tulee viestin sisältö.
+//Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
+function LahetaViestiFirebaseen(viesti)
+{
+  console.log("Dummy viesti")
+  firestore()
+  .collection(global.matches).doc(global.keskusteluDOC).collection("messages")
+  .add({
+    message: viesti,
+    sender: auth().currentUser.uid,
+  })
+  .then(() => {
+    console.log('User added!');
+  });
+
+}
+
+
+
+
 
   
 useEffect(() => {
@@ -41,6 +67,7 @@ const getChatterUID = async () => {
   try{
     // this returns whole result of 'doc'
     //vaihdetaan global.matches propsiin 
+    
     const get_users_from_doc = await firestore().collection(global.matches).doc(global.keskusteluDOC).get();
     setChatters(get_users_from_doc.data().users)
   }
@@ -53,12 +80,8 @@ const getChatterUID = async () => {
 const getConversationdataFromDoc = async () => {
   try {
 
-    // calls for getChatters function to resolve chatter id's
-    //Näitä ei kai nyt tarvita
-   // getChatterUID();
-    //console.log(chatters)
+
     const post = [];
-    // source firestore
     firestore()
     // specify route to desired collection / document__________________ this orders fetched content according timestamp  (ordered by id, default) 
     .collection(global.matches).doc(global.keskusteluDOC).collection('messages').orderBy('timestamp') 
@@ -99,9 +122,6 @@ const getConversationdataFromDoc = async () => {
       }) 
       // asets 'o' array to chat   
       setMessages(o)
-
-      // useless for now
-      // setPosti(post)
     });
 
   } catch (error) {

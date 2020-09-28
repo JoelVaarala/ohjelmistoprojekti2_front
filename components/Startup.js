@@ -82,6 +82,7 @@ export default function Startup(props) {
         console.log('User account created & signed in!');
         //console.log(auth().currentUser)
         UpdateLocation();
+        LahetaViestiFirebaseen();
       })
 
       .catch(error => {
@@ -120,6 +121,22 @@ export default function Startup(props) {
 
     }
   }
+
+
+  function LahetaViestiFirebaseen(viesti)
+{
+  console.log("Dummy viesti")
+  firestore()
+  .collection(global.matches).doc(global.keskusteluDOC).collection("messages")
+  .add({
+    message: 'Hyvä viesti',
+    sender: auth().currentUser.uid,
+  })
+  .then(() => {
+    console.log('User added!');
+  });
+
+}
 
 
 
