@@ -16,7 +16,6 @@ export default function Chat(props) {
 const [messages, setMessages] = useState([]);
 const [posti, setPosti] = useState([]);
 const [chatters, setChatters] = useState([]);
-const post = [];
 
 
 //Tämä on heitetty nyt App.js , kutsutaan kerran ja vain täältä.
@@ -33,6 +32,7 @@ const post = [];
 
   
 useEffect(() => {
+  console.log("Chatin us effect")
   getConversationdataFromDoc()
 }, []);  
 
@@ -57,7 +57,7 @@ const getConversationdataFromDoc = async () => {
     //Näitä ei kai nyt tarvita
    // getChatterUID();
     //console.log(chatters)
-
+    const post = [];
     // source firestore
     firestore()
     // specify route to desired collection / document__________________ this orders fetched content according timestamp  (ordered by id, default) 

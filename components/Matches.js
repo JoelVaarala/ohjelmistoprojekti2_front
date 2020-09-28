@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { Avatar, ListItem, Overlay } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
+import firebase from 'react-native-firebase';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Matches({ navigation, route }) {
@@ -10,10 +11,24 @@ export default function Matches({ navigation, route }) {
   const myUserID = "qREmoPw72NRHB2JA6uBCKJyuWhY2";
   const [overlay, setOverlay] = React.useState(true);
 
+
+    React.useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        console.log("Listener")
+        //console.log(firebase.auth().currentUser)
+        getMyMatches();
+      });
+  
+      // Return the function to unsubscribe from the event so it gets removed on unmount
+      return unsubscribe;
+    }, [navigation]);
+
+
   React.useEffect(() => {
 
+    //Pitäs 
     getMyMatches();
-
+    console.log("matches use effect")
     //Haetaan kaikki käyttäjän mätsit ja sortataan kahteen listaan sen perusteella onko näillä chattihistoriassa mitään.
     //jos on niin näytetään vertikaalisessa osiossa, jos ei niin horisontaalisessa.
     //tagi filtteri tälle sivulle myös?

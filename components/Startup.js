@@ -36,9 +36,9 @@ export default function Startup(props) {
       console.log("use effect")
       //firebase.initializeApp()
       firebase.initializeApp(firebaseConfig);
-      console.log(firebase.config.toString())
+      //console.log(firebase.config.toString())
        //yritaKirjautua();
-
+      login();
     }, []);
 
 
@@ -83,6 +83,7 @@ export default function Startup(props) {
         .signInWithEmailAndPassword(kayttaja, salasana)
         .then(() => {
           console.log('User account created & signed in!');
+          console.log(auth().currentUser)
         })
         
         .catch(error => {
