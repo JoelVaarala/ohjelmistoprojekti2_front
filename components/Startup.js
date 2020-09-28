@@ -63,7 +63,7 @@ export default function Startup(props) {
   function UpdateFirebase(newloc) {
     var mydoc = auth().currentUser.uid;
     //console.log(mydoc)
-    firestore().collection('users').doc(mydoc).update({"location" : newloc})
+    firestore().collection('users').doc(mydoc).update({"location" : new firestore.GeoPoint(newloc.latitude, newloc.longitude)})
       .then(function () {
         console.log("Document successfully updated!");
         //päivitetään firebaseen käyttäjän sijainti
