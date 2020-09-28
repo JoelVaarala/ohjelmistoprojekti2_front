@@ -21,6 +21,7 @@ export default function EditProfile() {
       <View style={styles.textAreaContainer}>
         <TextInput style={styles.textArea} placeholder='Asuinpaikka' />
       </View>
+      
     </View>
 
   );
