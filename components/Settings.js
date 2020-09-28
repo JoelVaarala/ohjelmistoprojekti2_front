@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Input, Slider } from 'react-native-elements'
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
-export default function MyFilters() {
+export default function Settings() {
 
   const [value, setValue] = React.useState(1)
   const [minAge, setMinAge] = React.useState('')

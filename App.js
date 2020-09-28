@@ -7,6 +7,8 @@ import MyProfile from "./components/MyProfile";
 import SwipingPage from "./components/SwipingPage";
 import Matches from "./components/Matches";
 import Chat from "./components/Chat";
+import EditProfile from './components/EditProfile';
+import Settings from './components/Settings';
 //import FirebaseSaato from './components/FirebaseSaato'
 import Startup from "./components/Startup";
 import { NavigationContainer } from "@react-navigation/native";
@@ -42,9 +44,9 @@ export default function App() {
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Profile" component={MyProfile} />
-        {/* <ListStack.Screen name="Chat" component={Chat}/> */}
-        {/* <ListStack.Screen name="Lisää kuva" component={}/>
-        <ListStack.Screen name="Profiili" component={}/> */}
+        <ListStack.Screen name="Settings" component={Settings}/>
+        {/* <ListStack.Screen name="Lisää kuva" component={} /> */
+        <ListStack.Screen name="EditProfile" component={EditProfile}/> }
       </ListStack.Navigator>
     );
   };
