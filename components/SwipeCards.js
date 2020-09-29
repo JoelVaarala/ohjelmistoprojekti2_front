@@ -11,7 +11,7 @@ class Card extends React.Component {
       nimi: props.text
     };
     console.log("Card prop")
-    console.log(this.state.nimi)
+    console.log(props)
 
   }
 
@@ -27,9 +27,9 @@ class Card extends React.Component {
                 style={{ height: 400, width: 350, right: 15, top: 25, opacity: 0.9, borderRadius: 5 }}
               />
               <View style={{ bottom: 45 }}>
-                <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>{this.state.nimi}, 24</Text>
+                <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>{this.props.displayname}    {this.props.age}</Text>
                 <Text style={{ fontSize: 12, color: "white" }}>Tags</Text>
-                <Text style={{ fontSize: 12, color: "white" }}>Etäisyys</Text>
+                <Text style={{ fontSize: 12, color: "white" }}>{this.props.distance} km away</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -67,21 +67,25 @@ export default class extends React.Component {
 
     //Otetaan pois tää kovakoodattu ja käytetään propsina tulevaa. 
     //propsissa tulee documentid, nimi, avatarurli
-    this.state = {
-      cards: [
-        { text: "Tomato" },
-        { text: "Aubergine", backgroundColor: "purple" },
-        { text: "Courgette", backgroundColor: "green" },
-        { text: "Blueberry", backgroundColor: "blue" },
-        { text: "Umm...", backgroundColor: "cyan" },
-        { text: "orange", backgroundColor: "orange" },
-      ],
-    };
+    // this.state = {
+    //   cards: [
+    //     { text: "Tomato" },
+    //     { text: "Aubergine", backgroundColor: "purple" },
+    //     { text: "Courgette", backgroundColor: "green" },
+    //     { text: "Blueberry", backgroundColor: "blue" },
+    //     { text: "Umm...", backgroundColor: "cyan" },
+    //     { text: "orange", backgroundColor: "orange" },
+    //   ],
+    // };
 
-    // this.state ={
-    //   cards : props.vaihtoehdot
-    // }
-    console.log("jou jou")
+    this.state ={
+      cards : props.vaihtoehdot
+    }
+    console.log("///")
+    console.log("///")
+    console.log("///")
+    console.log("///")
+    console.log("///")
     console.log(props)
   }
 

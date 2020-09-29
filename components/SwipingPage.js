@@ -8,6 +8,7 @@ export default function SwipingPage({navigation,route}) {
 
   [swipettavat, setSwipettavat] = React.useState([]);
 
+  //ratkaistava vielä se että swipettavat ei päivity swipecardsiin.
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -33,21 +34,27 @@ export default function SwipingPage({navigation,route}) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
+      setSwipettavat(data.result)
+        console.log(data.result)
     
     })
     .catch(err => console.error(err))
     //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
   }
 
-
-
-
+  function LuoSwipecardi()
+  {
+    //Tällä saadaan päiviettyä nää shitit oikeasti statesta.
+    return(
+      <SwipeCards vaihtoehdot={swipettavat} />
+    )
+  }
 
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, justifyContent: "flex-start" }}>
-        <SwipeCards vaihtoehdot={swipettavat} />
+        {/* <SwipeCards vaihtoehdot={swipettavat} /> */}
+        <LuoSwipecardi/>
       </View>
       <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
         <View style={styles.icons}>
