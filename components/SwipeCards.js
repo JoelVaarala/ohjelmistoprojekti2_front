@@ -20,7 +20,7 @@ class Card extends React.Component {
       <View style={{ flex: 1 }}>
         <View style={[{ backgroundColor: this.props.backgroundColor }]}>
           <TouchableOpacity>
-            <Image source={{ uri: "https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg" }} style={styles.card} />
+            <Image source={{ uri: this.props.picture }} style={styles.card} />
             <View style={{ position: "absolute", top: 0, left: 15, right: 150, justifyContent: "flex-end", alignItems: "flex-start" }}>
               <Image
                 source={require("../pictures/darkish.png")}
