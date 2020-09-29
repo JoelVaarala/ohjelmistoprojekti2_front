@@ -7,6 +7,12 @@ import { Icon, Avatar } from "react-native-elements";
 class Card extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      nimi: props.text
+    };
+    console.log("Card prop")
+    console.log(this.state.nimi)
+
   }
 
   render() {
@@ -21,9 +27,9 @@ class Card extends React.Component {
                 style={{ height: 400, width: 350, right: 15, top: 25, opacity: 0.9, borderRadius: 5 }}
               />
               <View style={{ bottom: 45 }}>
-                <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>Mikael MooMoo, 35</Text>
-                <Text style={{ fontSize: 12, color: "white" }}>Paikalla viimeksi</Text>
-                <Text style={{ fontSize: 12, color: "white" }}>Sijainti/Etäisyys</Text>
+                <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>{this.state.nimi}, 24</Text>
+                <Text style={{ fontSize: 12, color: "white" }}>Tags</Text>
+                <Text style={{ fontSize: 12, color: "white" }}>Etäisyys</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -58,6 +64,9 @@ class NoMoreCards extends Component {
 export default class extends React.Component {
   constructor(props) {
     super(props);
+
+    //Otetaan pois tää kovakoodattu ja käytetään propsina tulevaa. 
+    //propsissa tulee documentid, nimi, avatarurli
     this.state = {
       cards: [
         { text: "Tomato" },
@@ -68,9 +77,16 @@ export default class extends React.Component {
         { text: "orange", backgroundColor: "orange" },
       ],
     };
+
+    // this.state ={
+    //   cards : props.vaihtoehdot
+    // }
+    console.log("jou jou")
+    console.log(props)
   }
 
   // konsoliin tieto mihin swipettiin
+  //lähetetään bäkkiin tieto että swipettiin tälle, parametreinä, swipeäjä ja swipettäjä + suunta.
   handleYup(card) {
     console.log(`Yup for ${card.text}`);
   }

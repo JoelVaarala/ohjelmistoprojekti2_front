@@ -17,13 +17,13 @@ let url1 = '';
 let url2 = 'http://192.168.1.133:8080';
 let url3 = '';
 let jaaninlocalhost =  'http://192.168.56.1:5001/ohpro2-f30e5/us-central1/'; //käytetään firebasen funktioiden testaamiseen
-
+let firebaseurl = 'https://us-central1-ohpro2-f30e5.cloudfunctions.net/'
 //tätä käytetään globaalina variablena että voidaan eri  classeista helposti accessaa frontin/backin osoitteet. 
 //masterissa/productionissa käytetään aina tuotantopolkua, ei omia testipatheja
 
 global.matches = "messages"; //kertoo  collectionin nimen, nyt on messages mutta muutetaan tulevaisuudessa matcheihin tms.
 
-global.url = jaaninlocalhost;
+global.url = firebaseurl;
 
 global.firebaseConfig = fireConf;
 
