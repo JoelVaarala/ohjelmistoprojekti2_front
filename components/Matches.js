@@ -14,7 +14,7 @@ export default function Matches({ navigation, route }) {
 
     React.useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
-        console.log("Listener")
+        //console.log("Listener")
         //console.log(firebase.auth().currentUser)
         getMyMatches();
       });
