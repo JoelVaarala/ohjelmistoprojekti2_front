@@ -37,10 +37,7 @@ React.useEffect(() => {
 }, []);
 
 
-//Tällä pystyy lähettää viestinm parametrinä tulee viestin teksti.
-//Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
-
-//TODO Timestamppi oikein.
+//Jee
 function LahetaViestiFirebaseen(viesti)
 {
   //https://firebase.google.com/docs/auth/admin/verify-id-tokens#web
