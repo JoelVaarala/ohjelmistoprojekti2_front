@@ -21,7 +21,7 @@ let firebaseurl = 'https://us-central1-ohpro2-f30e5.cloudfunctions.net/'
 //tätä käytetään globaalina variablena että voidaan eri  classeista helposti accessaa frontin/backin osoitteet. 
 //masterissa/productionissa käytetään aina tuotantopolkua, ei omia testipatheja
 
-global.matches = "messages"; //kertoo  collectionin nimen, nyt on messages mutta muutetaan tulevaisuudessa matcheihin tms.
+global.matches = "matches"; //kertoo  collectionin nimen, nyt on messages mutta muutetaan tulevaisuudessa matcheihin tms.
 
 global.url = firebaseurl;
 
