@@ -4,6 +4,8 @@ import { color } from "react-native-reanimated";
 import SwipeCards from "react-native-swipe-cards";
 import { Icon, Avatar } from "react-native-elements";
 
+
+
 class Card extends React.Component {
   constructor(props) {
     super(props);
@@ -27,7 +29,7 @@ class Card extends React.Component {
                 style={{ height: 400, width: 350, right: 15, top: 25, opacity: 0.9, borderRadius: 5 }}
               />
               <View style={{ bottom: 45 }}>
-                <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>{this.props.displayname}    {this.props.age}</Text>
+                <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>{this.props.displayName}    {this.props.age}</Text>
                 <Text style={{ fontSize: 12, color: "white" }}>Tags</Text>
                 <Text style={{ fontSize: 12, color: "white" }}>{this.props.distance} km away</Text>
               </View>
@@ -84,22 +86,24 @@ export default class extends React.Component {
     console.log("///")
     console.log("///")
     console.log("///")
-    console.log("///")
-    console.log("///")
-    console.log(props)
+    console.log(this.props)
   }
 
   // konsoliin tieto mihin swipettiin
   //lähetetään bäkkiin tieto että swipettiin tälle, parametreinä, swipeäjä ja swipettäjä + suunta.
   handleYup(card) {
-    console.log(`Yup for ${card.text}`);
+    console.log(card)
+    // this.PostSwipe(true)
+    PostSwipe(true, card.user)
   }
   handleNope(card) {
-    console.log(`Nope for ${card.text}`);
+    PostSwipe(false,card.user)
+    // PostSwipe(false)
   }
   handleMaybe(card) {
     console.log(`Maybe for ${card.text}`);
   }
+
   render() {
     // If you want a stack of cards instead of one-per-one view, activate stack mode
     // stack={true}
@@ -136,3 +140,31 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
 });
+
+function  PostSwipe(liked, user) {
+  //Connectaa endpointiin, lähettää parametrinä omat hakutoiveet. Vaihtoehtona että bäkki itse noutas firebasesta mutta ei kai tarpeen?
+  let data = { 
+    liked : liked, 
+    target : user ,
+    idToken : "dummy" ,  //myöhemmin idtokeni 
+    uid : "qREmoPw72NRHB2JA6uBCKJyuWhY2"  //myöhemmin käyttäjän oma tokeni
+  }
+  console.log(JSON.stringify(data))
+  console.log(data)
+  fetch(global.url+"swipe" , {
+  // fetch("http://192.168.56.1:5001/ohpro2-f30e5/us-central1/swipe" , {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      // body: JSON.stringify(body)
+      body: JSON.stringify(data)
+
+  })
+  .then(response => response.json())
+  .then(data => {
+      console.log(data)
+  })
+  .catch(err => console.error(err))
+  //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
+}

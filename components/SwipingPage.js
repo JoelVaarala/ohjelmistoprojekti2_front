@@ -4,7 +4,7 @@ import { Icon } from "react-native-elements";
 import SwipeCards from "./SwipeCards";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
-export default function SwipingPage({navigation,route}) {
+export default function SwipingPage({ navigation, route }) {
 
   [swipettavat, setSwipettavat] = React.useState([]);
 
@@ -12,7 +12,7 @@ export default function SwipingPage({navigation,route}) {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-     
+
       //console.log(firebase.auth().currentUser)
       HaeSwipettaviaBackista();
     });
@@ -25,27 +25,32 @@ export default function SwipingPage({navigation,route}) {
   function HaeSwipettaviaBackista() {
     //Connectaa endpointiin, lähettää parametrinä omat hakutoiveet. Vaihtoehtona että bäkki itse noutas firebasesta mutta ei kai tarpeen?
     console.log("Hae swipettäviä")
-    console.log(global.url+"findSwipeables")
-    fetch(global.url+"findSwipeables" , {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        }
+    console.log(global.url + "findSwipeables")
+    let bodii =  {
+      "uid" : "qREmoPw72NRHB2JA6uBCKJyuWhY2",
+      "tags" : ["perunat"]
+  }
+    fetch(global.url + "findSwipeables", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bodii)
     })
-    .then(response => response.json())
-    .then(data => {
-      setSwipettavat(data.result)
+      .then(response => response.json())
+      // .then(response => console.log(response))
+      .then(data => {
+        console.log(data)
+        setSwipettavat(data.result)
         console.log(data.result)
-    
-    })
-    .catch(err => console.error(err))
+      })
+      .catch(err => console.error(err))
     //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
   }
 
-  function LuoSwipecardi()
-  {
+  function LuoSwipecardi() {
     //Tällä saadaan päiviettyä nää shitit oikeasti statesta.
-    return(
+    return (
       <SwipeCards vaihtoehdot={swipettavat} />
     )
   }
@@ -54,7 +59,7 @@ export default function SwipingPage({navigation,route}) {
     <View style={styles.container}>
       <View style={{ flex: 1, justifyContent: "flex-start" }}>
         {/* <SwipeCards vaihtoehdot={swipettavat} /> */}
-        <LuoSwipecardi/>
+        <LuoSwipecardi />
       </View>
       <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
         <View style={styles.icons}>
