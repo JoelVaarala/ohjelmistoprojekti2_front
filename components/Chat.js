@@ -8,13 +8,14 @@ import auth from '@react-native-firebase/auth';
 import { Avatar } from 'react-native-elements';
 
 
+
 // import firebase from 'react-native-firebase';
 
 
 
 
 //Tämä on chatti mätsin kanssa
-export default function Chat({ navigation, route }) {
+export default function Chat({ navigation }) {
 
   // States
   const [messages, setMessages] = useState([]);
