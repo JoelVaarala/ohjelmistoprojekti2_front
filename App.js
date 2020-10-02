@@ -7,7 +7,8 @@ import MyProfile from "./components/MyProfile";
 import SwipingPage from "./components/SwipingPage";
 import Matches from "./components/Matches";
 import Chat from "./components/Chat";
-import EditProfile from './components/EditProfile';
+import Profile from "./components/MyProfile";
+import EditProfile from './components/Profile';
 import Settings from './components/Settings';
 //import FirebaseSaato from './components/FirebaseSaato'
 import Startup from "./components/Startup";
@@ -56,8 +57,8 @@ export default function App() {
       <ListStack.Navigator>
         <ListStack.Screen name="Matches" component={Matches} />
         <ListStack.Screen name="Chat" component={Chat}/>
-        {/* <ListStack.Screen name="Lisää kuva" component={}/>
-        <ListStack.Screen name="Profiili" component={}/> */}
+        {/* <ListStack.Screen name="Lisää kuva" component={}/> */}
+        <ListStack.Screen name="MatchProfile" component={Profile}/>
       </ListStack.Navigator>
     );
   };

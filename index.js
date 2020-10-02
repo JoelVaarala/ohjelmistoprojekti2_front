@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
 
 import App from './App';
+import Chat from './components/Chat';
 // import myProfile from './components/MyProfile'
 // import EditProfile from './components/EditProfile'
 // import MyFilters from './components/MyFilters'
