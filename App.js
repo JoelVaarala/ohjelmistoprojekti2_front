@@ -8,7 +8,7 @@ import SwipingPage from "./components/SwipingPage";
 import Matches from "./components/Matches";
 import Chat from "./components/Chat";
 import Profile from "./components/Profile";
-import EditProfile from './components/Profile';
+import EditProfile from './components/EditProfile';
 import Settings from './components/Settings';
 //import FirebaseSaato from './components/FirebaseSaato'
 import Startup from "./components/Startup";
