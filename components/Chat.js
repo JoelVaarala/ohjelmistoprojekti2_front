@@ -40,25 +40,36 @@ React.useEffect(() => {
 //Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
 
 //TODO Timestamppi oikein.
-function LahetaViestiFirebaseen(viesti)
-{
-  console.log("Lähetä viesti firebaseen: " + viesti)
-  firestore()
-  .collection(global.matches).doc(global.keskusteluDOC).collection("messages")
-  .add({
-    message: viesti,
-    sender : auth().currentUser.uid,
-    timestamp : null
-  })
-  .then(() => {
-    console.log('Message added!');
-  });
-
-}
+  function LahetaViestiFirebaseen(viesti) {
+    //https://firebase.google.com/docs/auth/admin/verify-id-tokens#web
+    let body = {
+      data: {
+        message: viesti,
+        match: props.route.params.chatti, //tää pitäs tulla propsi parametristä
+      },
+    idToken: "dummytoken", //menee nyt dummyna, tän voi hakea kuitenkin ylläolevan ohjeen mukaisesti ja käytetään sitten kun verifiointi päällä
+      uid: auth().currentUser.uid //uid menee nyt dummydatana koska verifointifunkkaria ei käytetä.
+    }
+    //console.log(body)
+    fetch(global.url + "message",
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+      }
+    )
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data)
+      })
+      .catch(err => console.error(err))
+  }
 
 // --UPDATED METHOD TO GET MESSAGES REALTIME
 // ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
-const ref = firestore().collection(global.matches).doc(global.keskusteluDOC).collection('messages').orderBy('timestamp', 'desc');
+const ref = firestore().collection('matches').doc(props.route.params.chatti).collection('messages').orderBy('timestamp', 'desc');
 
 function getConversationsRT() {
   
