@@ -7,6 +7,7 @@ import MyProfile from "./components/MyProfile";
 import SwipingPage from "./components/SwipingPage";
 import Matches from "./components/Matches";
 import Chat from "./components/Chat";
+import Profile from "./components/Profile";
 import EditProfile from './components/EditProfile';
 import Settings from './components/Settings';
 import Add_Event from './components/Add_Event';
@@ -58,8 +59,8 @@ export default function App() {
       <ListStack.Navigator>
         <ListStack.Screen name="Matches" component={Matches} />
         <ListStack.Screen name="Chat" component={Chat}/>
-        {/* <ListStack.Screen name="Lisää kuva" component={}/>
-        <ListStack.Screen name="Profiili" component={}/> */}
+        {/* <ListStack.Screen name="Lisää kuva" component={}/> */}
+        <ListStack.Screen name="MatchProfile" component={Profile}/>
       </ListStack.Navigator>
     );
   };
