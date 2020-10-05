@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Icon, Avatar } from 'react-native-elements';
+
+
+import React from "react";
+import { StyleSheet, Text, View, Button} from "react-native";
+import { Icon, Avatar} from "react-native-elements";
 import ImagePicker from 'react-native-image-picker';
+
+//Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
+export default function MyProfile({navigation}) {
+  const [count, setCount] = React.useState("");
+
+  const onPress = () => setCount("KUVA AVAUTUU");
+
 
 const MyProfile = ({ navigation }) => {
   const [state, setState] = useState({
@@ -52,6 +61,9 @@ const MyProfile = ({ navigation }) => {
           <Icon onPress={() => navigation.navigate('EditProfile')} size={28} reverse name="edit" />
           <Text>Omat tiedot</Text>
         </View>
+      </View>
+      <View>
+        <Button onPress={() => navigation.navigate('Add_Event')} title="add event"/>
       </View>
     </View>
   );
