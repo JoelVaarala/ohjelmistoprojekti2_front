@@ -8,7 +8,7 @@ import firebase from 'react-native-firebase';
 export default function Matches({ navigation, route }) {
 
   const [myMatches, setMyMatches] = React.useState([]);
-  const myUserID = "qREmoPw72NRHB2JA6uBCKJyuWhY2";
+  //const myUserID = "qREmoPw72NRHB2JA6uBCKJyuWhY2";
   const [overlay, setOverlay] = React.useState(true);
 
 
@@ -47,7 +47,7 @@ export default function Matches({ navigation, route }) {
       matches.docs.map(doc => {
         let matchname = "";
         doc._data.users.forEach((user) => {
-          if (user != myUserID) {
+          if (user != global.myUserData.myUserID) {
             matchname = user;
           }
           

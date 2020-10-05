@@ -80,8 +80,8 @@ export default class extends React.Component {
     //   ],
     // };
 
-    this.state ={
-      cards : props.vaihtoehdot
+    this.state = {
+      cards: props.vaihtoehdot
     }
     console.log("///")
     console.log("///")
@@ -97,7 +97,7 @@ export default class extends React.Component {
     PostSwipe(true, card.user)
   }
   handleNope(card) {
-    PostSwipe(false,card.user)
+    PostSwipe(false, card.user)
     // PostSwipe(false)
   }
   handleMaybe(card) {
@@ -141,30 +141,33 @@ const styles = StyleSheet.create({
   },
 });
 
-function  PostSwipe(liked, user) {
+function PostSwipe(liked, user) {
   //Connectaa endpointiin, lähettää parametrinä omat hakutoiveet. Vaihtoehtona että bäkki itse noutas firebasesta mutta ei kai tarpeen?
-  let data = { 
-    liked : liked, 
-    target : user ,
-    idToken : "dummy" ,  //myöhemmin idtokeni 
-    uid : "qREmoPw72NRHB2JA6uBCKJyuWhY2"  //myöhemmin käyttäjän oma tokeni
+  let myData = {
+    data: {
+      liked: liked,
+      target: user, //korjaa findSwipeablesin blabla vanhaan.
+      isEvent : false
+    },
+    "uid": global.myUserData.uid,
+    "idToken": global.myUserData.idToken,
   }
-  console.log(JSON.stringify(data))
-  console.log(data)
-  fetch(global.url+"swipe" , {
-  // fetch("http://192.168.56.1:5001/ohpro2-f30e5/us-central1/swipe" , {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      // body: JSON.stringify(body)
-      body: JSON.stringify(data)
+  console.log(JSON.stringify(myData))
+
+  fetch(global.url + "swipe", {
+    // fetch("http://192.168.56.1:5001/ohpro2-f30e5/us-central1/swipe" , {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    // body: JSON.stringify(body)
+    body: JSON.stringify(myData)
 
   })
-  .then(response => response.json())
-  .then(data => {
+    .then(response => response.json())
+    .then(data => {
       console.log(data)
-  })
-  .catch(err => console.error(err))
+    })
+    .catch(err => console.error(err))
   //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
 }
