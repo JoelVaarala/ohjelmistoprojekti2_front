@@ -43,6 +43,7 @@ export default function Matches({ navigation, route }) {
       const matches = await firestore().collection(global.matches).get();
       
       let temparray = [];
+      let num = 1;
       matches.docs.map(doc => {
         let matchname = "";
         doc._data.users.forEach((user) => {
@@ -58,9 +59,9 @@ export default function Matches({ navigation, route }) {
         //uid : käyttäjän userid josta voidaan fetchaa dataa
         //name : käyttäjän näkyvä nimi (nyt uid, korjataan)
         //avatar_url : placeholder kuva vain, haetana myöhemmin profilesta kuva (UID kautta)
-        temparray.push({matchid: doc.id , uid: matchname, name: matchname, avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'})
+        temparray.push({matchid: doc.id , uid: matchname, name: matchname, avatar_url: `https://randomuser.me/api/portraits/med/women/${num}.jpg`})
         console.log("my match is "+matchname)
-
+        num = num+1;
       })
       setMyMatches(temparray);
 
@@ -97,7 +98,7 @@ export default function Matches({ navigation, route }) {
   const renderItem = ({ item }) => (
     <ListItem
     onPress={() => {
-      console.log(item.matchid)
+      console.log("Pressed: "+item.matchid)
      navigation.navigate('Chat', { chatti: item.matchid})
     }}
     >

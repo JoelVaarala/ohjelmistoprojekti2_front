@@ -10,6 +10,7 @@ import Chat from "./components/Chat";
 import Profile from "./components/Profile";
 import EditProfile from './components/EditProfile';
 import Settings from './components/Settings';
+import Add_Event from './components/Add_Event';
 //import FirebaseSaato from './components/FirebaseSaato'
 import Startup from "./components/Startup";
 import { NavigationContainer } from "@react-navigation/native";
@@ -46,6 +47,7 @@ export default function App() {
       <ListStack.Navigator>
         <ListStack.Screen name="Profile" component={MyProfile} />
         <ListStack.Screen name="Settings" component={Settings}/>
+        <ListStack.Screen name="Add_Event" component={Add_Event}/>
         {/* <ListStack.Screen name="Lisää kuva" component={} /> */
         <ListStack.Screen name="EditProfile" component={EditProfile}/> }
       </ListStack.Navigator>
@@ -69,6 +71,7 @@ export default function App() {
     // <View>
     //   <Text asd></Text>
     //   </View>
+    
     <NavigationContainer>
       {vaihto ? (
         <Stack.Navigator>
