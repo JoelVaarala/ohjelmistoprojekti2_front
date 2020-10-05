@@ -10,7 +10,7 @@ export default function Profile() {
     return (
         <View style={styles.container}>
             <View style={{ flex: 1 }}>
-                <Text>TÄNNE NAVI</Text>
+   
             </View>
             <View style={{ alignItems: 'center', flex: 8 }}>
                 <Text value={{ count }} >{count}</Text>
