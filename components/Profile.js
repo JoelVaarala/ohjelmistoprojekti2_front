@@ -1,31 +1,59 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import Carousel from './Carousel';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Profile() {
 
-    const [count, setCount] = React.useState('')
-    const onPress = () => setCount("KUVA AVAUTUU");
+    const [user, setUser] = React.useState({
+        name: 'nimi',
+        age: 'ikä',
+        bio: 'bio',
+    });
+
+    {/*
+    React.useEffect(() => {
+          //console.log(firebase.auth().currentUser)
+          HaeKayttaja();
+        });
+
+        
+
+    function HaeKayttaja() {
+        let bodii =  {
+            "uid" : "qREmoPw72NRHB2JA6uBCKJyuWhY2",
+            "tags" : ["perunat"]
+        }
+    fetch(global.url + "profileUpdate", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bodii)
+      })
+        .then(response => response.json())
+        // .then(response => console.log(response))
+        .then(data => {
+          setUser(
+            name = "nimi",
+            age = "ikä",
+            bio = "bio")
+          console.log(data.result)
+        })
+        .catch(err => console.error(err))
+      //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
+    } */}
+
+
 
     return (
         <View style={styles.container}>
-            <View style={{ flex: 1 }}>
-   
-            </View>
-            <View style={{ alignItems: 'center', flex: 8 }}>
-                <Text value={{ count }} >{count}</Text>
-                <Image source={{ uri: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg' }} style={{ width: 400, height: 400 }} />
+            <View style={{ alignItems: 'center', flex: 6 }}>
+                <Carousel />
             </View>
             <View style={{ flex: 3 }}>
-                <Text style={{ fontSize: 40 }}>Nimi Ikä</Text>
-                <Text style={{ fontSize: 20 }}>Asdasdasdasdasdasdasd</Text>
-                <Text style={{ fontSize: 20 }}>Asdasdasdasdasdasdasd</Text>
-
-            </View>
-            <View>
-                <Text style={{ fontSize: 20 }}>Käyttäjän tägit:</Text>
-                <Text style={{ fontSize: 20 }}>Asdasdasdasdasdasdasd</Text>
-                <Text style={{ fontSize: 20 }}>Asdasdasdasdasdasdasd</Text>
+            <Text style={{ fontSize: 40 }}>{user.name}, {user.age}</Text>
+                <Text style={{ fontSize: 20 }}>{user.bio}</Text>
             </View>
         </View>
     );
@@ -34,9 +62,9 @@ export default function Profile() {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 50,
         flex: 1,
         backgroundColor: '#fff',
+        alignItems: 'center',
     },
     button: {
         alignItems: "center",

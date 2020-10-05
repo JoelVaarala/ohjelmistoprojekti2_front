@@ -1,17 +1,9 @@
-
-
-import React from "react";
-import { StyleSheet, Text, View, Button} from "react-native";
-import { Icon, Avatar} from "react-native-elements";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, Button } from "react-native";
+import { Icon, Avatar } from "react-native-elements";
 import ImagePicker from 'react-native-image-picker';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
-export default function MyProfile({navigation}) {
-  const [count, setCount] = React.useState("");
-
-  const onPress = () => setCount("KUVA AVAUTUU");
-
-
 const MyProfile = ({ navigation }) => {
   const [state, setState] = useState({
     picPath: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg',
@@ -63,7 +55,7 @@ const MyProfile = ({ navigation }) => {
         </View>
       </View>
       <View>
-        <Button onPress={() => navigation.navigate('Add_Event')} title="add event"/>
+        <Button onPress={() => navigation.navigate('Add_Event')} title="add event" />
       </View>
     </View>
   );
