@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { Icon, Avatar } from 'react-native-elements';
+import React, { useState } from "react";
+import { StyleSheet, Text, View, Button } from "react-native";
+import { Icon, Avatar } from "react-native-elements";
 import ImagePicker from 'react-native-image-picker';
 
+//Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 const MyProfile = ({ navigation }) => {
   const [state, setState] = useState({
     picPath: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg',
@@ -34,7 +35,7 @@ const MyProfile = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
-        <Avatar onPress={() => navigation.navigate('FullProfile')} size="xlarge" rounded source={{ uri: picPath }} />
+        <Avatar size="xlarge" rounded source={{ uri: picPath }} />
         <Text style={{ fontSize: 20, top: 5 }}>
           {name}, {age}
         </Text>
@@ -52,9 +53,9 @@ const MyProfile = ({ navigation }) => {
           <Icon onPress={() => navigation.navigate('EditProfile')} size={28} reverse name="edit" />
           <Text>Omat tiedot</Text>
         </View>
-        <View>
-          <Button onPress={() => navigation.navigate('Add_Event')} title='add event' />
-        </View>
+      </View>
+      <View>
+        <Button onPress={() => navigation.navigate('Add_Event')} title="add event" />
       </View>
     </View>
   );
