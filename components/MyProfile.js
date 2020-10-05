@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View} from "react-native";
+import { StyleSheet, Text, View, Button} from "react-native";
 import { Icon, Avatar} from "react-native-elements";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
@@ -33,6 +33,9 @@ export default function MyProfile({navigation}) {
           <Icon onPress={() => navigation.navigate('EditProfile')} size={28} reverse name="edit" />
           <Text>Omat tiedot</Text>
         </View>
+      </View>
+      <View>
+        <Button onPress={() => navigation.navigate('Add_Event')} title="add event"/>
       </View>
     </View>
   );
