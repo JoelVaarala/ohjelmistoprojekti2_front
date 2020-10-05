@@ -48,8 +48,8 @@ React.useEffect(() => {
         message: viesti,
         match: props.route.params.chatti, //tää pitäs tulla propsi parametristä
       },
-    idToken: "dummytoken", //menee nyt dummyna, tän voi hakea kuitenkin ylläolevan ohjeen mukaisesti ja käytetään sitten kun verifiointi päällä
-      uid: auth().currentUser.uid //uid menee nyt dummydatana koska verifointifunkkaria ei käytetä.
+      "uid": global.myUserData.uid,
+      "idToken": global.myUserData.idToken,
     }
     //console.log(body)
     fetch(global.url + "message",
