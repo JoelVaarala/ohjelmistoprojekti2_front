@@ -11,22 +11,23 @@ export default function EditProfile() {
 
   React.useEffect(() => {
     HaeKayttajanTiedot()
-  }, []);  
+  }, []);
 
   const HaeKayttajanTiedot = async () => {
-  
+
     console.log("Haetaan käyttäjän omat tiedot")
     const myUID = auth().currentUser.uid;
     const tiedot = await firestore().collection("users").doc(myUID).get();
     console.log(tiedot._data)
+    console.log(tiedot)
     //Nyt tiedot kentästä voi noukkia tarvittavat tiedot.
-  }
+  } 
 
   return (
     <View style={styles.container}>
       <Icon reverse name='image' />
       <Text style={styles.text}>Lisää kuva</Text>
-      <Text style={styles.text} >Tietoja sinusta: </Text>
+      <Text style={styles.text} >Tietoja sinusta:</Text>
       <View style={styles.textAreaContainer}>
 
         <TextInput style={styles.textArea} multiline={true}
@@ -36,7 +37,7 @@ export default function EditProfile() {
       <View style={styles.textAreaContainer}>
         <TextInput style={styles.textArea} placeholder='Asuinpaikka' />
       </View>
-      
+
     </View>
 
   );

@@ -48,6 +48,7 @@ export default function App() {
         <ListStack.Screen name="Settings" component={Settings}/>
         {/* <ListStack.Screen name="Lisää kuva" component={} /> */
         <ListStack.Screen name="EditProfile" component={EditProfile}/> }
+        <ListStack.Screen name="FullProfile" component={Profile}/>
       </ListStack.Navigator>
     );
   };
