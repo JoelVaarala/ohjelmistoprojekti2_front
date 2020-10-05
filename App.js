@@ -50,6 +50,7 @@ export default function App() {
         <ListStack.Screen name="Add_Event" component={Add_Event}/>
         {/* <ListStack.Screen name="Lisää kuva" component={} /> */
         <ListStack.Screen name="EditProfile" component={EditProfile}/> }
+        <ListStack.Screen name="FullProfile" component={Profile}/>
       </ListStack.Navigator>
     );
   };
