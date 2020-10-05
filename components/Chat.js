@@ -14,145 +14,137 @@ import auth from '@react-native-firebase/auth';
 //Tämä on chatti mätsin kanssa
 export default function Chat(props) {
 
-// States
-const [messages, setMessages] = useState([]);
-const [posti, setPosti] = useState([]);
-const [chatters, setChatters] = useState([]);
+  // States
+  const [messages, setMessages] = useState([]);
+  const [posti, setPosti] = useState([]);
+  const [chatters, setChatters] = useState([]);
 
 
-//Tämä on heitetty nyt App.js , kutsutaan kerran ja vain täältä.
-//firebase.app();
-// React.useEffect(() => {
-//   console.log("use effect")
-//   //firebase.initializeApp()
-//   firebase.initializeApp(global.firebaseConfig);
-//   console.log(firebase.config.toString())
-//    //yritaKirjautua();
+  //Tämä on heitetty nyt App.js , kutsutaan kerran ja vain täältä.
+  //firebase.app();
+  // React.useEffect(() => {
+  //   console.log("use effect")
+  //   //firebase.initializeApp()
+  //   firebase.initializeApp(global.firebaseConfig);
+  //   console.log(firebase.config.toString())
+  //    //yritaKirjautua();
 
-// }, []);
+  // }, []);
 
-//Tämä on debuggausta varten, testataan viestin lähettämistä
-React.useEffect(() => {
-//LahetaViestiFirebaseen()
-}, []);
+  //Tämä on debuggausta varten, testataan viestin lähettämistä
+  React.useEffect(() => {
+    console.log(props)
+    console.log(props.route.params.chatti)
+  }, []);
 
 
-//Jee
-function LahetaViestiFirebaseen(viesti)
-{
-  //https://firebase.google.com/docs/auth/admin/verify-id-tokens#web
-  let body = {
-    message: viesti,
-    match: global.keskusteluDOC, //tää pitäs tulla propsi parametristä
-    idToken : "dummytoken", //menee nyt dummyna, tän voi hakea kuitenkin ylläolevan ohjeen mukaisesti ja käytetään sitten kun verifiointi päällä
-    uid : auth().currentUser.uid //uid menee nyt dummydatana koska verifointifunkkaria ei käytetä.
-  }
-  console.log(body)
-  fetch(global.url + "message",
-    {
+  //Jee
+  function LahetaViestiFirebaseen(viesti) {
+    //https://firebase.google.com/docs/auth/admin/verify-id-tokens#web
+    let body = {
+      data: {
+        message: viesti,
+        match: props.route.params.chatti, //tää pitäs tulla propsi parametristä
+      },
+    idToken: "dummytoken", //menee nyt dummyna, tän voi hakea kuitenkin ylläolevan ohjeen mukaisesti ja käytetään sitten kun verifiointi päällä
+      uid: auth().currentUser.uid //uid menee nyt dummydatana koska verifointifunkkaria ei käytetä.
+    }
+    //console.log(body)
+    fetch(global.url + "message",
+      {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(body)
+      }
+    )
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data)
+      })
+      .catch(err => console.error(err))
+  }
+
+
+
+
+
+
+  useEffect(() => {
+    console.log("Chatin us effect")
+    getConversationdataFromDoc()
+  }, []);
+
+  // chat user id's of specific doc
+  const getChatterUID = async () => {
+    try {
+      // this returns whole result of 'doc'
+      //vaihdetaan global.matches propsiin 
+
+      const get_users_from_doc = await firestore().collection('matches').doc(props.route.params.chatti).get();
+      setChatters(get_users_from_doc.data().users)
     }
-)
-.then(response => response.json())
-.then(data => {
-    console.log(data)
-})
-  .catch(err => console.error(err))
-  // console.log("Lähetä viesti firebaseen: " + viesti)
-  // firestore()
-  // .collection(global.matches).doc(global.keskusteluDOC).collection("messages")
-  // .add({
-  //   message: viesti,
-  //   sender : auth().currentUser.uid,
-  //   timestamp : null
-  // })
-  // .then(() => {
-  //   console.log('Message added!');
-  // });
-
-}
-
-
-
-
-
-  
-useEffect(() => {
-  console.log("Chatin us effect")
-  getConversationdataFromDoc()
-}, []);  
-
-// chat user id's of specific doc
-const getChatterUID = async () => {
-  try{
-    // this returns whole result of 'doc'
-    //vaihdetaan global.matches propsiin 
-    
-    const get_users_from_doc = await firestore().collection(global.matches).doc(global.keskusteluDOC).get();
-    setChatters(get_users_from_doc.data().users)
-  }
-  catch(error){
+    catch (error) {
       console.log(error)
+    }
   }
-}
 
-// getting data from firebase
-const getConversationdataFromDoc = async () => {
-  try {
+  // getting data from firebase
+  const getConversationdataFromDoc = async () => {
+    try {
 
+      //console.log("JEE")
+      //console.log(props.chatti)
+      const post = [];
+      firestore()
+        // specify route to desired collection / document__________________ this orders fetched content according timestamp  (ordered by id, default) 
+        .collection('matches').doc(props.route.params.chatti).collection('messages').orderBy('timestamp')
+        .get()
+        .then(querySnapshot => {
+          // querySnapshot = result (messages collection)
+          console.log('Total messages: ', querySnapshot.size);
+          // forEach (documentSnapshot = individual doc inside the messages collection)
+          querySnapshot.forEach(documentSnapshot => {
 
-    const post = [];
-    firestore()
-    // specify route to desired collection / document__________________ this orders fetched content according timestamp  (ordered by id, default) 
-    .collection(global.matches).doc(global.keskusteluDOC).collection('messages').orderBy('timestamp') 
-    .get()
-    .then(querySnapshot => {
-      // querySnapshot = result (messages collection)
-      console.log('Total messages: ', querySnapshot.size);
-      // forEach (documentSnapshot = individual doc inside the messages collection)
-      querySnapshot.forEach(documentSnapshot => {
+            post.push({ text: documentSnapshot.data().message, dt: documentSnapshot.data().timestamp, sender: documentSnapshot.data().sender })
 
-        post.push({text : documentSnapshot.data().message, dt: documentSnapshot.data().timestamp, sender: documentSnapshot.data().sender})
-        
-        // logs convo/message id and its content of each result
-        console.log('message ID + content : ', documentSnapshot.id, documentSnapshot.data());
+            // logs convo/message id and its content of each result
+            console.log('message ID + content : ', documentSnapshot.id, documentSnapshot.data());
 
-        // logs only the text content <String> of each message
-        // specific fields can be referenced as shown below extracting wanted field after doc.data(). + 'field'
-        console.log('message : ',  documentSnapshot.data().message);
-      });
+            // logs only the text content <String> of each message
+            // specific fields can be referenced as shown below extracting wanted field after doc.data(). + 'field'
+            //console.log('message : ', documentSnapshot.data().message);
+          });
 
-      // Chat näkyviin a'la Jaani. Nyt all ja ylläoleva tekee about samat, poistetaan toinen seuraavassa spintissä-
-      const o = []
-      //reverse koska giftedchatin dokumentaatiota tutkimalla siellä on defaulttina reverse, ja sitä parametriä ei nyt käytetä niin tässä tehdään oma reverse. "Korjataan" seuraavassa sprintissä
-      post.reverse();
-      post.forEach((element) => {
-        console.log(element.message)
-          let sender = 2;
-          if(element.sender == 'qREmoPw72NRHB2JA6uBCKJyuWhY2'){
-            sender = 1;}
-            o.push({
-            _id: o.length+1,
-            text: element.text,
-            createdAt: new Date(element.dt._seconds * 1000),
-            user: {
-              _id: sender,          
+          // Chat näkyviin a'la Jaani. Nyt all ja ylläoleva tekee about samat, poistetaan toinen seuraavassa spintissä-
+          const o = []
+          //reverse koska giftedchatin dokumentaatiota tutkimalla siellä on defaulttina reverse, ja sitä parametriä ei nyt käytetä niin tässä tehdään oma reverse. "Korjataan" seuraavassa sprintissä
+          post.reverse();
+          post.forEach((element) => {
+            console.log(element)
+            let sender = 2;
+            if (element.sender == 'qREmoPw72NRHB2JA6uBCKJyuWhY2') { //FIXME
+              sender = 1;
             }
-          })       
-      }) 
-      // asets 'o' array to chat   
-      setMessages(o)
-    });
+            o.push({
+              _id: o.length + 1,
+              text: element.text,
+              createdAt: new Date(element.dt._seconds * 1000),
+              user: {
+                _id: sender,
+              }
+            })
+          })
+          // asets 'o' array to chat   
+          setMessages(o)
+        });
 
-  } catch (error) {
-    console.log(error);
-   
+    } catch (error) {
+      console.log(error);
+
+    }
   }
-}
 
 
   // invert shit chatin kääntelyyn mahd.
@@ -166,17 +158,17 @@ const getConversationdataFromDoc = async () => {
   return (
     <View style={styles.container}>
       <GiftedChat
-      messages={messages}
-      onSend={messages => onSend(messages)}
-      //onSend={handleSend}
-      user={{
-        _id: 1,
-      }}
-    />
-    <Button 
-    onPress={getConversationdataFromDoc} title="hae docs + log it"
-    containerStyle={{ paddingHorizontal: 10 }}
-    />
+        messages={messages}
+        onSend={messages => onSend(messages)}
+        //onSend={handleSend}
+        user={{
+          _id: 1,
+        }}
+      />
+      <Button
+        onPress={getConversationdataFromDoc} title="hae docs + log it"
+        containerStyle={{ paddingHorizontal: 10 }}
+      />
     </View>
   );
 }

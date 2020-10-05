@@ -97,7 +97,7 @@ export default function Matches({ navigation, route }) {
   const renderItem = ({ item }) => (
     <ListItem
     onPress={() => {
-      console.log(item.matchid)
+      console.log("Pressed: "+item.matchid)
      navigation.navigate('Chat', { chatti: item.matchid})
     }}
     >
