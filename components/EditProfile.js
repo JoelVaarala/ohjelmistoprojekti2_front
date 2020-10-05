@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { Icon, Input } from 'react-native-elements'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -24,35 +24,49 @@ export default function EditProfile() {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1 }}>
-        <Text>TÄNNE NAVI</Text>
+      <Icon reverse name='image' />
+      <Text style={styles.text}>Lisää kuva</Text>
+      <Text style={styles.text} >Tietoja sinusta: </Text>
+      <View style={styles.textAreaContainer}>
+
+        <TextInput style={styles.textArea} multiline={true}
+          numberOfLines={3} maxLength={500} placeholder='Tietoja sinusta' />
       </View>
-
-      <View style={{ flex: 7, alignItems:'center' }}>
-        <Icon reverse name='image' />
-        <Text>Lisää kuva</Text>
-
-        <Input label='Tietoja sinusta' />
-        <Input label='Asuinpaikka' />
-       
-       
-
+      <Text style={styles.text}>Asuinpaikka: </Text>
+      <View style={styles.textAreaContainer}>
+        <TextInput style={styles.textArea} placeholder='Asuinpaikka' />
       </View>
+      
     </View>
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#eaeaea',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
   button: {
     alignItems: "center",
     backgroundColor: "#DDDDDD",
     padding: 10
+  },
+  textAreaContainer: {
+    backgroundColor: 'white',
+    padding: 5,
+    alignSelf: 'stretch'
+  },
+  textArea: {
+    textAlignVertical: "top",
+    alignSelf: 'stretch',
+    fontSize: 15
+  },
+  text: {
+    fontSize: 20,
+    paddingTop: 2,
+    paddingBottom: 1,
   },
 });

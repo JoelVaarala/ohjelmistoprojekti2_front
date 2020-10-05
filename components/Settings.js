@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 import { Input, Slider } from 'react-native-elements'
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
@@ -11,13 +11,12 @@ export default function Settings() {
   const [tag, setTag] = React.useState('')
   const [tagList, setTagList] = React.useState([])
 
+  const addButtonPressed = () => {
+    setTagList([...tagList, {key: tag}])
+  }
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1 }}>
-        <Text>TÄNNE NAVI</Text>
-      </View>
-
       <View style={{ justifyContent: 'flex-start', flex: 4, alignItems: 'center' }}>
         <Text>Enimmäisetäisyys: {value} kilometriä</Text>
         <View style={{ flex: 1, alignItems: 'stretch', justifyContent: 'flex-start', padding: 20 }}>
@@ -44,10 +43,13 @@ export default function Settings() {
           />
 
         </View>
-        <View style={{flex: 7}}>         
-        <Input label='Lisää tägi'value={tag}
-        onChangeText={tag => setTag(tag)} onSubmitEditing= {tagList == [...tagList, tag]} />
-        <Text>{tagList}</Text>
+        <View style={{flex: 7}}>  
+        <Text>Lisää tägi</Text>       
+        <TextInput  onChangeText={tag => setTag(tag)} value={tag} style={{ width: 200, borderColor: 'gray', borderWidth: 1 }}></TextInput>
+        <Button onPress={addButtonPressed} title="ADD"></Button>
+        <View style={{flexDirection: 'row'}}>
+        <FlatList data={tagList} renderItem={({item}) => <Text >{item.key}</Text>} />
+        </View>
         </View>
 
       </View>
