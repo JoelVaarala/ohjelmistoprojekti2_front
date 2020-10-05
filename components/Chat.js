@@ -174,6 +174,7 @@ const getChatterUID = async () => {
   }
   catch(error){
       console.log(error)
+    }
   }
 } */
 /*
@@ -220,15 +221,23 @@ const getConversationdataFromDoc = async () => {
             user: {
               _id: sender,          
             }
-          })       
-      }) 
-      // asets 'o' array to chat   
-      setMessages(o)
-    });
+            o.push({
+              _id: o.length + 1,
+              text: element.text,
+              createdAt: new Date(element.dt._seconds * 1000),
+              user: {
+                _id: sender,
+              }
+            })
+          })
+          // asets 'o' array to chat   
+          setMessages(o)
+        });
 
-  } catch (error) {
-    console.log(error);
-   
+    } catch (error) {
+      console.log(error);
+
+    }
   }
 }
 */
