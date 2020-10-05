@@ -1,7 +1,9 @@
-import { StatusBar } from "expo-status-bar";
+
+
 import React from "react";
 import { StyleSheet, Text, View, Button} from "react-native";
 import { Icon, Avatar} from "react-native-elements";
+import ImagePicker from 'react-native-image-picker';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function MyProfile({navigation}) {
@@ -10,23 +12,49 @@ export default function MyProfile({navigation}) {
   const onPress = () => setCount("KUVA AVAUTUU");
 
 
+const MyProfile = ({ navigation }) => {
+  const [state, setState] = useState({
+    picPath: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg',
+    name: 'Michael',
+    age: 26
+  });
 
+  const addImage = () => {
+    const options = {
+      title: 'Select Avatar',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images'
+      }
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = { uri: response.uri };
+        setState((state) => ({ ...state, picPath: source.uri }));
+      }
+    });
+  };
+
+  const { name, age, picPath } = state;
   return (
     <View style={styles.container}>
-      <View style={{ alignItems: "center" }}>
-        <Text value={{ count }}>{count}</Text>
-
-        <Avatar size="xlarge" rounded source={{ uri: "https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg" }} />
-
-        <Text style={{ fontSize: 20, top: 5 }}>Nimi, ikä</Text>
+      <View style={styles.avatarContainer}>
+        <Avatar size="xlarge" rounded source={{ uri: picPath }} />
+        <Text style={{ fontSize: 20, top: 5 }}>
+          {name}, {age}
+        </Text>
       </View>
-      <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around", top: 20 }}>
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', top: 20 }}>
         <View>
           <Icon onPress={() => navigation.navigate('Settings')} size={28} reverse name="settings" />
           <Text>Asetukset</Text>
         </View>
         <View>
-          <Icon size={28} reverse name="image" />
+          <Icon size={28} reverse name="image" onPress={() => addImage()} />
           <Text>Lisää kuva</Text>
         </View>
         <View>
@@ -39,16 +67,22 @@ export default function MyProfile({navigation}) {
       </View>
     </View>
   );
-}
+};
+
+export default MyProfile;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff'
   },
   button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10
   },
+  avatarContainer: {
+    marginTop: 15,
+    alignItems: 'center'
+  }
 });

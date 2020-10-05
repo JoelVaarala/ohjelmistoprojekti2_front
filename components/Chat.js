@@ -36,6 +36,7 @@ React.useEffect(() => {
 }, []);
 
 
+
 //Tällä pystyy lähettää viestinm parametrinä tulee viestin teksti.
 //Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
 
@@ -102,6 +103,7 @@ function getConversationsRT() {
     })
   })
 }
+
 
 useEffect(() => {
   //console.log("Chatin useEffect")

@@ -8,6 +8,8 @@ import './Globaalit';
 import firebase from 'react-native-firebase';
 import firestore from '@react-native-firebase/firestore';
 import * as Location from 'expo-location';
+import functions from '@react-native-firebase/functions';
+
 
 // import  'firebaseconfig';
 //import { firebaseConfig } from 'firebase-functions';
@@ -37,6 +39,8 @@ export default function Startup(props) {
   React.useEffect(() => {
     //firebase.initializeApp()
     firebase.initializeApp(firebaseConfig);
+    // firestore().settings({ host: 'localhost:8080',  ssl: false });
+    
     login();
   }, []);
 
