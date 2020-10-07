@@ -5,7 +5,7 @@ import DatePicker from 'react-native-date-picker';
 import RadioGroup from 'react-native-radio-button-group';
 import { Entypo } from '@expo/vector-icons';
 
-export default function Register() {
+export default function Register({ navigation }) {
 
     const [kayttajaTiedot, setKayttajaTiedot] = React.useState({ email: '', password: '', age: '', displayName: '', gender: '' });
     const [naytasalasana, setNaytaSalasana] = React.useState(true);
@@ -66,6 +66,7 @@ export default function Register() {
             .then(res => {
                 console.log(res.result);
             })
+            //tämä testiä varten
             .then(_ => {
                 setKayttajaTiedot({ email: '', password: '', age: '', displayName: '', gender: '' });
                 setDate(Date.now());
@@ -74,6 +75,9 @@ export default function Register() {
             .catch(err => console.error(err))
     }
 
+    function testi() {
+        navigation.goba
+    }
     //TODO
     //labelStyle inputeissa ja itsetehdyt Text "lablet" samalla tyylillä tulevaisuudessa jostain StyleSheatista
     //muuta css hömpötystä
@@ -136,31 +140,6 @@ export default function Register() {
                 // }}
                 />
             </View>
-
-            <Input
-                label="Salasana"
-                placeholder="Vähintään 6 merkkiä"
-                secureTextEntry={naytasalasana}
-                onChangeText={value => inputChanged('password', value)}
-                value={kayttajaTiedot.password}
-                rightIcon={iconi}
-            />
-            <Input
-                label="Salasana"
-                placeholder="Vähintään 6 merkkiä"
-                secureTextEntry={naytasalasana}
-                onChangeText={value => inputChanged('password', value)}
-                value={kayttajaTiedot.password}
-                rightIcon={iconi}
-            />
-            <Input
-                label="Salasana"
-                placeholder="Vähintään 6 merkkiä"
-                secureTextEntry={naytasalasana}
-                onChangeText={value => inputChanged('password', value)}
-                value={kayttajaTiedot.password}
-                rightIcon={iconi}
-            />
             <Button
                 onPress={() => registerUser()}
                 title="Luo käyttäjä"
