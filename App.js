@@ -13,6 +13,7 @@ import Settings from './components/Settings';
 import Add_Event from './components/Add_Event';
 //import FirebaseSaato from './components/FirebaseSaato'
 import Startup from "./components/Startup";
+import Register from "./components/Register";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -66,6 +67,14 @@ export default function App() {
     );
   };
 
+  const LoginStack = () => {
+    return (
+    <ListStack.Navigator>
+          <ListStack.Screen name="Login">{() => <Startup asetaLogin={asetaLogin} />}</ListStack.Screen>
+          <ListStack.Screen name="Register" component={Register}/>
+    </ListStack.Navigator>
+    )
+  }
 
 
   return (
@@ -91,7 +100,9 @@ export default function App() {
           <Tab.Screen name="Matches" component={MatchStack} />
 
           <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
-          <Tab.Screen name="Login" component={Startup} />
+          {/* <Tab.Screen name="Login" component={Startup} /> */}
+
+          <Tab.Screen name="Rekisteröidy" component={LoginStack} />
 
           {/* <Tab.Screen name="Messages" component={Chat} />
             <Tab.Screen name="Profiili" component={MyProfile} /> */}

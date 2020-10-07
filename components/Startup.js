@@ -25,8 +25,9 @@ var firebaseConfig = {
 };
 
 
-export default function Startup(props) {
-
+export default function Startup({ navigation }) {
+  console.log('navigation: ')
+  console.log(navigation)
   const [kayttaja, setKayttaja] = React.useState('user@example.com');
   const [salasana, setSalasana] = React.useState('secretPassword');
   const [msg, setMsg] = React.useState('');
@@ -173,7 +174,8 @@ export default function Startup(props) {
       <Text>{msg}</Text>
 
       <Button
-        onPress={login} title="REKISTERÖIDY"
+        onPress={() => navigation.navigate('Register')}
+        title="REKISTERÖIDYaaaaaaa"
         containerStyle={{ paddingHorizontal: 10 }}
       />
     </View>
