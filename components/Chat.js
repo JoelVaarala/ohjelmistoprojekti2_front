@@ -87,7 +87,8 @@ function getConversationsRT() {
       // Alla selvitetään onko henkilö lähettäjä/vastaanottaja, jotta tiedetään kummalle puolelle näyttöä viestit renderöidään
       let sender = 2;
       if(doc.data().sender == auth().currentUser.uid){
-        sender = 1;}
+        sender = 1;
+      }
       // lisätään arrayhin halutut viesti datat
       keskustelunViestit.push({
         _id: keskustelunViestit.length+1,

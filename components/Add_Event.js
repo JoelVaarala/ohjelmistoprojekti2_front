@@ -1,23 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, TextInput, Button, FlatList, EventSubscriptionVendor, Platform } from 'react-native';
+import React, {useEffect, useState, Component } from 'react';
+import { StyleSheet, Text, View, TextInput, Button, FlatList,  Platform } from 'react-native';
 import { Icon, Input } from 'react-native-elements';
 import Stepper from "react-native-stepper-ui";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Redux from 'redux';
+import { connect } from 'react-redux';
+import { addName, addBio, addTime, addTags, store, } from '../redux/index';
 
 
-export default function Add_Event() {
-
+function Add_Eventti(props) {
+  
   // -------------------------------------------------------------------------------------------
-  const BasicInfo = () => {
+  const BasicInfo = (props) => {
 
     const [eventName, setEventName] = useState('');
     const [description, setDescription] = useState('');
-   
+    
 
     return (
       <View>
-        
         <Text style={styles.headers}>Anna tapahtumalle nimi : </Text>
         <TextInput style={styles.textbox} onChangeText={text => setEventName(text)} 
                         value={eventName} />
@@ -143,10 +144,16 @@ export default function Add_Event() {
 
   // -----------------------------------------------------------------------------------------------------
   const ShowAll = (props) => {
+
+    var e_nimi = store.getState().reducer[0].n
+    var e_kuvaus = store.getState().reducer[1].k
     return(
       <View>
         <Text>Täällä voisi näyttää tiedot 
           ja 'confirm' event</Text>
+          
+          <Text style={{marginTop: 30}}>Eventin nimi on : {e_nimi}</Text>
+          <Text>Eventin kuvaus : {e_kuvaus}</Text>
       </View>
     );
   }
@@ -159,13 +166,32 @@ export default function Add_Event() {
   ];
 
 const [active, setActive] = useState(0);
+let enim = "test_nimi"
+let ekuv = "test_kuvaus tapahtumasta"
+let aika = "30-10-2020"
+let tt = ["pelit", "kalastus"]
+const addi = () => {
+  //store.dispatch(addItem({nimi: enim}))
+  store.dispatch(addName(enim))
+  store.dispatch(addBio(ekuv))
+  store.dispatch(addTime(aika))
+  store.dispatch(addTags({tt}))
+  //store.dispatch(addItem({tag: tt}))
+}
 
+const log = () => {
+  console.log(store.getState());
+  console.log(store.getState().EventReducer[3].tt);
+  
+}
 
   return (
     
     <View style={styles.container}>
-
-    <View style={styles.container, {paddingTop: 30, paddingBottom: 20}}>
+     
+    <View style={styles.container, {paddingTop: 0, paddingBottom: 300}}>
+    <Button onPress={addi} title="add item"/>
+      <Button onPress={log} title="logita store state"/>
         <Stepper
           active={active}
           content={content}
@@ -180,6 +206,15 @@ const [active, setActive] = useState(0);
   );
 
 }
+
+
+const mapStateToProps = (state) => ({
+  EventReducer: state.EventReducer,
+})
+
+const Add_Event = connect(mapStateToProps, {addName, addBio, addTime, addTags})(Add_Eventti);
+
+export default Add_Event;
 
 
 const styles = StyleSheet.create({
