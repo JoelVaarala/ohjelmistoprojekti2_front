@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
 import SwipeCards from "./SwipeCards";
+import * as Location from 'expo-location';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function SwipingPage({ navigation, route }) {
@@ -22,14 +23,25 @@ export default function SwipingPage({ navigation, route }) {
   }, [navigation]);
 
 
-  function HaeSwipettaviaBackista() {
+  async function HaeSwipettaviaBackista() {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+    }
+    let location = await (await Location.getCurrentPositionAsync({})).coords;
     //Connectaa endpointiin, lähettää parametrinä omat hakutoiveet. Vaihtoehtona että bäkki itse noutas firebasesta mutta ei kai tarpeen?
     console.log("Hae swipettäviä")
-    console.log(global.url + "findSwipeables")
-    let bodii =  {
-      "uid" : "qREmoPw72NRHB2JA6uBCKJyuWhY2",
-      "tags" : ["perunat"]
-  }
+    global.myUserData.filters.myLocation.latitude = location.latitude;
+    global.myUserData.filters.myLocation.longitude = location.longitude;
+
+
+    let bodii = {
+      "uid": global.myUserData.uid,
+      "idToken": global.myUserData.idToken,
+      "data": global.myUserData.filters
+    }
+
+    console.log(bodii)
     fetch(global.url + "findSwipeables", {
       method: 'POST',
       headers: {
@@ -40,9 +52,10 @@ export default function SwipingPage({ navigation, route }) {
       .then(response => response.json())
       // .then(response => console.log(response))
       .then(data => {
-        console.log(data)
-        setSwipettavat(data.result)
+        console.log("Find results:")
+        //console.log(data)
         console.log(data.result)
+        setSwipettavat(data.result)
       })
       .catch(err => console.error(err))
     //palauttaa asynscista arrayn, sijoitetaan swipettaviin.

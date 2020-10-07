@@ -19,6 +19,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import firebase from 'react-native-firebase';
+import ViewLikers from "./components/ViewLikers.js";
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -99,7 +100,7 @@ export default function App() {
             <Tab.Screen name="Swipes" component={SwipingPage} />
             {/* <Tab.Screen name="Chat" component={Chat} /> */}
             <Tab.Screen name="Matches" component={MatchStack} />
-
+            <Tab.Screen name="MyLikes" component={ViewLikers} />
             <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
             {/* <Tab.Screen name="Login" component={Startup} /> */}
 

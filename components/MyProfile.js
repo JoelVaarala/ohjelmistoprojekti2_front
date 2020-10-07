@@ -37,7 +37,8 @@ const MyProfile = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
-        <Avatar size="xlarge" rounded source={{ uri: picPath }} />
+        <Avatar onPress={() => navigation.navigate('FullProfile')} 
+        size="xlarge" rounded source={{ uri: picPath }} />
         <Text style={{ fontSize: 20, top: 5 }}>
           {name}, {age}
         </Text>
