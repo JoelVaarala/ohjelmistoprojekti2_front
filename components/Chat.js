@@ -21,12 +21,13 @@ export default function Chat(props) {
 
 
   //tää täytyy fixaaa EI TOIMI
-  function GoToAvatar({ navigation, route}) {
+  function GoToAvatar({ navigation }) {
     return (
       <Avatar 
       onPress={() => navigation.navigate('MatchProfile')}
       size="large" rounded 
-      source={{ uri: avatar_url }} />
+      source={{ uri: avatar_url }} 
+      />
     );
   }
 
@@ -138,7 +139,7 @@ export default function Chat(props) {
     <View style={styles.container}>
       <View style={{justifyContent: 'space-around', flexDirection: 'row', padding: 5, backgroundColor: 'grey'}}>
       <Icon size={20} reverse name="info"  /*tällä napilla voidaan myöhemmin poistaa match*/ />
-      <GoToAvatar />
+      <GoToAvatar navigation={props.navigation} />
       </View>
       <GiftedChat
         messages={messages}
