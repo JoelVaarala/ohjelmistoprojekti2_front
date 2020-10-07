@@ -9,6 +9,8 @@ export default function ViewLikers() {
     const [selectedEvent, setEvent] = React.useState("java");
     const [myEvents, setMyevents] = React.useState(["Puistokalja", "Sulkkis"])
 
+    //
+
     //Bäkistä tai firebasesta: Hae userit jotka on tykännyt eventistä ja joille eventti ei ole vielä swipennyt
     const placeholdertext = "Tag1, Tag2, Tag3, Tag4"
 
