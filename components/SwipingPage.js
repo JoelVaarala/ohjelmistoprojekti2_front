@@ -31,7 +31,6 @@ export default function SwipingPage({ navigation, route }) {
     let location = await (await Location.getCurrentPositionAsync({})).coords;
     //Connectaa endpointiin, lähettää parametrinä omat hakutoiveet. Vaihtoehtona että bäkki itse noutas firebasesta mutta ei kai tarpeen?
     console.log("Hae swipettäviä")
-    console.log(global.myUserData)
     global.myUserData.filters.myLocation.latitude = location.latitude;
     global.myUserData.filters.myLocation.longitude = location.longitude;
 
@@ -41,6 +40,8 @@ export default function SwipingPage({ navigation, route }) {
       "idToken": global.myUserData.idToken,
       "data": global.myUserData.filters
     }
+
+    console.log(bodii)
     fetch(global.url + "findSwipeables", {
       method: 'POST',
       headers: {
@@ -51,9 +52,10 @@ export default function SwipingPage({ navigation, route }) {
       .then(response => response.json())
       // .then(response => console.log(response))
       .then(data => {
-        console.log(data)
-        setSwipettavat(data.result)
+        console.log("Find results:")
+        //console.log(data)
         console.log(data.result)
+        setSwipettavat(data.result)
       })
       .catch(err => console.error(err))
     //palauttaa asynscista arrayn, sijoitetaan swipettaviin.

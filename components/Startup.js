@@ -53,7 +53,8 @@ export default function Startup(props) {
       }
       let location = await (await Location.getCurrentPositionAsync({})).coords;
       console.log(location)
-      UpdateFirebase({ latitude: location.latitude, longitude: location.longitude })
+      console.log("sijaintia ei päivitetä nyt")
+      //UpdateFirebase({ latitude: location.latitude, longitude: location.longitude })
       // return ({ });
       // return {latitute: , longitude: }
       // paivitaKayttajanSijainti({latitude : location.coords.latitude, longitude: location.coords.longitude})
