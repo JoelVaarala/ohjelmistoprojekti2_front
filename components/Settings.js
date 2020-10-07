@@ -9,9 +9,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Settings() {
 
-  const [value, setValue] = useState(1)
-  const [minAge, setMinAge] = useState('')
-  const [maxAge, setMaxAge] = useState('')
   //tagit
   const [tag, setTag] = useState('')
   const [tagList, setTagList] = useState([])
@@ -52,7 +49,7 @@ export default function Settings() {
   };
 
   const formatDate = (date) => {
-    return `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}`
+    return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
   }
 
   return (
@@ -175,6 +172,9 @@ export default function Settings() {
             />
           )}
         </View>
+        <View style={styles.omatContainerit}>
+          <Button title='Tallenna muutokset' />
+        </View>
       </ScrollView>
     </SafeAreaView>
 
@@ -186,7 +186,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    marginTop: StatusBar.currentHeight || 0,
   },
   scrollView: {
 
@@ -199,7 +198,7 @@ const styles = StyleSheet.create({
   },
   tag: {
     padding: 6,
-    fontSize: 20,
+    fontSize: 16,
     color: 'white',
     marginVertical: 7,
     marginHorizontal: 10,
