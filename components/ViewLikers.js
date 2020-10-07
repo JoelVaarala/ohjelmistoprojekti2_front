@@ -1,12 +1,15 @@
 import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, StatusBar, Image, Text } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, StatusBar, Image, Text, Picker } from 'react-native';
 import { Avatar, ListItem, Overlay, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function ViewLikers() {
+    const [selectedEvent, setEvent] = React.useState("java");
+    const [myEvents, setMyevents] = React.useState(["Puistokalja", "Sulkkis"])
 
+    //Bäkistä tai firebasesta: Hae userit jotka on tykännyt eventistä ja joille eventti ei ole vielä swipennyt
     const placeholdertext = "Tag1, Tag2, Tag3, Tag4"
 
     const list = [
@@ -39,10 +42,20 @@ export default function ViewLikers() {
     }
     return (
         <View style={styles.container}>
-            {/* <View style={{ flex: 1 }}>
-            <Text>TÄNNE NAVI</Text>
-          </View> */}
             <View>
+                <View style={styles.picker}>
+                    <Picker
+                        selectedValue={selectedEvent}
+                        style={{ height: 50, width: 150 }}
+                        onValueChange={(itemValue, itemIndex) => setEvent(itemValue)}
+                    >
+                        {
+                            myEvents.map((l, i) => (
+                                <Picker.Item label={l} value={l} />
+                            ))
+                        }
+                    </Picker>
+                </View>
                 <Text style={{ fontSize: 20 }}>  People who swiped for your event!</Text>
                 {
                     list.map((l, i) => (
@@ -62,6 +75,7 @@ export default function ViewLikers() {
                             }}>
 
                                 <Button
+                                    //style={styles.button}
                                     type="outline"
                                     raised={true}
                                     icon={{
@@ -101,5 +115,12 @@ const styles = StyleSheet.create({
         backgroundColor: "#DDDDDD",
         padding: 10
     },
+    picker: {
+        //flex: 1,
+        // paddingTop: 0,
+        alignItems: "center"
+    },
 });
+
+
 

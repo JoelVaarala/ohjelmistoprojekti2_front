@@ -23,15 +23,16 @@ let herokuurl = "https://ohpro2.herokuapp.com/"
 global.myUserData = {
   uid : "",
   idToken : "",
-  user: { bio: " asda", tags: ["rakkautta", "rauhaa"] },
+  user: { bio: " asda", tags: ["perunat", "testitag"] },
   filters: {
     tags: ["perunat"
     ],
     minAge: 18,
-    maxAge: 50,
-    distance: 5.3,
+    maxAge: 500,
+    distance: 50000.3,
     lookingFor: [
-      "events",
+      "events"
+      ,
       "users"
     ],
     genders: [
