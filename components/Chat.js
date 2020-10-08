@@ -83,7 +83,7 @@ export default function Chat(props) {
       .catch(err => console.error(err))
   }
 
-<<<<<<< HEAD
+
 // --UPDATED METHOD TO GET MESSAGES REALTIME
 // ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
 const ref = firestore().collection('matches').doc(props.route.params.chatti).collection('messages').orderBy('timestamp', 'desc');
@@ -105,36 +105,7 @@ function getConversationsRT() {
       if(doc.data().sender == auth().currentUser.uid){
         sender = 1;
       }
-      // lisätään arrayhin halutut viesti datat
-      keskustelunViestit.push({
-        _id: keskustelunViestit.length+1,
-        text: doc.data().message,
-        createdAt: new Date(doc.data().timestamp._seconds * 1000),
-        user: {
-          _id: sender,          
-=======
-  // --UPDATED METHOD TO GET MESSAGES REALTIME
-  // ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
-  const ref = firestore().collection('matches').doc(props.route.params.chatti).collection('messages').orderBy('timestamp', 'desc');
-
-  function getConversationsRT() {
-
-    // luodaan snapshot joka, "hakee" firestoren sisällön
-    ref.onSnapshot((querySnapshot) => {
-      // array johon laitetaan firestoren viestit
-      const keskustelunViestit = [];
-      // tulostaa kuinka monta viestiä collection sisältää
-      console.log('Total messages: ', querySnapshot.size);
-      // looppi jossa muodostetaan viestit jokaisesta tietueesta
-      querySnapshot.forEach((doc) => {
-
-        console.log('Viestin sisältö : ', doc.data().message);
-        // Alla selvitetään onko henkilö lähettäjä/vastaanottaja, jotta tiedetään kummalle puolelle näyttöä viestit renderöidään
-        let sender = 2;
-        if (doc.data().sender == auth().currentUser.uid) {
-          sender = 1;
->>>>>>> 9cb49c1fe3f63e910df77578956177531b9435c1
-        }
+  
         // lisätään arrayhin halutut viesti datat
         keskustelunViestit.push({
           _id: keskustelunViestit.length + 1,
