@@ -25,15 +25,15 @@ global.myUserData = {
   idToken : "",
   user: { bio: " asda", tags: ["perunat", "testitag"] },
   filters: {
-    tags: ["perunat"
+    tags: ["perunat", "testitagi"
     ],
     minAge: 18,
     maxAge: 500,
     distance: 50000.3,
     lookingFor: [
       "events"
-      ,
-      "users"
+      // ,
+      // "users"
     ],
     genders: [
       "male",
