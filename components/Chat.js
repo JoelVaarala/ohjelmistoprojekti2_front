@@ -119,10 +119,40 @@ useEffect(() => {
     LahetaViestiFirebaseen(messages[0].text);
   }, [])
 
+  // Matchin poisto funkari
+  const removeMatch = () => {
+    console.log('matchin poisto', props.route.params.chatti)
+    
+    let url = global.url + 'removeMatch';
+    let body = {
+      idToken : "Dummyyy", // FIX ME
+      data: {
+      match : props.route.params.chatti,
+      },
+      uid : auth().currentUser.uid
+    }
+
+    console.log(body);
+
+    fetch(url,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application.json' 
+        },
+        body: JSON.stringify(body)
+      })
+      .then(response => response.json())
+      .then(res => {
+          console.log('.then res ->', res);
+      })
+      .catch(err => console.error(err))
+  }
+
 
   return (
     <View style={styles.container}>
-      <Icon size={20} reverse name="info"  /*tällä napilla voidaan myöhemmin poistaa match*//>
+      <Icon size={20} reverse name="info"  onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*//>
       <GiftedChat
       messages={messages}
       onSend={messages => onSend(messages)}

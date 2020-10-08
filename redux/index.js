@@ -1,7 +1,7 @@
 import { combineReducers ,createStore} from 'redux';
 
 // actions, näitä actioneita kutsutaan komponenteissa
-// välittävät dispatchin avulla arvot alla oleviin reducer functioihin -> stateen
+// välittävät dispatchin avulla arvot storeen ja alla oleviin reducer functioihin -> stateen 
 
 export const addItem = (value) => {
     return{
@@ -9,49 +9,29 @@ export const addItem = (value) => {
         item: value
     }
 }
- export const addName = (value) => {
+// Tämä käytössä, vastaan ottaa olion joka sisältää käyttäjän syöttämät tiedot
+export const addEvent = (value) => {
     return {
-        type: "ADD1",
-        item: value
-    }
-}
-export const addBio = (value) => {
-    return {
-        type: "ADD2",
-        item: value
-    }
-}
-export const addTime = (value) => {
-    return {
-        type: "ADD3",
-        item: value
-    }
-}
-export const addTags = (value) => {
-    return {
-        type: "ADD4",
-        item: value
+        type: "eventti",
+        payload: value 
     }
 }
 
 
 // reducer, or multiple reducers 
 const EventReducer = (state, action) => {
-    if(state === undefined){
-        state = []
-    }
-    
+    //if(state === undefined){
+     //   state = []
+    //}
+    // for now empty state for every new event is fine
+    // possibly we can make different reducer for updates if needed / wanted
+    state=[]    
     switch(action.type) {
         case "ADD1":
             return state.concat(action.item)
             //return state.splice(1,0,action.item);
-            
-        case "ADD2":
-            return state.concat(action.item);
-        case "ADD3":
-            return state.concat(action.item);
-        case "ADD4":
-            return state.concat(action.item);
+        case "eventti":
+            return state.concat(action.payload);
         default:
             return state;
     } 
