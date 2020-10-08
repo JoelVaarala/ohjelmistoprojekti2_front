@@ -21,6 +21,8 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import firebase from 'react-native-firebase';
 import ViewLikers from "./components/ViewLikers.js";
 
+import { Provider } from 'react-redux';
+import { store } from './redux/index';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -83,6 +85,8 @@ export default function App() {
     //   <Text asd></Text>
     //   </View>
 
+    <Provider store={store}>
+
     <NavigationContainer>
       {vaihto ? (
         <Stack.Navigator>
@@ -111,6 +115,7 @@ export default function App() {
           </Tab.Navigator>
         )}
     </NavigationContainer>
+    </Provider>
   );
 }
 

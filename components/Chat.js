@@ -83,26 +83,36 @@ export default function Chat(props) {
       .catch(err => console.error(err))
   }
 
-  // --UPDATED METHOD TO GET MESSAGES REALTIME
-  // ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
-  const ref = firestore().collection('matches').doc(props.route.params.chatti).collection('messages').orderBy('timestamp', 'desc');
 
-  function getConversationsRT() {
+// --UPDATED METHOD TO GET MESSAGES REALTIME
+// ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
+const ref = firestore().collection('matches').doc(props.route.params.chatti).collection('messages').orderBy('timestamp', 'desc');
 
-    // luodaan snapshot joka, "hakee" firestoren sisällön
-    ref.onSnapshot((querySnapshot) => {
-      // array johon laitetaan firestoren viestit
-      const keskustelunViestit = [];
-      // tulostaa kuinka monta viestiä collection sisältää
-      console.log('Total messages: ', querySnapshot.size);
-      // looppi jossa muodostetaan viestit jokaisesta tietueesta
-      querySnapshot.forEach((doc) => {
+function getConversationsRT() {
+  
+  // luodaan snapshot joka, "hakee" firestoren sisällön
+  ref.onSnapshot((querySnapshot) => {
+    // array johon laitetaan firestoren viestit
+    const keskustelunViestit = [];
+    // tulostaa kuinka monta viestiä collection sisältää
+    console.log('Total messages: ', querySnapshot.size);
+    // looppi jossa muodostetaan viestit jokaisesta tietueesta
+    querySnapshot.forEach((doc) => {
+      
+      console.log('Viestin sisältö : ',doc.data().message);
+      // Alla selvitetään onko henkilö lähettäjä/vastaanottaja, jotta tiedetään kummalle puolelle näyttöä viestit renderöidään
+      let sender = 2;
+      if(doc.data().sender == auth().currentUser.uid){
+        sender = 1;
+      }
+      // lisätään arrayhin halutut viesti datat
+      keskustelunViestit.push({
+        _id: keskustelunViestit.length+1,
+        text: doc.data().message,
+        createdAt: new Date(doc.data().timestamp._seconds * 1000),
+        user: {
+          _id: sender,          
 
-        console.log('Viestin sisältö : ', doc.data().message);
-        // Alla selvitetään onko henkilö lähettäjä/vastaanottaja, jotta tiedetään kummalle puolelle näyttöä viestit renderöidään
-        let sender = 2;
-        if (doc.data().sender == auth().currentUser.uid) {
-          sender = 1;
         }
         // lisätään arrayhin halutut viesti datat
         keskustelunViestit.push({
@@ -134,13 +144,47 @@ export default function Chat(props) {
     LahetaViestiFirebaseen(messages[0].text);
   }, [])
 
+  // Matchin poisto funkari
+  const removeMatch = () => {
+    console.log('matchin poisto', props.route.params.chatti)
+    
+    let url = global.url + 'removeMatch';
+    let body = {
+      idToken : "Dummyyy", // FIX ME
+      data: {
+      match : props.route.params.chatti,
+      },
+      uid : auth().currentUser.uid
+    }
+
+    console.log(body);
+
+    fetch(url,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application.json' 
+        },
+        body: JSON.stringify(body)
+      })
+      .then(response => response.json())
+      .then(res => {
+          console.log('.then res ->', res);
+      })
+      .catch(err => console.error(err))
+  }
+
 
   return (
     <View style={styles.container}>
+
+      <Icon size={20} reverse name="info"  onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*//>
+
       <View style={{justifyContent: 'space-around', flexDirection: 'row', padding: 5, backgroundColor: 'grey'}}>
-      <Icon size={20} reverse name="info"  /*tällä napilla voidaan myöhemmin poistaa match*/ />
+     
       <GoToAvatar navigation={props.navigation} />
       </View>
+
       <GiftedChat
         messages={messages}
         onSend={messages => onSend(messages)}
