@@ -58,7 +58,7 @@ export default class App extends React.Component {
                         data={this.state.carouselItems}
                         sliderWidth={viewportWidth}
                         itemWidth={viewportWidth}
-                        sliderHeight={viewport}
+                        sliderHeight={viewportHeight}
                         renderItem={this._renderItem}
                         onSnapToItem={index => this.setState({ activeIndex: index })} />
                 </View>

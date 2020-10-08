@@ -5,6 +5,8 @@ import ImagePicker from 'react-native-image-picker';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 const MyProfile = ({ navigation }) => {
+  console.log('navigation: ')
+  console.log(navigation)
   const [state, setState] = useState({
     picPath: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg',
     name: 'Michael',
@@ -35,7 +37,8 @@ const MyProfile = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
-        <Avatar size="xlarge" rounded source={{ uri: picPath }} />
+        <Avatar onPress={() => navigation.navigate('FullProfile')} 
+        size="xlarge" rounded source={{ uri: picPath }} />
         <Text style={{ fontSize: 20, top: 5 }}>
           {name}, {age}
         </Text>

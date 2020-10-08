@@ -8,7 +8,7 @@ import firebase from 'react-native-firebase';
 export default function Matches({ navigation, route }) {
 
   const [myMatches, setMyMatches] = React.useState([]);
-  const myUserID = "qREmoPw72NRHB2JA6uBCKJyuWhY2";
+  //const myUserID = "qREmoPw72NRHB2JA6uBCKJyuWhY2";
   const [overlay, setOverlay] = React.useState(true);
 
 
@@ -40,14 +40,15 @@ export default function Matches({ navigation, route }) {
     try {
       // this returns whole result of 'doc'
       //hakee messages/matches collectionista itemit
-      const matches = await firestore().collection(global.matches).get();
+      const matches = await firestore().collection('matches').get();
       
+      //TODO FIXME querytataan mielummin kuin haetaan koko collectionia, Sprintti 3.
       let temparray = [];
       let num = 1;
       matches.docs.map(doc => {
         let matchname = "";
         doc._data.users.forEach((user) => {
-          if (user != myUserID) {
+          if (user != global.myUserData.myUserID) {
             matchname = user;
           }
           

@@ -25,8 +25,9 @@ var firebaseConfig = {
 };
 
 
-export default function Startup(props) {
-
+export default function Startup({ navigation }) {
+  // console.log('navigation: ')
+  // console.log(navigation)
   const [kayttaja, setKayttaja] = React.useState('user@example.com');
   const [salasana, setSalasana] = React.useState('secretPassword');
   const [msg, setMsg] = React.useState('');
@@ -40,7 +41,7 @@ export default function Startup(props) {
     //firebase.initializeApp()
     firebase.initializeApp(firebaseConfig);
     // firestore().settings({ host: 'localhost:8080',  ssl: false });
-    
+
     login();
   }, []);
 
@@ -52,19 +53,20 @@ export default function Startup(props) {
         setErrorMsg('Permission to access location was denied');
       }
       let location = await (await Location.getCurrentPositionAsync({})).coords;
-       console.log(location)
-       UpdateFirebase({latitude: location.latitude, longitude: location.longitude })
+      console.log(location)
+      console.log("sijaintia ei päivitetä nyt")
+      //UpdateFirebase({ latitude: location.latitude, longitude: location.longitude })
       // return ({ });
       // return {latitute: , longitude: }
       // paivitaKayttajanSijainti({latitude : location.coords.latitude, longitude: location.coords.longitude})
     })();
   }
 
-  //TODO pyydä käyttäjältä lupaa sijaintiin jos ei ole ja syötä locationiin latitute/lognitude
+  //tää menee endpointin kautta.
   function UpdateFirebase(newloc) {
     var mydoc = auth().currentUser.uid;
     //console.log(mydoc)
-    firestore().collection('users').doc(mydoc).update({"location" : new firestore.GeoPoint(newloc.latitude, newloc.longitude)})
+    firestore().collection('users').doc(mydoc).update({ "location": new firestore.GeoPoint(newloc.latitude, newloc.longitude) })
       .then(function () {
         console.log("Document successfully updated!");
         //päivitetään firebaseen käyttäjän sijainti
@@ -80,9 +82,15 @@ export default function Startup(props) {
     auth()
       .signInWithEmailAndPassword(kayttaja, salasana)
       .then(() => {
-        console.log('User account created & signed in!');
-        //console.log(auth().currentUser)
-        UpdateLocation();
+        console.log('User logged in');
+        // console.log(auth().currentUser)
+        global.myUserData.uid = auth().currentUser.uid;
+        auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+          global.myUserData.idToken = idToken;
+        }).catch(function (error) {
+          // Handle error
+        });
+        //UpdateLocation();
         //Debugin takia tässä, poistettu 28.9.2020
         //LahetaViestiFirebaseen();
       })
@@ -173,7 +181,8 @@ export default function Startup(props) {
       <Text>{msg}</Text>
 
       <Button
-        onPress={login} title="REKISTERÖIDY"
+        onPress={() => navigation.navigate('Rekisteröidy')}
+        title="REKISTERÖIDYaaaaaaa"
         containerStyle={{ paddingHorizontal: 10 }}
       />
     </View>
