@@ -39,7 +39,7 @@ export default function Startup({ navigation }) {
 
   React.useEffect(() => {
     //firebase.initializeApp()
-    firebase.initializeApp(firebaseConfig);
+   firebase.initializeApp(firebaseConfig);
     // firestore().settings({ host: 'localhost:8080',  ssl: false });
 
     login();

@@ -8,37 +8,60 @@ import firestore from '@react-native-firebase/firestore';
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function EditProfile() {
 
+    //tagit
+    const [tag, setTag] = useState('')
+    const [tagList, setTagList] = useState([])
 
   React.useEffect(() => {
     HaeKayttajanTiedot()
   }, []);
+
+  React.useEffect(() => {
+    console.log('useeffecti', tagList )
+  }, [tagList]);
+
 
   const HaeKayttajanTiedot = async () => {
 
     console.log("Haetaan käyttäjän omat tiedot")
     const myUID = auth().currentUser.uid;
     const tiedot = await firestore().collection("users").doc(myUID).get();
-    console.log(tiedot._data)
-    console.log(tiedot)
+    var info = await tiedot.data()
+    
+    setUserTiedot({
+      age: info.data.age,
+      name: info.data.displayName,
+      bio: info.data.bio
+    }
+    )
+    let blaa = info.tags
+    console.log('jfjf', blaa)
+    setTagList(blaa)
     //Nyt tiedot kentästä voi noukkia tarvittavat tiedot.
   }
 
-  //tagit
-  const [tag, setTag] = useState('')
-  const [tagList, setTagList] = useState([])
 
   const addButtonPressed = () => {
-    setTagList([...tagList, { key: tag }])
+    setTagList([...tagList, tag ])
   }
+
+  const [userTiedot, setUserTiedot] = useState({
+    age: 0,
+    bio: '',
+    name: '',
+  })
 
   return (
     <View style={styles.container}>
+      <View style={{ flexDirection: 'row' }}>
+        <Text style={styles.text}>{userTiedot.name}, {userTiedot.age}</Text>
+      </View>
       <Icon reverse name='image' />
       <Text style={styles.text}>Lisää kuva</Text>
       <Text style={styles.text} >Tietoja sinusta:</Text>
       <View style={styles.textAreaContainer}>
 
-        <TextInput style={styles.textArea} multiline={true}
+        <TextInput value={userTiedot.bio} style={styles.textArea} multiline={true}
           numberOfLines={3} maxLength={500} placeholder='Tietoja sinusta' />
       </View>
       <Text style={styles.text}>Asuinpaikka: </Text>
@@ -57,9 +80,9 @@ export default function EditProfile() {
             horizontal={false}
             numColumns={3}
             data={tagList}
-            keyExtractor={((item, index) => index.toString())}  
+            keyExtractor={((item, index) => index.toString())}
             renderItem={({ item }) =>
-              <Text style={styles.tag}>{item.key}</Text>}
+              <Text onPress={() => deleteItemById(item.id)} style={styles.tag}>{item}</Text>}
           />
         </View>
       </View>
