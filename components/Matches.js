@@ -35,6 +35,18 @@ export default function Matches({ navigation, route }) {
 
   }, []);
 
+  // FIXME, tämä päivittyy "automaattisesti"
+  function getMyMatches_From_MyMatches()  {
+    let ref = firestore().collection('users').doc(global.myUserData.myUserID).collection('MyMatches')
+    ref.onSnapshot((querySnapshot) => { // snapshot == capture sen hetkisestä rakenteesta
+      let matchit = []; // voidaan asettaa halutut tiedot taulukkoon
+      console.log('number of matches : ', querySnapshot.size); // logi -> tuleeko collectionista "osumia"
+      querySnapshot.forEach((doc) => { // dokkari kerrallaan läpi, jotta voidaan poimia matchien "id:t"
+        matchit.push(doc.data() /*esim .user[1]*/) // TODO: specify what data myMatch dokkarista haetaan.
+      })
+    })
+  }
+
 
   const getMyMatches = async () => {
     try {
