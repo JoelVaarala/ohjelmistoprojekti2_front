@@ -29,9 +29,9 @@ export default function EditProfile() {
     var info = await tiedot.data()
     
     setUserTiedot({
-      age: info.data.age,
-      name: info.data.displayName,
-      bio: info.data.bio
+      age: info.age,
+      name: info.displayName,
+      bio: info.bio
     }
     )
     let blaa = info.tags
