@@ -52,6 +52,15 @@ export default function Settings() {
     return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
   }
 
+  function HaeSettingsValues() {
+    let ref = firestore().collection("users").doc(auth().currentUser.uid)
+    ref.onSnapshot((querySnapshot) =>{
+    let sukupuutto = querySnapshot.data().gender;
+    console.log(sukupuutto);
+    // setStates here as shown above
+    })
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>

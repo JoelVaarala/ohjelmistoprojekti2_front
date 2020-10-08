@@ -14,12 +14,25 @@ export default function EditProfile() {
 
   React.useEffect(() => {
     HaeKayttajanTiedot()
-  }, []);
+    HaeKayttajanTiedot_autoupdate()
+  }, [ikkä]);
 
   React.useEffect(() => {
     console.log('useeffecti', tagList )
   }, [tagList]);
 
+
+  const [ikkä, setIkkä] = React.useState();
+
+  function HaeKayttajanTiedot_autoupdate() {
+    let ref = firestore().collection("users").doc(auth().currentUser.uid)
+    ref.onSnapshot((querySnapshot) => {
+      let iäkäs = querySnapshot.data().age
+      console.log('user ika : ', iäkäs) // prints 23 tai new value
+      setIkkä(querySnapshot.data().age)
+      
+    })
+  }
 
   const HaeKayttajanTiedot = async () => {
 
@@ -43,6 +56,8 @@ export default function EditProfile() {
 
   const addButtonPressed = () => {
     setTagList([...tagList, tag ])
+   HaeKayttajanTiedot_autoupdate() 
+
   }
 
   const [userTiedot, setUserTiedot] = useState({
@@ -54,7 +69,12 @@ export default function EditProfile() {
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row' }}>
-        <Text style={styles.text}>{userTiedot.name}, {userTiedot.age}</Text>
+      <Text 
+      style={styles.text}>
+        {userTiedot.name}, 
+        {userTiedot.age}, 
+        {ikkä /*FIXME ikä täällä uudella funkkarilla haettuna japäivittyy kun firestorea muokkaa */}
+        </Text>
       </View>
       <Icon reverse name='image' />
       <Text style={styles.text}>Lisää kuva</Text>
