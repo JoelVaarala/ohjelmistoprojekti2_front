@@ -48,7 +48,10 @@ export default function ViewLikers({ navigation, route }) {
                 querySnapshot.forEach(function (doc) {
                     // doc.data() is never undefined for query doc snapshots
                     // console.log(doc.id, " => ", doc.data());
+                    var asd = doc.data();
+                    asd.uid = doc.id;
                     lopulliset.push(doc.data())
+                    //lopulliset[length-1].uid = doc.id;
                 });
             })
         console.log("Lopulliset")
@@ -98,17 +101,46 @@ export default function ViewLikers({ navigation, route }) {
 
     //Bäkistä tai firebasesta: Hae userit jotka on tykännyt eventistä ja joille eventti ei ole vielä swipennyt
 
+    function PostSwipe(liked, user) {
+        //Connectaa endpointiin, lähettää parametrinä omat hakutoiveet. Vaihtoehtona että bäkki itse noutas firebasesta mutta ei kai tarpeen?
+        let myData = {
+            data: {
+                liked: liked,
+                target: user.uid, //korjaa findSwipeablesin blabla vanhaan.
+                isEvent: false, //tarviko tätä, eiks swipe nyt bäkissä automaattisesti katsonut et onks user vai event
+                swipeAs: selectedEvent
+            },
+            "uid": global.myUserData.uid,
+            "idToken": global.myUserData.idToken,
+        }
+        console.log("Swiped " + liked + " for " + user)
+        console.log(JSON.stringify(myData))
+        return;
+        fetch(global.url + "swipe", {
+            // fetch("http://192.168.56.1:5001/ohpro2-f30e5/us-central1/swipe" , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // body: JSON.stringify(body)
+            body: JSON.stringify(myData)
+
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+            .catch(err => console.error(err))
+        //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
+    }
 
 
-
-    function Accept() {
+    function Accept(liked,uid) {
         console.log("Accept")
+        console.log(uid)
+        PostSwipe(liked,uid)
     }
 
-
-    function Reject() {
-        console.log("Reject")
-    }
     return (
         <View style={styles.container}>
             <View>
@@ -152,12 +184,12 @@ export default function ViewLikers({ navigation, route }) {
                                         size: 30,
                                         color: "lightgreen"
                                     }}
-                                    onPress={Accept}
-                                />
+                                    onPress ={() => Accept(true,l.uid)}                                
+                                    />
                                 <Button
                                     type="outline"
                                     raised={true}
-                                    onPress={Accept}
+                                    onPress ={() => Accept(false,l.uid)}                                
                                     icon={{
                                         name: "arrow-right",
                                         size: 30,

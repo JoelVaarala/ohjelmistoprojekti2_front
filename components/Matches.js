@@ -40,8 +40,9 @@ export default function Matches({ navigation, route }) {
     try {
       // this returns whole result of 'doc'
       //hakee messages/matches collectionista itemit
-      const matches = await firestore().collection(global.matches).get();
+      const matches = await firestore().collection('matches').get();
       
+      //TODO FIXME querytataan mielummin kuin haetaan koko collectionia, Sprintti 3.
       let temparray = [];
       let num = 1;
       matches.docs.map(doc => {
