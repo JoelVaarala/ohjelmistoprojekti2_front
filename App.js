@@ -84,17 +84,9 @@ export default function App() {
     // <View>
     //   <Text asd></Text>
     //   </View>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <Provider store={store}>
-=======
-
->>>>>>> 9cb49c1fe3f63e910df77578956177531b9435c1
-=======
 
     <Provider store={store}>
 
->>>>>>> 31bda0be2f427ccbe8a8cccee61c8cd883f04d39
     <NavigationContainer>
       {vaihto ? (
         <Stack.Navigator>
