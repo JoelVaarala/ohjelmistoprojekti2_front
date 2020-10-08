@@ -105,15 +105,7 @@ function getConversationsRT() {
       if(doc.data().sender == auth().currentUser.uid){
         sender = 1;
       }
-      // lisätään arrayhin halutut viesti datat
-      keskustelunViestit.push({
-        _id: keskustelunViestit.length+1,
-        text: doc.data().message,
-        createdAt: new Date(doc.data().timestamp._seconds * 1000),
-        user: {
-          _id: sender,          
-
-        }
+  
         // lisätään arrayhin halutut viesti datat
         keskustelunViestit.push({
           _id: keskustelunViestit.length + 1,
