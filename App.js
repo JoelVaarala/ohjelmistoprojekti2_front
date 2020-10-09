@@ -13,6 +13,7 @@ import Settings from './components/Settings';
 import Add_Event from './components/Add_Event';
 //import FirebaseSaato from './components/FirebaseSaato'
 import Startup from "./components/Startup";
+import Register from "./components/Register";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -20,6 +21,8 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import firebase from 'react-native-firebase';
 import ViewLikers from "./components/ViewLikers.js";
 
+import { Provider } from 'react-redux';
+import { store } from './redux/index';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -67,6 +70,14 @@ export default function App() {
     );
   };
 
+  const LoginStack = () => {
+    return (
+      <ListStack.Navigator>
+        <ListStack.Screen name="Login" component={Startup} />
+        <ListStack.Screen name="Rekisteröidy" component={Register} options={{ headerShown: false }}/>
+      </ListStack.Navigator>
+    )
+  }
 
 
   return (
@@ -74,10 +85,13 @@ export default function App() {
     //   <Text asd></Text>
     //   </View>
 
+    <Provider store={store}>
+
     <NavigationContainer>
       {vaihto ? (
         <Stack.Navigator>
-          <Stack.Screen name="Login">{() => <Startup asetaLogin={asetaLogin} />}</Stack.Screen>
+          <ListStack.Screen name="Login" component={Startup} />
+          <ListStack.Screen name="Register" component={Register} />
         </Stack.Navigator>
       ) : (
           <Tab.Navigator
@@ -91,15 +105,17 @@ export default function App() {
             <Tab.Screen name="Matches" component={MatchStack} />
             <Tab.Screen name="Swipes" component={SwipingPage} />
             <Tab.Screen name="MyLikes" component={ViewLikers} />
-
             <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
-            <Tab.Screen name="Login" component={Startup} />
+            {/* <Tab.Screen name="Login" component={Startup} /> */}
+
+            <Tab.Screen name="Login" component={LoginStack} />
 
             {/* <Tab.Screen name="Messages" component={Chat} />
             <Tab.Screen name="Profiili" component={MyProfile} /> */}
           </Tab.Navigator>
         )}
     </NavigationContainer>
+    </Provider>
   );
 }
 

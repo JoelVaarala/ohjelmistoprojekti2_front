@@ -25,8 +25,9 @@ var firebaseConfig = {
 };
 
 
-export default function Startup(props) {
-
+export default function Startup({ navigation }) {
+  // console.log('navigation: ')
+  // console.log(navigation)
   const [kayttaja, setKayttaja] = React.useState('user@example.com');
   const [salasana, setSalasana] = React.useState('secretPassword');
   const [msg, setMsg] = React.useState('');
@@ -38,7 +39,7 @@ export default function Startup(props) {
 
   React.useEffect(() => {
     //firebase.initializeApp()
-    firebase.initializeApp(firebaseConfig);
+   firebase.initializeApp(firebaseConfig);
     // firestore().settings({ host: 'localhost:8080',  ssl: false });
 
     login();
@@ -180,7 +181,8 @@ export default function Startup(props) {
       <Text>{msg}</Text>
 
       <Button
-        onPress={login} title="REKISTERÖIDY"
+        onPress={() => navigation.navigate('Rekisteröidy')}
+        title="REKISTERÖIDYaaaaaaa"
         containerStyle={{ paddingHorizontal: 10 }}
       />
     </View>
