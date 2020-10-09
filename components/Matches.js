@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { Avatar, ListItem, Overlay } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import firebase from 'react-native-firebase';
+import auth from '@react-native-firebase/auth';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Matches({ navigation, route }) {
@@ -12,16 +13,16 @@ export default function Matches({ navigation, route }) {
   const [overlay, setOverlay] = React.useState(true);
 
 
-    React.useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
-        //console.log("Listener")
-        //console.log(firebase.auth().currentUser)
-        getMyMatches();
-      });
-  
-      // Return the function to unsubscribe from the event so it gets removed on unmount
-      return unsubscribe;
-    }, [navigation]);
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      //console.log("Listener")
+      //console.log(firebase.auth().currentUser)
+      getMyMatches();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
 
   React.useEffect(() => {
@@ -36,7 +37,7 @@ export default function Matches({ navigation, route }) {
   }, []);
 
   // FIXME, tämä päivittyy "automaattisesti"
-  function getMyMatches_From_MyMatches()  {
+  function getMyMatches_From_MyMatches() {
     let ref = firestore().collection('users').doc(global.myUserData.myUserID).collection('MyMatches')
     ref.onSnapshot((querySnapshot) => { // snapshot == capture sen hetkisestä rakenteesta
       let matchit = []; // voidaan asettaa halutut tiedot taulukkoon
@@ -49,36 +50,35 @@ export default function Matches({ navigation, route }) {
 
 
   const getMyMatches = async () => {
+
     try {
       // this returns whole result of 'doc'
       //hakee messages/matches collectionista itemit
-      const matches = await firestore().collection('matches').get();
-      
-      //TODO FIXME querytataan mielummin kuin haetaan koko collectionia, Sprintti 3.
+      let num = 1
       let temparray = [];
-      let num = 1;
-      matches.docs.map(doc => {
-        let matchname = "";
-        doc._data.users.forEach((user) => {
-          if (user != global.myUserData.myUserID) {
-            matchname = user;
-          }
-          
+      var query = await firestore().collection("matches").where("users", "array-contains", auth().currentUser.uid).
+        get()
+        .then(async function (querySnapshot) {
+          querySnapshot.forEach(async function (doc) {
+            console.log("MyMatch", doc.id)
+            var asd = await doc.data();
+            console.log(asd)
+            asd.uid = doc.id;
+
+
+            num = num + 1;
+            // asd.users.re
+            //temparray.push(doc.data())
+            temparray.push({ matchid: doc.id, name: "naimi", avatar_url: `https://randomuser.me/api/portraits/med/women/${num}.jpg` })
+            //lopulliset[length-1].uid = doc.id;
+          });
         })
 
-        //käyteään namessa UID siihen asti kunnes fetchataan oikea nimi
-        //Lisätään myöhemmin  tsekkaamana että onko viestejä, jos on niin 
-        //Matchid: dokumentin id
-        //uid : käyttäjän userid josta voidaan fetchaa dataa
-        //name : käyttäjän näkyvä nimi (nyt uid, korjataan)
-        //avatar_url : placeholder kuva vain, haetana myöhemmin profilesta kuva (UID kautta)
-        temparray.push({matchid: doc.id , uid: matchname, name: matchname, avatar_url: `https://randomuser.me/api/portraits/med/women/${num}.jpg`})
-        console.log("my match is "+matchname)
-        num = num+1;
-      })
-      setMyMatches(temparray);
 
+      setMyMatches(temparray);
     }
+
+
     catch (error) {
       console.log(error)
     }
@@ -110,10 +110,10 @@ export default function Matches({ navigation, route }) {
   //Tämän pitäisi myös pistää linkki chatkomponenttiin johon passataan parametrinä keskustelkun id
   const renderItem = ({ item }) => (
     <ListItem
-    onPress={() => {
-      console.log("Pressed: "+item.matchid)
-     navigation.navigate('Chat', { chatti: item.matchid})
-    }}
+      onPress={() => {
+        console.log("Pressed: " + item.matchid)
+        navigation.navigate('Chat', { chatti: item.matchid })
+      }}
     >
       <Avatar source={{ uri: item.avatar_url }} />
     </ListItem>
