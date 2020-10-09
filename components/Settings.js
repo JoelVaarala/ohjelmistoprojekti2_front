@@ -54,11 +54,47 @@ export default function Settings() {
 
   function HaeSettingsValues() {
     let ref = firestore().collection("users").doc(auth().currentUser.uid)
-    ref.onSnapshot((querySnapshot) =>{
-    let sukupuutto = querySnapshot.data().gender;
-    console.log(sukupuutto);
-    // setStates here as shown above
+    ref.onSnapshot((querySnapshot) => {
+      let sukupuutto = querySnapshot.data().gender;
+      console.log(sukupuutto);
+      // setStates here as shown above
     })
+  }
+
+  function TallennaData() {
+    let body = {
+      data: {
+        data: {
+          minAge: lowAge,
+          maxAge: highAge,
+          lookingFor: ["events", "users"],
+          genders: ["rakkautta", "rauhaa"],
+          distance: distance,
+          eventsInXHours: 7,
+          tags: tagList
+        }
+
+      },
+      uid: global.myUserData.uid,
+      idToken: global.myUserData.idToken,
+    }
+    console.log(JSON.stringify(body))
+    return;
+    fetch(global.url + "profileUpdate",
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+      }
+    )
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data)
+      })
+      .catch(err => console.error(err))
+
   }
 
   return (
@@ -182,7 +218,11 @@ export default function Settings() {
           )}
         </View>
         <View style={styles.omatContainerit}>
-          <Button title='Tallenna muutokset' />
+          <Button
+            onPress={TallennaData}
+            title="Tallenna tiedot"
+            style={{ paddingHorizontal: 10, alignItems: 'stretch' }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

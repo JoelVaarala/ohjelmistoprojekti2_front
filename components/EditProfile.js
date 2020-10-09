@@ -37,7 +37,7 @@ export default function EditProfile() {
       uid: global.myUserData.uid,
       idToken: global.myUserData.idToken,
     }
-    console.log(body)
+
     fetch(global.url + "profileUpdate",
       {
         method: 'POST',
