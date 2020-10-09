@@ -8,9 +8,15 @@ import firestore from '@react-native-firebase/firestore';
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function EditProfile() {
 
-    //tagit
-    const [tag, setTag] = useState('')
-    const [tagList, setTagList] = useState([])
+  //tagit
+  const [tag, setTag] = useState('')
+  const [tagList, setTagList] = useState([])
+  const [ikkä, setIkkä] = React.useState();
+  const [userTiedot, setUserTiedot] = useState({
+    age: 0,
+    bio: '',
+    name: '',
+  })
 
   React.useEffect(() => {
     HaeKayttajanTiedot()
@@ -18,19 +24,44 @@ export default function EditProfile() {
   }, [ikkä]);
 
   React.useEffect(() => {
-    console.log('useeffecti', tagList )
+    // console.log('useeffecti', tagList)
   }, [tagList]);
 
 
-  const [ikkä, setIkkä] = React.useState();
+  function TallennaData() {
+    let body = {
+      data: {
+        tags: tagList,
+        bio: userTiedot.bio
+      },
+      uid: global.myUserData.uid,
+      idToken: global.myUserData.idToken,
+    }
+    console.log(body)
+    fetch(global.url + "profileUpdate",
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+      }
+    )
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data)
+      })
+      .catch(err => console.error(err))
+
+  }
 
   function HaeKayttajanTiedot_autoupdate() {
     let ref = firestore().collection("users").doc(auth().currentUser.uid)
     ref.onSnapshot((querySnapshot) => {
       let iäkäs = querySnapshot.data().age
-      console.log('user ika : ', iäkäs) // prints 23 tai new value
+      // console.log('user ika : ', iäkäs) // prints 23 tai new value
       setIkkä(querySnapshot.data().age)
-      
+
     })
   }
 
@@ -40,13 +71,12 @@ export default function EditProfile() {
     const myUID = auth().currentUser.uid;
     const tiedot = await firestore().collection("users").doc(myUID).get();
     var info = await tiedot.data()
-    
+
     setUserTiedot({
       age: info.age,
       name: info.displayName,
       bio: info.bio
-    }
-    )
+    })
     let blaa = info.tags
     console.log('jfjf', blaa)
     setTagList(blaa)
@@ -55,25 +85,21 @@ export default function EditProfile() {
 
 
   const addButtonPressed = () => {
-    setTagList([...tagList, tag ])
-   HaeKayttajanTiedot_autoupdate() 
+    setTagList([...tagList, tag])
+    HaeKayttajanTiedot_autoupdate()
 
   }
 
-  const [userTiedot, setUserTiedot] = useState({
-    age: 0,
-    bio: '',
-    name: '',
-  })
 
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row' }}>
-      <Text 
-      style={styles.text}>
-        {userTiedot.name}, 
-        {userTiedot.age}, 
-        {ikkä /*FIXME ikä täällä uudella funkkarilla haettuna japäivittyy kun firestorea muokkaa */}
+        <Text
+          style={styles.text}>
+          {userTiedot.name},
+         {userTiedot.age}
+          {/* {ikkä }  */}
+          {/* /*FIXME ikä täällä uudella funkkarilla haettuna japäivittyy kun firestorea muokkaa */}
         </Text>
       </View>
       <Icon reverse name='image' />
@@ -84,10 +110,11 @@ export default function EditProfile() {
         <TextInput value={userTiedot.bio} style={styles.textArea} multiline={true}
           numberOfLines={3} maxLength={500} placeholder='Tietoja sinusta' />
       </View>
-      <Text style={styles.text}>Asuinpaikka: </Text>
-      <View style={styles.textAreaContainer}>
+      {/* meillä ei oo asuinpaikkaa nyt */}
+      {/* <Text style={styles.text}>Asuinpaikka: </Text>
+      <View style={styles.textAreaContainer}> 
         <TextInput style={styles.textArea} placeholder='Asuinpaikka' />
-      </View>
+      </View> */}
       <View style={styles.omatContainerit}>
         <View>
           <Text>Lisää tägi</Text>
@@ -95,7 +122,7 @@ export default function EditProfile() {
           <Button style={styles.button} onPress={addButtonPressed} title="LISÄÄ"></Button>
         </View>
         <View>
-          <Text>Olet valinnut seuraavat tagit:</Text>
+          <Text>Your tags:</Text>
           <FlatList contentContainerStyle={styles.content}
             horizontal={false}
             numColumns={3}
@@ -106,6 +133,11 @@ export default function EditProfile() {
           />
         </View>
       </View>
+      <Button
+        onPress={TallennaData}
+        title="Tallenna tiedot"
+        style={{ paddingHorizontal: 10, alignItems: 'stretch' }}
+      />
     </View>
 
   );

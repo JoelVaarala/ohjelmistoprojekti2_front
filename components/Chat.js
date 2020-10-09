@@ -23,32 +23,13 @@ export default function Chat(props) {
   //tää täytyy fixaaa EI TOIMI
   function GoToAvatar({ navigation }) {
     return (
-      <Avatar 
-      onPress={() => navigation.navigate('MatchProfile')}
-      size="large" rounded 
-      source={{ uri: avatar_url }} 
+      <Avatar
+        onPress={() => navigation.navigate('MatchProfile')}
+        size="large" rounded
+        source={{ uri: avatar_url }}
       />
     );
   }
-
-
-  //Tämä on heitetty nyt App.js , kutsutaan kerran ja vain täältä.
-  //firebase.app();
-  // React.useEffect(() => {
-  //   console.log("use effect")
-  //   //firebase.initializeApp()
-  //   firebase.initializeApp(global.firebaseConfig);
-  //   console.log(firebase.config.toString())
-  //    //yritaKirjautua();
-
-  // }, []);
-
-  //Tämä on debuggausta varten, testataan viestin lähettämistä
-  React.useEffect(() => {
-    //LahetaViestiFirebaseen()
-  }, []);
-
-
 
   //Tällä pystyy lähettää viestinm parametrinä tulee viestin teksti.
   //Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
@@ -61,10 +42,8 @@ export default function Chat(props) {
         message: viesti,
         match: props.route.params.chatti, //tää pitäs tulla propsi parametristä
       },
-
-      "uid": global.myUserData.uid,
-      "idToken": global.myUserData.idToken,
-
+      uid: global.myUserData.uid,
+      idToken: global.myUserData.idToken,
     }
     //console.log(body)
     fetch(global.url + "message",
@@ -84,28 +63,28 @@ export default function Chat(props) {
   }
 
 
-// --UPDATED METHOD TO GET MESSAGES REALTIME
-// ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
-const ref = firestore().collection('matches').doc(props.route.params.chatti).collection('messages').orderBy('timestamp', 'desc');
+  // --UPDATED METHOD TO GET MESSAGES REALTIME
+  // ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
+  const ref = firestore().collection('matches').doc(props.route.params.chatti).collection('messages').orderBy('timestamp', 'desc');
 
-function getConversationsRT() {
-  
-  // luodaan snapshot joka, "hakee" firestoren sisällön
-  ref.onSnapshot((querySnapshot) => {
-    // array johon laitetaan firestoren viestit
-    const keskustelunViestit = [];
-    // tulostaa kuinka monta viestiä collection sisältää
-    console.log('Total messages: ', querySnapshot.size);
-    // looppi jossa muodostetaan viestit jokaisesta tietueesta
-    querySnapshot.forEach((doc) => {
-      
-      console.log('Viestin sisältö : ',doc.data().message);
-      // Alla selvitetään onko henkilö lähettäjä/vastaanottaja, jotta tiedetään kummalle puolelle näyttöä viestit renderöidään
-      let sender = 2;
-      if(doc.data().sender == auth().currentUser.uid){
-        sender = 1;
-      }
-  
+  function getConversationsRT() {
+
+    // luodaan snapshot joka, "hakee" firestoren sisällön
+    ref.onSnapshot((querySnapshot) => {
+      // array johon laitetaan firestoren viestit
+      const keskustelunViestit = [];
+      // tulostaa kuinka monta viestiä collection sisältää
+      console.log('Total messages: ', querySnapshot.size);
+      // looppi jossa muodostetaan viestit jokaisesta tietueesta
+      querySnapshot.forEach((doc) => {
+
+        console.log('Viestin sisältö : ', doc.data().message);
+        // Alla selvitetään onko henkilö lähettäjä/vastaanottaja, jotta tiedetään kummalle puolelle näyttöä viestit renderöidään
+        let sender = 2;
+        if (doc.data().sender == auth().currentUser.uid) {
+          sender = 1;
+        }
+
         // lisätään arrayhin halutut viesti datat
         keskustelunViestit.push({
           _id: keskustelunViestit.length + 1,
@@ -139,29 +118,30 @@ function getConversationsRT() {
   // Matchin poisto funkari
   const removeMatch = () => {
     console.log('matchin poisto', props.route.params.chatti)
-    
+
     let url = global.url + 'removeMatch';
-    let body = {
-      idToken : "Dummyyy", // FIX ME
+    let bodi = {
+      idToken: "Dummyyy", // FIX ME
+      uid: global.myUserData.uid,
       data: {
-      match : props.route.params.chatti,
-      },
-      uid : auth().currentUser.uid
+        match: props.route.params.chatti,
+      }
     }
 
-    console.log(body);
+    console.log(bodi);
+    console.log(JSON.stringify(bodi))
 
     fetch(url,
       {
         method: 'POST',
         headers: {
-          'Content-Type': 'application.json' 
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(bodi),
       })
       .then(response => response.json())
       .then(res => {
-          console.log('.then res ->', res);
+        console.log('.then res ->', res);
       })
       .catch(err => console.error(err))
   }
@@ -170,11 +150,11 @@ function getConversationsRT() {
   return (
     <View style={styles.container}>
 
-      <Icon size={20} reverse name="info"  onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*//>
+      <Icon size={20} reverse name="info" onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*/ />
 
-      <View style={{justifyContent: 'space-around', flexDirection: 'row', padding: 5, backgroundColor: 'grey'}}>
-     
-      <GoToAvatar navigation={props.navigation} />
+      <View style={{ justifyContent: 'space-around', flexDirection: 'row', padding: 5, backgroundColor: 'grey' }}>
+
+        <GoToAvatar navigation={props.navigation} />
       </View>
 
       <GiftedChat
