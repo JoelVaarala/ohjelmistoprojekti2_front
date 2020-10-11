@@ -114,8 +114,9 @@ export default function Matches({ navigation, route }) {
         console.log("Pressed: " + item.matchid)
         navigation.navigate('Chat', { chatti: item.matchid })
       }}
+      containerStyle={{ backgroundColor: 'rgba(255,154,0,0)' }}
     >
-      <Avatar source={{ uri: item.avatar_url }} />
+      <Avatar rounded source={{ uri: item.avatar_url }} />
     </ListItem>
   );
 
@@ -128,21 +129,37 @@ export default function Matches({ navigation, route }) {
         <Text>TÄNNE NAVI</Text>
       </View> */}
       <View>
-        <Text style={{ fontSize: 20 }}>Matches</Text>
+        <Text style={{
+          fontSize: 20, color: 'orange',
+          // color: 'orange', //overridee nyt activetintcolor ja inactiven, vaihdetan jossain kohtaa sprintti 3, sang.
+          fontWeight: 'bold',
+          fontFamily: 'roboto'
+        }}>Matches</Text>
         <FlatList
           horizontal={true}
           data={myMatches}
           renderItem={renderItem}
         >
         </FlatList>
-        <Text style={{ fontSize: 20 }}>Active chats</Text>
+        <Text style={{
+          fontSize: 20, color: 'orange',
+          // color: 'orange', //overridee nyt activetintcolor ja inactiven, vaihdetan jossain kohtaa sprintti 3, sang.
+          fontWeight: 'bold',
+          fontFamily: 'roboto'
+        }}>Active chats</Text>
         {
           list.map((l, i) => (
-            <ListItem key={i} bottomDivider>
-              <Avatar source={{ uri: l.avatar_url }} />
-              <ListItem.Content>
-                <ListItem.Title>{l.name}</ListItem.Title>
-                <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
+            <ListItem key={i} bottomDivider  containerStyle={{ backgroundColor: 'rgba(255,154,0,0)' }} >
+              <Avatar rounded source={{ uri: l.avatar_url }} backgroundColor={'black'} />
+              <ListItem.Content style={{ opacity: 1 }}>
+                <ListItem.Title style={{
+                  color: 'orange', fontWeight: 'bold',
+                  fontFamily: 'roboto'
+                }}>{l.name}</ListItem.Title>
+                <ListItem.Subtitle style={{
+                  color: 'orange', 
+                  fontFamily: 'roboto'
+                }}>{l.subtitle}</ListItem.Subtitle>
               </ListItem.Content>
             </ListItem>
           ))
@@ -157,7 +174,8 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'black',
+
   },
   button: {
     alignItems: "center",

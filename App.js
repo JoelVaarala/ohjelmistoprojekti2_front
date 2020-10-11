@@ -27,6 +27,7 @@ import { store } from './redux/index';
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
+
 export default function App() {
   // true -> false, bypass jolla jättää login pagen välistä
   const [vaihto, setVaihto] = React.useState(false);
@@ -74,7 +75,7 @@ export default function App() {
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Login" component={Startup} />
-        <ListStack.Screen name="Rekisteröidy" component={Register} options={{ headerShown: false }}/>
+        <ListStack.Screen name="Rekisteröidy" component={Register} options={{ headerShown: false }} />
       </ListStack.Navigator>
     )
   }
@@ -87,35 +88,37 @@ export default function App() {
 
     <Provider store={store}>
 
-    <NavigationContainer>
-      {vaihto ? (
-        <Stack.Navigator>
-          <ListStack.Screen name="Login" component={Startup} />
-          <ListStack.Screen name="Register" component={Register} />
-        </Stack.Navigator>
-      ) : (
-          <Tab.Navigator
-            swipeEnabled = {false}
-            tabBarOptions={{
-              labelStyle: { fontSize: 12 },
-              tabStyle: { width: 100 },
-              style: { backgroundColor: "powderblue", paddingTop: 0 },
-            }}
-          >
-            {/* <Tab.Screen name="Chat" component={Chat} /> */}
-            <Tab.Screen name="Matches" component={MatchStack} />
-            <Tab.Screen name="Swipes" component={SwipingPage} />
-            <Tab.Screen name="MyLikes" component={ViewLikers} />
-            <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
-            {/* <Tab.Screen name="Login" component={Startup} /> */}
+      <NavigationContainer>
+        {vaihto ? (
+          <Stack.Navigator>
+            <ListStack.Screen name="Login" component={Startup} />
+            <ListStack.Screen name="Register" component={Register} />
+          </Stack.Navigator>
+        ) : (
+            <Tab.Navigator
+              swipeEnabled={false}
+              tabBarOptions={{
+                labelStyle: {
+                  fontSize: 10,
+                  // color: 'orange', //overridee nyt activetintcolor ja inactiven, vaihdetan jossain kohtaa sprintti 3, sang.
+                  fontWeight: 'bold',
+                  fontFamily: 'roboto'
+                },
+                activeTintColor: 'tomato',
+                inactiveTintColor: 'gray',
 
-            <Tab.Screen name="Login" component={LoginStack} />
-
-            {/* <Tab.Screen name="Messages" component={Chat} />
-            <Tab.Screen name="Profiili" component={MyProfile} /> */}
-          </Tab.Navigator>
-        )}
-    </NavigationContainer>
+                // tabStyle: { width: 100 },
+                style: { backgroundColor: "black", paddingTop: 0 },
+              }}
+            >
+              <Tab.Screen name="Matches" component={MatchStack} />
+              <Tab.Screen name="Swipes" component={SwipingPage} />
+              <Tab.Screen name="My Likes" component={ViewLikers} />
+              <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
+              <Tab.Screen name="Login" component={LoginStack} />
+            </Tab.Navigator>
+          )}
+      </NavigationContainer>
     </Provider>
   );
 }
@@ -123,7 +126,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
   },
