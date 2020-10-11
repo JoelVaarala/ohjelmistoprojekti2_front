@@ -95,10 +95,11 @@ export default function App() {
         </Stack.Navigator>
       ) : (
           <Tab.Navigator
+            swipeEnabled = {false}
             tabBarOptions={{
               labelStyle: { fontSize: 12 },
               tabStyle: { width: 100 },
-              style: { backgroundColor: "powderblue", paddingTop: 30 },
+              style: { backgroundColor: "powderblue", paddingTop: 0 },
             }}
           >
             {/* <Tab.Screen name="Chat" component={Chat} /> */}

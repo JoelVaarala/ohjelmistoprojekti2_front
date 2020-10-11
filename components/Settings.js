@@ -128,6 +128,50 @@ export default function Settings() {
       })
       .catch(err => console.error(err))
 
+  function HaeSettingsValues() {
+    let ref = firestore().collection("users").doc(auth().currentUser.uid)
+    ref.onSnapshot((querySnapshot) => {
+      let sukupuutto = querySnapshot.data().gender;
+      console.log(sukupuutto);
+      // setStates here as shown above
+    })
+
+  }
+
+  function TallennaData() {
+    let body = {
+      data: {
+        data: {
+          minAge: lowAge,
+          maxAge: highAge,
+          lookingFor: ["events", "users"],
+          genders: ["rakkautta", "rauhaa"],
+          distance: distance,
+          eventsInXHours: 7,
+          tags: tagList
+        }
+
+      },
+      uid: global.myUserData.uid,
+      idToken: global.myUserData.idToken,
+    }
+    console.log(JSON.stringify(body))
+    return;
+    fetch(global.url + "profileUpdate",
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+      }
+    )
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data)
+      })
+      .catch(err => console.error(err))
+
   }
 
   return (
@@ -141,7 +185,7 @@ export default function Settings() {
             </TextInput>
           </View>
           <View>
-            <Text>Olet valinnut seuraavat tagit:</Text>
+            <Text>Tags:</Text>
             <FlatList contentContainerStyle={styles.content}
               horizontal={false}
               numColumns={3}
@@ -153,10 +197,10 @@ export default function Settings() {
           </View>
         </View>
         <View style={styles.omatContainerit}>
-          <Text>Enimmäisetäisyys: {distance} kilometriä</Text>
           <View>
+            <Text>Etäisyys:</Text>
             <RangeSlider
-              style={{ width: 160, height: 60 }}
+              style={{ width: 250, height: 60 }}
               gravity={'center'}
               rangeEnabled={false}
               min={1}
@@ -168,10 +212,11 @@ export default function Settings() {
                 setDistance(distance)
               }} />
           </View>
-          <View style={{ paddingTop: 10 }}>
-            <Text>Ikäryhmä: {lowAge} - {highAge} vuotiaat</Text>
+          <Text> {distance} km</Text>
+          <View style={{ paddingTop: 50 }}>
+            <Text> Iät</Text>
             <RangeSlider
-              style={{ width: 160, height: 60 }}
+              style={{ width: 250, height: 60 }}
               gravity={'center'}
               min={14}
               max={100}
@@ -185,6 +230,7 @@ export default function Settings() {
               onValueChanged={(lowAge, highAge, fromUser) => {
                 setLowAge(lowAge), setHighAge(highAge)
               }} />
+              <Text> {lowAge} - {highAge} vuotiaat</Text>
           </View>
         </View>
 
@@ -237,7 +283,9 @@ export default function Settings() {
         </View>
 
         <View style={styles.omatContainerit}>
-          <View>
+
+          {/* FIXME Tähän tulee aikaslideri josta valitaan tuntien tai päivien päästä */}
+          {/* <View>
             <Text>Tästä päivästä päivään {formatDate(date)} </Text>
             <Button onPress={showDatepicker} title="Valitse haettavat päivät" />
           </View>
@@ -250,10 +298,14 @@ export default function Settings() {
               display="default"
               onChange={onChange}
             />
-          )}
+          )} */}
         </View>
         <View style={styles.omatContainerit}>
-          <Button title='Tallenna muutokset' />
+          <Button
+            onPress={TallennaData}
+            title="Tallenna tiedot"
+            style={{ paddingHorizontal: 10, alignItems: 'stretch' }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
