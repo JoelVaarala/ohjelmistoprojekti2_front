@@ -127,7 +127,7 @@ export default function Settings() {
         // console.log(data)
       })
       .catch(err => console.error(err))
-
+    }
   function HaeSettingsValues() {
     let ref = firestore().collection("users").doc(auth().currentUser.uid)
     ref.onSnapshot((querySnapshot) => {
