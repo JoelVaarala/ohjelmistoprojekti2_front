@@ -57,46 +57,46 @@ export default function Settings() {
   React.useEffect(() => {
     HaeTiedot();
   }, []);
-  
+
   const HaeTiedot = async () => {
     let ref = firestore().collection("users").doc(auth().currentUser.uid).collection('filters').doc('myFilters')
     const doc = await ref.get();
-    if(!doc.exists){
+    if (!doc.exists) {
       console.log('document not found')
-    }else{
+    } else {
       console.log('success HERE HERE ::::', doc.data())
-       
-        setTagList(doc.data().tags)
-        setDistance(doc.data().distance)
-        setLowAge(doc.data().minAge)
-        setHighAge(doc.data().maxAge)
-        let looking = doc.data().lookingFor
-        let events = (looking.indexOf("events") > -1);
-        let people = (looking.indexOf("users") > -1);
-        if(events == true){
-          setEvents(true)
-        }
-        if(people == true){
-          setPeople(true)
-        }
-        let genders = doc.data().genders
-        let male = (genders.indexOf("male") > -1);
-        let female = (genders.indexOf("female") > -1);
-        let other = (genders.indexOf("other") > -1)
-        if(male == true){
-          setMale(true)
-        }
-        if(female == true){
-          setFemale(true)
-        }
-        if(other == true){
-          setOther(true)
-        }
+
+      setTagList(doc.data().tags)
+      setDistance(doc.data().distance)
+      setLowAge(doc.data().minAge)
+      setHighAge(doc.data().maxAge)
+      let looking = doc.data().lookingFor
+      let events = (looking.indexOf("events") > -1);
+      let people = (looking.indexOf("users") > -1);
+      if (events == true) {
+        setEvents(true)
+      }
+      if (people == true) {
+        setPeople(true)
+      }
+      let genders = doc.data().genders
+      let male = (genders.indexOf("male") > -1);
+      let female = (genders.indexOf("female") > -1);
+      let other = (genders.indexOf("other") > -1)
+      if (male == true) {
+        setMale(true)
+      }
+      if (female == true) {
+        setFemale(true)
+      }
+      if (other == true) {
+        setOther(true)
+      }
     }
   }
 
   function TallennaData() {
-    
+
     let body = {
       idToken: global.myUserData.idToken,
       uid: global.myUserData.uid,
@@ -109,7 +109,8 @@ export default function Settings() {
         distance: distance,
         eventsInXHours: 1,
         tags: []
-      }}
+      }
+    }
 
 
     console.log(body)
@@ -127,7 +128,7 @@ export default function Settings() {
         // console.log(data)
       })
       .catch(err => console.error(err))
-
+  }
   function HaeSettingsValues() {
     let ref = firestore().collection("users").doc(auth().currentUser.uid)
     ref.onSnapshot((querySnapshot) => {
@@ -230,7 +231,7 @@ export default function Settings() {
               onValueChanged={(lowAge, highAge, fromUser) => {
                 setLowAge(lowAge), setHighAge(highAge)
               }} />
-              <Text> {lowAge} - {highAge} vuotiaat</Text>
+            <Text> {lowAge} - {highAge} vuotiaat</Text>
           </View>
         </View>
 
@@ -348,5 +349,5 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     flexDirection: 'row'
-  },
-});
+  }
+})
