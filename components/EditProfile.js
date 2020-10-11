@@ -11,24 +11,21 @@ export default function EditProfile() {
   //tagit
   const [tag, setTag] = useState('')
   const [tagList, setTagList] = useState([])
-  const [ikkä, setIkkä] = React.useState();
   const [userTiedot, setUserTiedot] = useState({
     age: 0,
     bio: '',
     name: '',
   })
-
-  React.useEffect(() => {
-    HaeKayttajanTiedot()
-    HaeKayttajanTiedot_autoupdate()
-  }, [ikkä]);
+ 
 
   React.useEffect(() => {
     // console.log('useeffecti', tagList)
-  }, [tagList]);
+    HaeTiedot();
+  }, []);
 
 
   function TallennaData() {
+    
     let body = {
       data: {
         tags: tagList,
@@ -55,41 +52,41 @@ export default function EditProfile() {
 
   }
 
-  function HaeKayttajanTiedot_autoupdate() {
-    let ref = firestore().collection("users").doc(auth().currentUser.uid)
-    ref.onSnapshot((querySnapshot) => {
-      let iäkäs = querySnapshot.data().age
-      // console.log('user ika : ', iäkäs) // prints 23 tai new value
-      setIkkä(querySnapshot.data().age)
+  // function HaeKayttajanTiedot_autoupdate() {
+  //   let ref = firestore().collection("users").doc(auth().currentUser.uid)
+  //   ref.onSnapshot((querySnapshot) => {
+  //     let iäkäs = querySnapshot.data().age
+  //     // console.log('user ika : ', iäkäs) // prints 23 tai new value
+  //     setUserTiedot({
+  //      age: (querySnapshot.data().age),
+  //      bio: (querySnapshot.data().bio),
+  //      name: (querySnapshot.data().displayName)
+  //     })
+  //     setTagList(querySnapshot.data().tags)
+  //   })
+      
+  // }
 
-    })
+  const HaeTiedot = async () => {
+  const ref = firestore().collection("users").doc(auth().currentUser.uid)
+  const doc = await ref.get();
+  if(!doc.exists){
+    console.log('document not found')
+  }else{
+    console.log('success HERE HERE ::::', doc.data())
+     setUserTiedot({
+       age: (doc.data().age),
+       bio: (doc.data().bio),
+       name: (doc.data().displayName)
+      })
+      setTagList(doc.data().tags)
   }
+}
 
-  const HaeKayttajanTiedot = async () => {
-
-    console.log("Haetaan käyttäjän omat tiedot")
-    const myUID = auth().currentUser.uid;
-    const tiedot = await firestore().collection("users").doc(myUID).get();
-    var info = await tiedot.data()
-
-    setUserTiedot({
-      age: info.age,
-      name: info.displayName,
-      bio: info.bio
-    })
-    let blaa = info.tags
-    console.log('jfjf', blaa)
-    setTagList(blaa)
-    //Nyt tiedot kentästä voi noukkia tarvittavat tiedot.
-  }
-
-
-  const addButtonPressed = () => {
+  const addTag = () => {
     setTagList([...tagList, tag])
-    HaeKayttajanTiedot_autoupdate()
-
+    setTag('');
   }
-
 
   return (
     <View style={styles.container}>
@@ -97,18 +94,16 @@ export default function EditProfile() {
         <Text
           style={styles.text}>
           {userTiedot.name},
-         {userTiedot.age}
-          {/* {ikkä }  */}
-          {/* /*FIXME ikä täällä uudella funkkarilla haettuna japäivittyy kun firestorea muokkaa */}
+          {userTiedot.age} 
+    
         </Text>
       </View>
       <Icon reverse name='image' />
       <Text style={styles.text}>Lisää kuva</Text>
       <Text style={styles.text} >Tietoja sinusta:</Text>
       <View style={styles.textAreaContainer}>
-
-        <TextInput value={userTiedot.bio} style={styles.textArea} multiline={true}
-          numberOfLines={3} maxLength={500} placeholder='Tietoja sinusta' />
+        <TextInput value={userTiedot.bio} style={styles.textArea} multiline={true} 
+          numberOfLines={3} maxLength={500}  onChangeText={text => setUserTiedot({...userTiedot,bio: text})}/>
       </View>
       {/* meillä ei oo asuinpaikkaa nyt */}
       {/* <Text style={styles.text}>Asuinpaikka: </Text>
@@ -118,8 +113,9 @@ export default function EditProfile() {
       <View style={styles.omatContainerit}>
         <View>
           <Text>Lisää tägi</Text>
-          <TextInput onChangeText={tag => setTag(tag)} value={tag} style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, backgroundColor: 'white' }}></TextInput>
-          <Button style={styles.button} onPress={addButtonPressed} title="LISÄÄ"></Button>
+          <TextInput onChangeText={tag => setTag(tag)} value={tag} onEndEditing={addTag} 
+                style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, backgroundColor: 'white' }}>
+          </TextInput>
         </View>
         <View>
           <Text>Your tags:</Text>
@@ -136,7 +132,7 @@ export default function EditProfile() {
       <Button
         onPress={TallennaData}
         title="Tallenna tiedot"
-        style={{ paddingHorizontal: 10, alignItems: 'stretch' }}
+        style={{  }}
       />
     </View>
 

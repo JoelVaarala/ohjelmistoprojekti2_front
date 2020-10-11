@@ -44,39 +44,50 @@ function Add_Eventti(props) {
   // Luodun eventin lähetys
   // TODO : paikkatiedot korjaus, mahd valinta public 
   const sendEvent = () => {
-    
-    console.log('Tagi array', store.getState().EventReducer[0].tags)
-    let url = global.url + 'event';
-    let body = {
-      idToken: "Dummyyy",
-      uid: auth().currentUser.uid,
-      data: {
-        eventType: "public",
-        eventStart: store.getState().EventReducer[0].date,
-        eventEnd: "",
-        displayName: store.getState().EventReducer[0].eventName,
-        bio: store.getState().EventReducer[0].description,
-        position: {
-          latitude: 1,
-          longitude: 1
-        },
-        tags: store.getState().EventReducer[0].tags
-      }
-    }
 
-    fetch(url,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application.json'
-        },
-        body: JSON.stringify(body)
-      })
-      .then(response => response.json())
-      .then(res => {
-        console.log(res.result);
-      })
-      .catch(err => console.error(err))
+     let start_s = store.getState().EventReducer[0].date;
+     let event_s = store.getState().EventReducer[0].eventName;
+     let bio_s = store.getState().EventReducer[0].description
+     let tagit_s = store.getState().EventReducer[0].tags
+    let url = global.url + 'event';
+    // console.log('Tagi array', store.getState().EventReducer[0].tags)
+    // console.log(startTime, "start")
+    // console.log(displayName, " dp name")
+    // console.log(bio, " tää on bio")
+    // console.log(auth().currentUser.uid, ' current user')
+    // console.log(tagit, ' tagit')
+
+   let bodi = {
+     idToken: global.myUserData.idToken,
+     uid: global.myUserData.uid,
+     data: {
+       eventType: "public",
+       eventStart: start_s,
+       eventEnd: "",
+       displayName: event_s,
+       bio: bio_s,
+       position: {
+         latitude: 37.4220133,
+         longitude: -122.0839686
+       },
+       tags: tagit_s,
+       images: []
+     }
+   }
+
+   fetch(url,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bodi),
+    })
+    .then(response => response.json())
+    .then(res => {
+      console.log(res, 'dsfsdf')
+    })
+    .catch(err => console.error(err, 'moi'))
   }
 
 
