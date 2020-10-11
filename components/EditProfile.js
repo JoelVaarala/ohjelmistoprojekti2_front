@@ -102,9 +102,8 @@ export default function EditProfile() {
       <Text style={styles.text}>Lisää kuva</Text>
       <Text style={styles.text} >Tietoja sinusta:</Text>
       <View style={styles.textAreaContainer}>
-
         <TextInput value={userTiedot.bio} style={styles.textArea} multiline={true} 
-          numberOfLines={3} maxLength={500}  onChangeText={text => setUserTiedot({bio: text})}/>
+          numberOfLines={3} maxLength={500}  onChangeText={text => setUserTiedot({...userTiedot,bio: text})}/>
       </View>
       {/* meillä ei oo asuinpaikkaa nyt */}
       {/* <Text style={styles.text}>Asuinpaikka: </Text>
