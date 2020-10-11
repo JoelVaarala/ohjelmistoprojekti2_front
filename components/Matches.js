@@ -43,7 +43,7 @@ export default function Matches({ navigation, route }) {
       let matchit = []; // voidaan asettaa halutut tiedot taulukkoon
       console.log('number of matches : ', querySnapshot.size); // logi -> tuleeko collectionista "osumia"
       querySnapshot.forEach((doc) => { // dokkari kerrallaan läpi, jotta voidaan poimia matchien "id:t"
-        matchit.push(doc.data() /*esim .user[1]*/) // TODO: specify what data myMatch dokkarista haetaan.
+        matchit.push(doc.data()) // TODO: specify what data myMatch dokkarista haetaan.
       })
     })
   }
