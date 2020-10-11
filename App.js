@@ -80,6 +80,20 @@ export default function App() {
     )
   }
 
+  
+const MyTheme = {
+  dark: true,
+  colors: {
+    primary: 'rgb(255, 45, 85)',
+    background: 'rgb(242, 242, 242)',
+    card: 'rgb(0, 0, 0)',
+    text: 'orange',
+    border: 'rgb(199, 199, 204)',
+    notification: 'rgb(255, 69, 58)',
+  },
+  
+  
+};
 
   return (
     // <View>
@@ -88,7 +102,7 @@ export default function App() {
 
     <Provider store={store}>
 
-      <NavigationContainer>
+      <NavigationContainer theme = {MyTheme}>
         {vaihto ? (
           <Stack.Navigator>
             <ListStack.Screen name="Login" component={Startup} />

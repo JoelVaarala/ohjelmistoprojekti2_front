@@ -125,16 +125,13 @@ export default function Matches({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      {/* <View style={{ flex: 1 }}>
-        <Text>TÄNNE NAVI</Text>
-      </View> */}
+
       <View>
-        <Text style={{
+        {/* <Text style={{
           fontSize: 20, color: 'orange',
-          // color: 'orange', //overridee nyt activetintcolor ja inactiven, vaihdetan jossain kohtaa sprintti 3, sang.
           fontWeight: 'bold',
           fontFamily: 'roboto'
-        }}>Matches</Text>
+        }}>Matches</Text> */}
         <FlatList
           horizontal={true}
           data={myMatches}
@@ -143,21 +140,20 @@ export default function Matches({ navigation, route }) {
         </FlatList>
         <Text style={{
           fontSize: 20, color: 'orange',
-          // color: 'orange', //overridee nyt activetintcolor ja inactiven, vaihdetan jossain kohtaa sprintti 3, sang.
           fontWeight: 'bold',
           fontFamily: 'roboto'
         }}>Active chats</Text>
         {
           list.map((l, i) => (
-            <ListItem key={i} bottomDivider  containerStyle={{ backgroundColor: 'rgba(255,154,0,0)' }} >
+            <ListItem key={i} bottomDivider containerStyle={{ backgroundColor: 'rgba(255,154,0,0)' }} >
               <Avatar rounded source={{ uri: l.avatar_url }} backgroundColor={'black'} />
               <ListItem.Content style={{ opacity: 1 }}>
                 <ListItem.Title style={{
-                  color: 'orange', fontWeight: 'bold',
+                  color: 'white', fontWeight: 'bold',
                   fontFamily: 'roboto'
                 }}>{l.name}</ListItem.Title>
                 <ListItem.Subtitle style={{
-                  color: 'orange', 
+                  color: 'gray',
                   fontFamily: 'roboto'
                 }}>{l.subtitle}</ListItem.Subtitle>
               </ListItem.Content>
@@ -172,7 +168,7 @@ export default function Matches({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    // paddingTop: 50,
     flex: 1,
     backgroundColor: 'black',
 
