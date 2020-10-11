@@ -5,6 +5,8 @@ import RangeSlider from 'rn-range-slider';
 import CheckBox from '@react-native-community/checkbox';
 import Constants from 'expo-constants';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Settings() {
@@ -13,8 +15,9 @@ export default function Settings() {
   const [tag, setTag] = useState('')
   const [tagList, setTagList] = useState([])
 
-  const addButtonPressed = () => {
-    setTagList([...tagList, { key: tag }])
+  const addTag = () => {
+    setTagList([...tagList, tag])
+    setTag('');
   }
 
   //sliderit
@@ -51,14 +54,80 @@ export default function Settings() {
   const formatDate = (date) => {
     return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
   }
+  React.useEffect(() => {
+    HaeTiedot();
+  }, []);
+  
+  const HaeTiedot = async () => {
+    let ref = firestore().collection("users").doc(auth().currentUser.uid).collection('filters').doc('myFilters')
+    const doc = await ref.get();
+    if(!doc.exists){
+      console.log('document not found')
+    }else{
+      console.log('success HERE HERE ::::', doc.data())
+       
+        setTagList(doc.data().tags)
+        setDistance(doc.data().distance)
+        setLowAge(doc.data().minAge)
+        setHighAge(doc.data().maxAge)
+        let looking = doc.data().lookingFor
+        let events = (looking.indexOf("events") > -1);
+        let people = (looking.indexOf("users") > -1);
+        if(events == true){
+          setEvents(true)
+        }
+        if(people == true){
+          setPeople(true)
+        }
+        let genders = doc.data().genders
+        let male = (genders.indexOf("male") > -1);
+        let female = (genders.indexOf("female") > -1);
+        let other = (genders.indexOf("other") > -1)
+        if(male == true){
+          setMale(true)
+        }
+        if(female == true){
+          setFemale(true)
+        }
+        if(other == true){
+          setOther(true)
+        }
+    }
+  }
 
-  function HaeSettingsValues() {
-    let ref = firestore().collection("users").doc(auth().currentUser.uid)
-    ref.onSnapshot((querySnapshot) =>{
-    let sukupuutto = querySnapshot.data().gender;
-    console.log(sukupuutto);
-    // setStates here as shown above
-    })
+  function TallennaData() {
+    
+    let body = {
+      idToken: global.myUserData.idToken,
+      uid: global.myUserData.uid,
+      data: {
+        minAge: minAge,
+        maxAge: maxAge,
+        lookingFOr: ["FIXME"],
+        displayName: event_s,
+        genders: ["FIXME"],
+        distance: distance,
+        eventsInXHours: 1,
+        tags: []
+      }}
+
+
+    console.log(body)
+    fetch(global.url + "filtersUpdate",
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+      }
+    )
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data)
+      })
+      .catch(err => console.error(err))
+
   }
 
   return (
@@ -67,8 +136,9 @@ export default function Settings() {
         <View style={styles.omatContainerit}>
           <View style={{ backgroundColor: 'white' }} >
             <Text>Lisää tägi</Text>
-            <TextInput onChangeText={tag => setTag(tag)} value={tag} style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, backgroundColor: 'white' }}></TextInput>
-            <Button style={styles.button} onPress={addButtonPressed} title="LISÄÄ"></Button>
+            <TextInput onChangeText={tag => setTag(tag)} value={tag} onEndEditing={addTag}
+              style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, backgroundColor: 'white' }}>
+            </TextInput>
           </View>
           <View>
             <Text>Olet valinnut seuraavat tagit:</Text>
@@ -76,8 +146,9 @@ export default function Settings() {
               horizontal={false}
               numColumns={3}
               data={tagList}
+              keyExtractor={((item, index) => index.toString())}
               renderItem={({ item }) =>
-                <Text style={styles.tag}>{item.key}</Text>}
+                <Text style={styles.tag}>{item}</Text>}
             />
           </View>
         </View>
