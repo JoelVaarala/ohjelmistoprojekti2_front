@@ -125,7 +125,7 @@ export default function Matches({ navigation, route }) {
 
   return (
 
-    <ImageBackground style={styles.image} source={'http://jaanisavolainen.com/paskaa/logo.png'} >
+    // <ImageBackground style={styles.image} source={'http://jaanisavolainen.com/paskaa/logo.png'} >
       <View style={styles.container}>
 
         <View>
@@ -144,7 +144,7 @@ export default function Matches({ navigation, route }) {
             fontSize: 20, color: 'orange',
             fontWeight: 'bold',
             fontFamily: 'roboto'
-          }}>Active chats</Text>
+          }}>Messages</Text>
           {
             list.map((l, i) => (
               <ListItem key={i} bottomDivider containerStyle={{ backgroundColor: 'rgba(255,154,0,0)' }} >
@@ -163,13 +163,18 @@ export default function Matches({ navigation, route }) {
             ))
           }
         </View>
+        <View>
+          <Text></Text>
+          <Text></Text>
+          <Text></Text>
           <Image
             style={styles.logo}
             source={{
-              uri: 'http://jaanisavolainen.com/paskaa/logo.png'
+              uri: 'http://jaanisavolainen.com/paskaa/logo2.png'
             }}></Image>
+        </View>
       </View>
-    </ImageBackground>
+    // </ImageBackground>
 
   );
 }
@@ -193,10 +198,11 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   logo: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
-    width: '60%',
-    height: 200,
+    // justifyContent: 'center',
+    // alignContent: 'center',
+    // alignItems: 'center',
+    width: 400,
+    height: 50,
+    padding: '15%'
   },
 });
