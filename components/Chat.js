@@ -147,17 +147,17 @@ export default function Chat(props) {
   }
 
 
+
   return (
     <View style={styles.container}>
 
-      <Icon size={20} reverse name="info" onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*/ />
-
-      <View style={{ justifyContent: 'space-around', flexDirection: 'row', padding: 5, backgroundColor: 'grey' }}>
-
+      <View style={{ justifyContent: 'space-around', flexDirection: 'row', padding: 5, backgroundColor: 'black' }}>
+        <Icon size={20} reverse name="info" onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*/ />
         <GoToAvatar navigation={props.navigation} />
       </View>
 
       <GiftedChat
+        // optionTintColor  = {'red'}
         messages={messages}
         onSend={messages => onSend(messages)}
         //onSend={handleSend}
@@ -165,11 +165,11 @@ export default function Chat(props) {
           _id: 1,
         }}
       />
-      <Button
+      {/* <Button
         onPress={getConversationsRT}
         title="debug log"
         containerStyle={{ paddingHorizontal: 10 }}
-      />
+      /> */}
     </View>
   );
 }
@@ -177,6 +177,7 @@ export default function Chat(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor : 'black'
   },
 });
 
