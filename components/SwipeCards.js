@@ -147,7 +147,8 @@ function PostSwipe(liked, user) {
     data: {
       liked: liked,
       target: user.uid, //korjaa findSwipeablesin blabla vanhaan.
-      isEvent: false //tarviko tätä, eiks swipe nyt bäkissä automaattisesti katsonut et onks user vai event
+      isEvent: false, //tarviko tätä, eiks swipe nyt bäkissä automaattisesti katsonut et onks user vai event
+      swipeAs : null
     },
     "uid": global.myUserData.uid,
     "idToken": global.myUserData.idToken,
