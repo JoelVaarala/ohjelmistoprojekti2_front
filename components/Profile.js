@@ -19,8 +19,8 @@ export default function Profile( {navigation, route}, props) {
            //console.log("Listener")
           //console.log(firebase.auth().currentUser)
            //setPics();
-           console.log('XXXX', route.params)
-           console.log('AAA',props)
+           console.log('route.prams: ', route.params)
+           console.log('props: ',props)
         });
     
          // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -43,6 +43,7 @@ export default function Profile( {navigation, route}, props) {
             let bio_f = qr.data().bio
             setUser({name: name_f, age: age_f, bio: bio_f})
             console.log('id from haeTiedot : ',qr.id)
+            // kuva array stateen, joka välitettyy carousel.js
             setPics(qr.data().images)
                       
         })
@@ -90,9 +91,7 @@ export default function Profile( {navigation, route}, props) {
 
             <View style={{ alignItems: 'center',   flex: 3 }}>
              
-                 <Carousel2 kuvat={pics} style={{ flex: 1
-                     //height: '50%', width: '50%'
-                     }}/> 
+                 <Carousel2 kuvat={pics} style={{ flex: 1 }}/> 
                    
             </View>
 
