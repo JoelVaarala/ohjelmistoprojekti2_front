@@ -147,7 +147,7 @@ export default function ViewLikers({ navigation, route }) {
                 <View style={styles.picker}>
                     <Picker
                         selectedValue={selectedEvent}
-                        style={{ height: 50, width: 150 }}
+                        style={{ height: 50, width: 150, }}
                         onValueChange={(itemValue, itemIndex) => setEvent(itemValue)}
                     >
                         {
@@ -157,7 +157,7 @@ export default function ViewLikers({ navigation, route }) {
                         }
                     </Picker>
                 </View>
-                <Text style={{ fontSize: 20 }}>  People who swiped for your event!</Text>
+                <Text style={{ fontSize: 20, color: 'orange' }}>  People who swiped for your event!</Text>
                 {
                     peoplesWhoWantToJoin.map((l, i) => (
                         <ListItem key={i} bottomDivider>
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 50,
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: 'black',
     },
     button: {
         alignItems: "center",
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     picker: {
         //flex: 1,
         // paddingTop: 0,
-        alignItems: "center"
+        alignItems: "center",
     },
 });
 
