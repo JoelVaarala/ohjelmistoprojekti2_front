@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import styles from '../styles';
 
 //Tässä käyttäjä rekisteröityy jos ei ole valideja tunnuksia tallessa, muutoin tämä ruutu skipataan kun validointi tehty
 export default function StartingScreen() {

@@ -6,7 +6,6 @@ import Startup from './Startup';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { Icon, Avatar } from "react-native-elements";
-import styles from '../styles';
 
 // import firebase from 'react-native-firebase';
 
@@ -146,7 +145,9 @@ export default function Chat(props) {
       })
       .catch(err => console.error(err))
   }
-  
+
+
+
   return (
     <View style={styles.container}>
 
@@ -172,7 +173,6 @@ export default function Chat(props) {
     </View>
   );
 }
->>>>>>> master
 
 const styles = StyleSheet.create({
   container: {
@@ -181,13 +181,7 @@ const styles = StyleSheet.create({
   },
 });
 
-  return (
-    <View style={styles.chatContainer}>
 
-      <View style={styles.chatStyle}>
-        <Icon size={20} reverse name="info" onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*/ />
-        <GoToAvatar navigation={props.navigation} />
-      </View>
 // ____________________ Vanhaa koodia ____________________________
 
 /*  // err = "The caller does not have permission to execute the specified operation"
@@ -278,8 +272,8 @@ const getConversationdataFromDoc = async () => {
 
     } catch (error) {
       console.log(error);
+
     }
   }
 }
 */
->>>>>>> master

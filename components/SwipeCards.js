@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { color } from "react-native-reanimated";
 import SwipeCards from "react-native-swipe-cards";
 import { Icon, Avatar } from "react-native-elements";
-import styles from '../styles';
 
 
 
@@ -23,26 +22,26 @@ class Card extends React.Component {
 
   render() {
     return (
-      <View style={styles.flexOne}>
-        <View>
+      <View style={{ flex: 1 }}>
+        <View style={[{ backgroundColor: this.props.backgroundColor }]}>
           <TouchableOpacity>
             <Image source={{ uri: this.props.images[0] }} style={styles.card} />
-            <View style={styles.cardContainer}>
+            <View style={{ position: "absolute", top: 0, left: 15, right: 150, justifyContent: "flex-end", alignItems: "flex-start" }}>
               <Image
                 source={require("../pictures/darkish.png")}
-                style={styles.imageShadow}
+                style={{ height: 400, width: 350, right: 15, top: 25, opacity: 0.9, borderRadius: 5 }}
               />
-              <View style={styles.eventInfoMargin}> 
+              <View style={{ bottom: 40 }}> 
                 {
                   this.props.isEvent ? (
-                    <Text style={styles.eventInfo}>{this.props.displayName}  in 12h hours </Text>
+                    <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>{this.props.displayName}  in 12h hours </Text>
                   ) : (
-                      <Text style={styles.eventInfo}>{this.props.displayName}    {this.props.age}</Text>
+                      <Text style={{ fontSize: 18, color: "white", fontWeight: "bold" }}>{this.props.displayName}    {this.props.age}</Text>
                     )
                 }
 
-                <Text style={styles.eventInfoBio}>{this.props.tags}</Text>
-                <Text style={styles.eventInfoBio}>{this.props.distance} km away</Text>
+                <Text style={{ fontSize: 12, color: "white" }}>{this.props.tags}</Text>
+                <Text style={{ fontSize: 12, color: "white" }}>{this.props.distance} km away</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -52,6 +51,8 @@ class Card extends React.Component {
   }
 }
 
+<Image source={require("../pictures/darkish.png")} style={{ height: 400, width: 350, bottom: -40, right: 15, opacity: 0.9, borderRadius: 5 }} />;
+
 class NoMoreCards extends Component {
   constructor(props) {
     super(props);
@@ -59,11 +60,11 @@ class NoMoreCards extends Component {
 
   render() {
     return (
-      <View style={styles.noMoreCardsContent}>
+      <View style={{ flex: 1, justifyContent: "center" }}>
         <View>
           <Text style={styles.noMoreCardsText}>No more cards</Text>
         </View>
-        <View style={styles.noMoreCardsContent}>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Icon reverse name="refresh" />
         </View>
       </View>
@@ -122,6 +123,23 @@ export default class extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  card: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 350,
+    height: 445,
+    resizeMode: "cover",
+    borderWidth: 2,
+    borderColor: "black",
+    borderRadius: 5,
+    bottom: 20,
+  },
+  noMoreCardsText: {
+    fontSize: 22,
+  },
+});
 
 function PostSwipe(liked, user) {
   //Connectaa endpointiin, lähettää parametrinä omat hakutoiveet. Vaihtoehtona että bäkki itse noutas firebasesta mutta ei kai tarpeen?

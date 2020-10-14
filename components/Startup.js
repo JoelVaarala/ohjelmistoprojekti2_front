@@ -9,7 +9,6 @@ import firebase from 'react-native-firebase';
 import firestore from '@react-native-firebase/firestore';
 import * as Location from 'expo-location';
 import functions from '@react-native-firebase/functions';
-import styles from '../styles';
 
 
 // import  'firebaseconfig';
@@ -143,6 +142,8 @@ const yritaKirjautua = async () => {
   }
 }
 
+
+
 const tallennaToken = async (data) => {
   try {
     await AsyncStorage.setItem('tokenKey', data);
@@ -168,7 +169,7 @@ function testausta() {
 return (
   <View>
     <Input
-      containerStyle={styles.StartupUsername}
+      containerStyle={{ paddingTop: 100 }}
       lable="Käyttäjätunnus"
       placeholder="Käyttäjätunnus"
       onChangeText={kayttaja => setKayttaja(kayttaja)}
@@ -183,14 +184,14 @@ return (
     />
     <Button
       onPress={login} title="Login"
-      containerStyle={styles.startupButtons}
+      containerStyle={{ paddingHorizontal: 10 }}
     />
     <Text>{msg}</Text>
 
     <Button
       onPress={() => navigation.navigate('Rekisteröidy')}
       title="REKISTERÖIDYaaaaaaa"
-      containerStyle={styles.startupButtons}
+      containerStyle={{ paddingHorizontal: 10 }}
     />
   </View>
 );
