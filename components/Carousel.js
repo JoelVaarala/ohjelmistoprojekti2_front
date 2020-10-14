@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Text, View, SafeAreaView, Dimensions } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import styles from '../styles';
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
@@ -38,8 +37,11 @@ export default class App extends React.Component {
 
     _renderItem({ item, index }) {
         return (
-            <View style={styles.carouselBackground}>
-                <Text style={styles.carouselFontSize}>{item.title}</Text>
+            <View style={{
+                backgroundColor: 'floralwhite',
+                flex: 1
+            }}>
+                <Text style={{ fontSize: 30 }}>{item.title}</Text>
                 <Text>{item.text}</Text>
             </View>
 
@@ -48,8 +50,8 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <SafeAreaView style={styles.carouselSafeAreaView}>
-                <View style={styles.carouselLayout}>
+            <SafeAreaView style={{ flex: 1, paddingTop: 0, }}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', }}>
                     <Carousel
                         layout={"default"}
                         ref={ref => this.carousel = ref}
