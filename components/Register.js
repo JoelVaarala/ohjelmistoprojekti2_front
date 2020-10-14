@@ -3,7 +3,6 @@ import { View, ScrollView } from 'react-native';
 import { Input, Button, Text, ButtonGroup } from 'react-native-elements';
 import DatePicker from 'react-native-date-picker';
 import { Entypo } from '@expo/vector-icons';
-import styles from '../styles';
 
 export default function Register({ navigation }) {
 
@@ -93,8 +92,8 @@ export default function Register({ navigation }) {
     //sähköpostile checki, onko legit syntaxi
     //checki, onnistuiko rekisteröinti, jos onnistui -> loginpage ja kirjaudu automaattisesti
     return (
-        <ScrollView style={styles.registerScrollView}>
-            <Text h4 style={styles.registerText}>Luo käyttäjä</Text>
+        <ScrollView style={{ paddingTop: 20, flex: 1 }}>
+            <Text h4 style={{ alignSelf: 'center' }}>Luo käyttäjä</Text>
             <Input
                 label="Sähköposti"
                 placeholder="Sähköposti"
@@ -116,14 +115,13 @@ export default function Register({ navigation }) {
                 value={kayttajaTiedot.displayName}
             />
 
-            <View style={styles.registerBirthdayMarginLeft}>
+            <View style={{ marginLeft: 10 }}>
                 <Text  //jos on joku parempi label systeemi, saa muuttaa tämän
-                    style={styles.registerBirthdayText}
+                    style={{ color: 'grey', fontSize: 17, fontWeight: 'bold', marginBottom: 10 }}
                 >Syntymä aika</Text>
 
                 <DatePicker
-                    style={styles.registerDatePicker}
-
+                    style={{ alignSelf: 'center' }}
                     date={date}
                     onDateChange={value => setDate(value)}
                     mode="date"
@@ -131,9 +129,9 @@ export default function Register({ navigation }) {
                 />
             </View>
 
-            <View style={styles.registerGenderStyle}>
+            <View style={{ marginLeft: 10, paddingTop: 10 }}>
                 <Text  //jos on joku parempi label systeemi, saa muuttaa tämän
-                    style={styles.registerGenderText}
+                    style={{ color: 'grey', fontSize: 17, fontWeight: 'bold', marginBottom: 10 }}
                 >Sukupuoli</Text>
 
                 <ButtonGroup
@@ -160,8 +158,7 @@ export default function Register({ navigation }) {
             <Button
                 onPress={() => registerUser()}
                 title="Luo käyttäjä"
-                containerStyle={styles.registerUserButton}
-
+                containerStyle={{ paddingHorizontal: 10, paddingTop: 20, paddingBottom: 80 }}
             />
         </ScrollView>
     );

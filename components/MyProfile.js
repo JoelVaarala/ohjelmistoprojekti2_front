@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { Icon, Avatar } from "react-native-elements";
 import ImagePicker from 'react-native-image-picker';
-import styles from '../styles';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 const MyProfile = ({ navigation }) => {
@@ -36,15 +35,15 @@ const MyProfile = ({ navigation }) => {
 
   const { name, age, picPath } = state;
   return (
-    <View style={styles.myProfileContainer}>
-      <View style={styles.myProfileAvatarContainer}>
+    <View style={styles.container}>
+      <View style={styles.avatarContainer}>
         <Avatar onPress={() => navigation.navigate('FullProfile')} 
         size="xlarge" rounded source={{ uri: picPath }} />
-        <Text style={styles.myProfileUser}>
+        <Text style={{ fontSize: 20, top: 5 }}>
           {name}, {age}
         </Text>
       </View>
-      <View style={styles.iconSpacing}>
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', top: 20 }}>
         <View>
           <Icon onPress={() => navigation.navigate('Settings')} size={28} reverse name="settings" />
           <Text>Asetukset</Text>
@@ -66,3 +65,19 @@ const MyProfile = ({ navigation }) => {
 };
 
 export default MyProfile;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff'
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10
+  },
+  avatarContainer: {
+    marginTop: 15,
+    alignItems: 'center'
+  }
+});
