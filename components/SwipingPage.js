@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
 import SwipeCards from "./SwipeCards";
+import * as Location from 'expo-location';
+import styles from '../styles';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function SwipingPage({ navigation, route }) {
@@ -56,19 +58,19 @@ export default function SwipingPage({ navigation, route }) {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={{ flex: 1, justifyContent: "flex-start" }}>
+    <View style={styles.container, styles.containerMarginLeft, styles.containerBackground, styles.containerPaddingTop}>
+      <View style={styles.iconLocation}>
         {/* <SwipeCards vaihtoehdot={swipettavat} /> */}
         <LuoSwipecardi />
       </View>
-      <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
-        <View style={styles.icons}>
+      <View style={styles.iconSpacebetween}>
+        <View style={styles.iconPadding}>
           <Icon size={27} reverse name="cancel" />
         </View>
-        <View style={styles.icons}>
+        <View style={styles.iconPadding}>
           <Icon size={27} reverse name="info" />
         </View>
-        <View style={styles.icons}>
+        <View style={styles.iconPadding}>
           <Icon size={27} reverse name="favorite" />
         </View>
       </View>
@@ -76,22 +78,3 @@ export default function SwipingPage({ navigation, route }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 50,
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-  },
-  icons: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 20,
-  },
-});

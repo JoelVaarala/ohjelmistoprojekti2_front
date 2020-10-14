@@ -9,6 +9,7 @@ import firebase from 'react-native-firebase';
 import firestore from '@react-native-firebase/firestore';
 import * as Location from 'expo-location';
 import functions from '@react-native-firebase/functions';
+import styles from '../styles';
 
 
 // import  'firebaseconfig';
@@ -150,32 +151,47 @@ export default function Startup(props) {
     });
   }
 
-  return (
-    <View>
-      <Input
-        containerStyle={{ paddingTop: 100 }}
-        lable="Käyttäjätunnus"
-        placeholder="Käyttäjätunnus"
-        onChangeText={kayttaja => setKayttaja(kayttaja)}
-        value={kayttaja}
-      />
-      <Input
-        lable="Salasana"
-        placeholder="Salasana"
-        secureTextEntry={true}
-        onChangeText={salasana => setSalasana(salasana)}
-        value={salasana}
-      />
-      <Button
-        onPress={login} title="Login"
-        containerStyle={{ paddingHorizontal: 10 }}
-      />
-      <Text>{msg}</Text>
 
-      <Button
-        onPress={login} title="REKISTERÖIDY"
-        containerStyle={{ paddingHorizontal: 10 }}
-      />
-    </View>
-  );
+//https://firebase.google.com/docs/auth/admin/verify-id-tokens#web
+//hakee käyttäjän webbtokenin jota tarvitaan kun lähetetään viestejä, swipejä tms backendpalvelimelle.
+function testausta() {
+
+  auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+    // Send token to your backend via HTTPS
+    // ...
+    tallennaToken(idToken); //tallennetaan asyncciin, voitas kyl tallentaa vaikka globaliin myös? 
+  }).catch(function (error) {
+    // Handle error
+  });
+}
+
+return (
+  <View>
+    <Input
+      containerStyle={styles.StartupUsername}
+      lable="Käyttäjätunnus"
+      placeholder="Käyttäjätunnus"
+      onChangeText={kayttaja => setKayttaja(kayttaja)}
+      value={kayttaja}
+    />
+    <Input
+      lable="Salasana"
+      placeholder="Salasana"
+      secureTextEntry={true}
+      onChangeText={salasana => setSalasana(salasana)}
+      value={salasana}
+    />
+    <Button
+      onPress={login} title="Login"
+      containerStyle={styles.startupButtons}
+    />
+    <Text>{msg}</Text>
+
+    <Button
+      onPress={() => navigation.navigate('Rekisteröidy')}
+      title="REKISTERÖIDYaaaaaaa"
+      containerStyle={styles.startupButtons}
+    />
+  </View>
+);
 }

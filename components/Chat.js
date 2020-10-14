@@ -5,6 +5,8 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import Startup from './Startup';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { Icon, Avatar } from "react-native-elements";
+import styles from '../styles';
 
 // import firebase from 'react-native-firebase';
 
@@ -74,10 +76,53 @@ function LahetaViestiFirebaseen(viesti)
   //   console.log('Message added!');
   // });
 
-}
+    console.log(bodi);
+    console.log(JSON.stringify(bodi))
+
+    fetch(url,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodi),
+      })
+      .then(response => response.json())
+      .then(res => {
+        console.log('.then res ->', res);
+      })
+      .catch(err => console.error(err))
+  }
 
 
 
+  return (
+    <View style={styles.chatContainer}>
+
+      <View style={styles.chatStyle}>
+        <Icon size={20} reverse name="info" onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*/ />
+        <GoToAvatar navigation={props.navigation} />
+      </View>
+
+      <GiftedChat
+        // optionTintColor  = {'red'}
+        messages={messages}
+        onSend={messages => onSend(messages)}
+        //onSend={handleSend}
+        user={{
+          _id: 1,
+        }}
+      />
+      {/* <Button
+        onPress={getConversationsRT}
+        title="debug log"
+        containerStyle={styles.chatButton}
+      /> */}
+    </View>
+  );
+
+
+// ____________________ Vanhaa koodia ____________________________
 
 
   
@@ -179,9 +224,11 @@ const getConversationdataFromDoc = async () => {
     />
     </View>
   );
+
 }
 
-const styles = StyleSheet.create({
+
+const styles1 = StyleSheet.create({
   container: {
     flex: 1,
   },
