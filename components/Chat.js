@@ -18,15 +18,37 @@ export default function Chat(props) {
   // States
   const [messages, setMessages] = useState([]);
   const avatar_url = 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg'
+  const [matchinUID, setMatchinUID] = useState('');
+
+  
+  // React.useEffect(() => {
+  //   getMatchID()
+  // }, [])
+  
+  // // hae matchin id
+  // const refff = firestore().collection('matches').doc(props.route.params.chatti)
+  // function getMatchID() {
+  //   refff.onSnapshot((query) => {
+  //     console.log('id:t ',query.data().users[0], query.data().users[1])
+  //     let v1 = query.data().users[0];
+  //     if(v1 != global.myUserData.uid){
+  //       setMatchinUID(v1)
+  //     }else{
+  //       setMatchinUID( query.data().users[1]);
+  //     }
+  //     console.log('sdghtjhrtjtrj', matchinUID)
+  //   })
+  // }
 
 
   //tää täytyy fixaaa EI TOIMI
   function GoToAvatar({ navigation }) {
     return (
       <Avatar
-        onPress={() => navigation.navigate('MatchProfile')}
+        onPress={() => navigation.navigate('MatchProfile', { match: matchinUID })}
         size="large" rounded
         source={{ uri: avatar_url }}
+        
       />
     );
   }
@@ -63,10 +85,12 @@ export default function Chat(props) {
   }
 
 
+
+
   // --UPDATED METHOD TO GET MESSAGES REALTIME
   // ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
   const ref = firestore().collection('matches').doc(props.route.params.chatti).collection('messages').orderBy('timestamp', 'desc');
-
+  
   function getConversationsRT() {
 
     // luodaan snapshot joka, "hakee" firestoren sisällön
@@ -80,9 +104,10 @@ export default function Chat(props) {
 
         console.log('Viestin sisältö : ', doc.data().message);
         // Alla selvitetään onko henkilö lähettäjä/vastaanottaja, jotta tiedetään kummalle puolelle näyttöä viestit renderöidään
-        let sender = 2;
+        let sender = doc.data().sender;
         if (doc.data().sender == auth().currentUser.uid) {
-          sender = 1;
+          sender = 'asd';
+          
         }
 
         // lisätään arrayhin halutut viesti datat
@@ -92,6 +117,8 @@ export default function Chat(props) {
           createdAt: new Date(doc.data().timestamp._seconds * 1000),
           user: {
             _id: sender,
+            name: 'joku',
+            avatar: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg' 
           }
         });
         // asettaan taulun stateen jota Giftedchat käyttää datana
@@ -146,6 +173,14 @@ export default function Chat(props) {
       .catch(err => console.error(err))
   }
 
+  // avatar kuvaa painamalla pääsee katsomaan henkilön profiilia
+  function avatarOpensProfile(props2){
+      // console.log('props2 : ',props2)
+      // console.log('props : ',props)
+      console.log(props2)
+      props.navigation.navigate('MatchProfile', { match: props2._id })
+  }
+
 
 
   return (
@@ -162,8 +197,9 @@ export default function Chat(props) {
         onSend={messages => onSend(messages)}
         //onSend={handleSend}
         user={{
-          _id: 1,
+          _id: 'asd',
         }}
+        onPressAvatar={avatarOpensProfile}
       />
       {/* <Button
         onPress={getConversationsRT}
