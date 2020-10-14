@@ -76,7 +76,7 @@ export default function SwipingPage({ navigation, route }) {
 
   const buttons = ['Users', 'Events', 'Both']
   const subButtons = ['Open', 'Public', 'Private']
-  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [] });
+  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [1] });
 
 
   return (
