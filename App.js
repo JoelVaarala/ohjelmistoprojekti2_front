@@ -20,6 +20,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import firebase from 'react-native-firebase';
 import ViewLikers from "./components/ViewLikers.js";
+import styles from './styles';
 
 import { Provider } from 'react-redux';
 import { store } from './redux/index';
@@ -137,6 +138,7 @@ const MyTheme = {
   );
 }
 
+/*
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -145,3 +147,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+*/

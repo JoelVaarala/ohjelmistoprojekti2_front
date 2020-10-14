@@ -7,6 +7,7 @@ import Constants from 'expo-constants';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import styles from '../styles';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Settings() {
@@ -176,32 +177,32 @@ export default function Settings() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.settingsContainer}>
       <ScrollView>
-        <View style={styles.omatContainerit}>
-          <View style={{ backgroundColor: 'white' }} >
+        <View style={styles.settingsOmatContainerit}>
+          <View style={styles.textInputBackground} >
             <Text>Lisää tägi</Text>
             <TextInput onChangeText={tag => setTag(tag)} value={tag} onEndEditing={addTag}
-              style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, backgroundColor: 'white' }}>
+              style={styles.settingsAddTag}>
             </TextInput>
           </View>
           <View>
             <Text>Tags:</Text>
-            <FlatList contentContainerStyle={styles.content}
+            <FlatList contentContainerStyle={styles.settingsContent}
               horizontal={false}
               numColumns={3}
               data={tagList}
               keyExtractor={((item, index) => index.toString())}
               renderItem={({ item }) =>
-                <Text style={styles.tag}>{item}</Text>}
+                <Text style={styles.settingsTag}>{item}</Text>}
             />
           </View>
         </View>
-        <View style={styles.omatContainerit}>
+        <View style={styles.settingsOmatContainerit}>
           <View>
             <Text>Etäisyys:</Text>
             <RangeSlider
-              style={{ width: 250, height: 60 }}
+              style={styles.settingsRangerSlider}
               gravity={'center'}
               rangeEnabled={false}
               min={1}
@@ -214,10 +215,10 @@ export default function Settings() {
               }} />
           </View>
           <Text> {distance} km</Text>
-          <View style={{ paddingTop: 50 }}>
+          <View style={styles.settingsAgePaddingTop}>
             <Text> Iät</Text>
             <RangeSlider
-              style={{ width: 250, height: 60 }}
+              style={styles.settingsRangerSlider}
               gravity={'center'}
               min={14}
               max={100}
@@ -236,54 +237,55 @@ export default function Settings() {
         </View>
 
 
-        <View style={styles.omatContainerit}>
+        <View style={styles.settingsOmatContainerit}>
           <Text>Sukupuoli</Text>
-          <View style={styles.checkbox}>
+          <View style={styles.settingsCheckbox}>
             <CheckBox
               disabled={false}
               value={female}
               onValueChange={(newValue) => setFemale(newValue)}
             />
-            <Text style={{ marginTop: 5 }}>Naiset</Text>
+            <Text style={styles.optionMarginTopFive}>Naiset</Text>
           </View>
-          <View style={styles.checkbox}>
+          <View style={styles.settingsCheckbox}>
             <CheckBox
               disabled={false}
               value={male}
               onValueChange={(newValue) => setMale(newValue)}
             />
-            <Text style={{ marginTop: 5 }}>Miehet</Text>
+            <Text style={styles.optionMarginTopFive}>Miehet</Text>
           </View>
-          <View style={styles.checkbox}>
+          <View style={styles.settingsCheckbox}>
             <CheckBox
               disabled={false}
               value={other}
               onValueChange={(newValue) => setOther(newValue)}
             />
-            <Text style={{ marginTop: 5 }}>Muut</Text>
+
+            <Text style={styles.optionMarginTopFive}>Muut</Text>
           </View>
         </View>
-        <View style={styles.omatContainerit}>
+        <View style={styles.settingsOmatContainerit}>
           <Text>Hakukohteena </Text>
-          <View style={styles.checkbox}>
+          <View style={styles.settingsCheckbox}>
             <CheckBox
               disabled={false}
               value={events}
               onValueChange={(newValue) => setEvents(newValue)}
             />
-            <Text style={{ marginTop: 5 }}>Tapahtumat</Text>
+            <Text style={styles.optionMarginTopFive}>Tapahtumat</Text>
           </View>
-          <View style={styles.checkbox}>
+          <View style={styles.settingsCheckbox}>
             <CheckBox
               disabled={false}
               value={people}
               onValueChange={(newValue) => setPeople(newValue)}
             />
-            <Text style={{ marginTop: 5 }}>Ihmiset</Text>
+            <Text style={styles.optionMarginTopFive}>Ihmiset</Text>
           </View>
         </View>
 
-        <View style={styles.omatContainerit}>
+        <View style={styles.settingsOmatContainerit}>
 
           {/* FIXME Tähän tulee aikaslideri josta valitaan tuntien tai päivien päästä */}
           {/* <View>
@@ -301,11 +303,11 @@ export default function Settings() {
             />
           )} */}
         </View>
-        <View style={styles.omatContainerit}>
+        <View style={styles.settingsOmatContainerit}>
           <Button
             onPress={TallennaData}
             title="Tallenna tiedot"
-            style={{ paddingHorizontal: 10, alignItems: 'stretch' }}
+            style={styles.saveDataButton}
           />
         </View>
       </ScrollView>
@@ -315,39 +317,3 @@ export default function Settings() {
 }
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  scrollView: {
-
-  },
-  button: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    width: 200,
-    justifyContent: 'flex-start',
-  },
-  tag: {
-    padding: 6,
-    fontSize: 16,
-    color: 'white',
-    marginVertical: 7,
-    marginHorizontal: 10,
-    backgroundColor: 'green',
-    borderRadius: 6,
-  },
-  omatContainerit: {
-    flex: 4,
-    paddingTop: 20,
-    alignItems: 'flex-start',
-    paddingLeft: 80
-  },
-  content: {
-    paddingTop: 10,
-  },
-  checkbox: {
-    flexDirection: 'row'
-  }
-})

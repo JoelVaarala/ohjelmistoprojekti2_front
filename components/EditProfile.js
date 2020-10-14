@@ -3,6 +3,7 @@ import { StyleSheet, Button, FlatList, Text, View, TextInput } from 'react-nativ
 import { Icon, Input } from 'react-native-elements'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import styles from '../styles';
 
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
@@ -89,43 +90,43 @@ export default function EditProfile() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={{ flexDirection: 'row' }}>
+    <View style={styles.editProfileContainer}>
+      <View style={styles.editProfileUser}>
         <Text
-          style={styles.text}>
+          style={styles.editProfileText}>
           {userTiedot.name},
           {userTiedot.age} 
     
         </Text>
       </View>
       <Icon reverse name='image' />
-      <Text style={styles.text}>Lisää kuva</Text>
-      <Text style={styles.text} >Tietoja sinusta:</Text>
-      <View style={styles.textAreaContainer}>
-        <TextInput value={userTiedot.bio} style={styles.textArea} multiline={true} 
+      <Text style={styles.editProfileText}>Lisää kuva</Text>
+      <Text style={styles.editProfileText} >Tietoja sinusta:</Text>
+      <View style={styles.editProfileTextAreaContainer}>
+        <TextInput value={userTiedot.bio} style={styles.editProfileTextArea} multiline={true} 
           numberOfLines={3} maxLength={500}  onChangeText={text => setUserTiedot({...userTiedot,bio: text})}/>
       </View>
       {/* meillä ei oo asuinpaikkaa nyt */}
-      {/* <Text style={styles.text}>Asuinpaikka: </Text>
-      <View style={styles.textAreaContainer}> 
-        <TextInput style={styles.textArea} placeholder='Asuinpaikka' />
+      {/* <Text style={styles.editProfileText}>Asuinpaikka: </Text>
+      <View style={styles.editProfileTextAreaContainer}> 
+        <TextInput style={styles.editProfileTextArea} placeholder='Asuinpaikka' />
       </View> */}
       <View style={styles.omatContainerit}>
         <View>
           <Text>Lisää tägi</Text>
           <TextInput onChangeText={tag => setTag(tag)} value={tag} onEndEditing={addTag} 
-                style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, backgroundColor: 'white' }}>
+                style={styles.tagTextInput}>
           </TextInput>
         </View>
         <View>
           <Text>Your tags:</Text>
-          <FlatList contentContainerStyle={styles.content}
+          <FlatList contentContainerStyle={styles.editProfileContent}
             horizontal={false}
             numColumns={3}
             data={tagList}
             keyExtractor={((item, index) => index.toString())}
             renderItem={({ item }) =>
-              <Text onPress={() => deleteItemById(item.id)} style={styles.tag}>{item}</Text>}
+              <Text onPress={() => deleteItemById(item.id)} style={styles.editProfileTag}>{item}</Text>}
           />
         </View>
       </View>
@@ -138,56 +139,3 @@ export default function EditProfile() {
 
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#eaeaea',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-  },
-  textAreaContainer: {
-    backgroundColor: 'white',
-    padding: 5,
-    alignSelf: 'stretch'
-  },
-  textArea: {
-    textAlignVertical: "top",
-    alignSelf: 'stretch',
-    fontSize: 15
-  },
-  text: {
-    fontSize: 20,
-    paddingTop: 2,
-    paddingBottom: 1,
-  },
-  button: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    width: 200,
-    justifyContent: 'flex-start',
-  },
-  tag: {
-    padding: 6,
-    fontSize: 20,
-    color: 'white',
-    marginVertical: 7,
-    marginHorizontal: 10,
-    backgroundColor: 'green',
-    borderRadius: 6,
-  },
-  omatContainerit: {
-    flex: 4,
-    paddingTop: 20,
-    alignItems: 'flex-start',
-    paddingLeft: 80
-  },
-  content: {
-    paddingTop: 10,
-  },
-});

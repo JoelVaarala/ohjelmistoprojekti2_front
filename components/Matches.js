@@ -1,10 +1,13 @@
 import React from 'react';
+
 import { StyleSheet, Text, View, FlatList, ImageBackground, Image } from 'react-native';
 import { Avatar, ListItem, Overlay } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import firebase from 'react-native-firebase';
 import auth from '@react-native-firebase/auth';
 import Kuva from './assets/logo.png'
+import styles from '../styles';
+
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Matches({ navigation, route }) {
 
@@ -124,9 +127,9 @@ export default function Matches({ navigation, route }) {
 
 
   return (
-
-    // <ImageBackground style={styles.image} source={'http://jaanisavolainen.com/paskaa/logo.png'} >
-      <View style={styles.container}>
+    
+    // <ImageBackground style={styles.matchesImage} source={'http://jaanisavolainen.com/paskaa/logo.png'} >
+      <View style={styles.matchesContainer}>
 
         <View>
           {/* <Text style={{
@@ -168,41 +171,12 @@ export default function Matches({ navigation, route }) {
           <Text></Text>
           <Text></Text>
           <Image
-            style={styles.logo}
+            style={styles.matchesLogo}
             source={{
               uri: 'http://jaanisavolainen.com/paskaa/logo2.png'
             }}></Image>
         </View>
       </View>
-    // </ImageBackground>
-
   );
 }
 
-
-const styles = StyleSheet.create({
-  container: {
-    // paddingTop: 50,
-    flex: 1,
-    backgroundColor: 'black',
-
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-  },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
-  },
-  logo: {
-    // justifyContent: 'center',
-    // alignContent: 'center',
-    // alignItems: 'center',
-    width: 400,
-    height: 50,
-    padding: '15%'
-  },
-});

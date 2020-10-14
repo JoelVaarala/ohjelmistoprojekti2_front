@@ -6,6 +6,7 @@ import Redux from 'redux';
 import auth from '@react-native-firebase/auth';
 import { connect } from 'react-redux';
 import { store, addEvent } from '../redux/index';
+import styles from '../styles';
 
 
 function Add_Eventti(props) {
@@ -92,26 +93,25 @@ function Add_Eventti(props) {
 
 
   return (
-
-    <ScrollView style={{ marginTop: 22, flex: 1 }}>
+    <ScrollView style={styles.addEventScrollView}>
 
       {view ? (
 
-        <View style={{ marginLeft: 10, marginRight: 10 }}>
+        <View style={styles.eventAddMargin}>
 
           <View>
-            <Text style={styles.headers}>Anna tapahtumalle nimi : </Text>
+            <Text style={styles.eventHeaders}>Anna tapahtumalle nimi : </Text>
             <TextInput
-              style={styles.textbox}
+              style={styles.eventTextbox}
               onChangeText={text => setEventName(text)}
               value={eventName}
             //onEndEditing={() => store.dispatch(addName(eventName))} 
             //_tällä lähetteisi eventName kun näppäimistö suljetaan
             />
 
-            <Text style={styles.headers}>Anna tapahtuman kuvaus : </Text>
+            <Text style={styles.eventHeaders}>Anna tapahtuman kuvaus : </Text>
             <TextInput
-              style={styles.textbox}
+              style={styles.eventTextbox}
               onChangeText={text => setDescription(text)}
               value={description}
             />
@@ -119,7 +119,7 @@ function Add_Eventti(props) {
 
 
           <View>
-            <Text style={styles.headers}>Valitse alkamis aika : </Text>
+            <Text style={styles.eventHeaders}>Valitse alkamis aika : </Text>
             <DatePicker
               style={{ alignSelf: 'center' }}
               date={date}
@@ -129,15 +129,16 @@ function Add_Eventti(props) {
             />
           </View>
 
-          <View style={styles.container}>
-            <Text style={styles.headers}>Anna tapahtumalle tägejä : </Text>
+          <View style={styles.container, styles.containerMarginLeft}>
+            <Text style={styles.eventHeaders}>Anna tapahtumalle tägejä : </Text>
             <TextInput
-              style={styles.textbox}
+              style={styles.eventTextbox}
               onChangeText={text => setTag(text)}
               value={tag}
               onEndEditing={addTag}
             />
-            <View style={styles.container}>
+            <View style={styles.container, styles.containerMarginLeft}>
+
               <Text style={styles.header}>Tag List</Text>
               <FlatList
                 keyExtractor={(item, index) => index.toString()}
@@ -157,8 +158,8 @@ function Add_Eventti(props) {
       ) : (
 
           <View>
-            <Text style={styles.headers}>Preview!!</Text>
-            <Text style={styles.headers}>Luomasi tapahtuma </Text>
+            <Text style={styles.eventHeaders}>Preview!!</Text>
+            <Text style={styles.eventHeaders}>Luomasi tapahtuma </Text>
             <Text>Nimi : {store.getState().EventReducer[0].eventName}</Text>
             <Text>Kuvaus : {store.getState().EventReducer[0].description}</Text>
             <Text>Ajankohta : {store.getState().EventReducer[0].date.toString()}</Text>
@@ -186,29 +187,3 @@ const mapStateToProps = (state) => ({
 const Add_Event = connect(mapStateToProps, { addEvent })(Add_Eventti);
 // Export ln:177
 export default Add_Event;
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    //backgroundColor: '#eaeaea',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    marginLeft: 20
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-  },
-  headers: {
-    fontWeight: 'bold',
-    marginTop: 10
-  },
-  textbox: {
-    height: 40,
-    width: 200,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 1,
-  },
-});
