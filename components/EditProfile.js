@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Button, FlatList, Text, View, TextInput } from 'react-native';
 import { Icon, Input } from 'react-native-elements'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -9,18 +9,84 @@ import styles from '../styles';
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function EditProfile() {
 
+  //tagit
+  const [tag, setTag] = useState('')
+  const [tagList, setTagList] = useState([])
+  const [userTiedot, setUserTiedot] = useState({
+    age: 0,
+    bio: '',
+    name: '',
+  })
+ 
 
   React.useEffect(() => {
-    HaeKayttajanTiedot()
-  }, []);  
+    // console.log('useeffecti', tagList)
+    HaeTiedot();
+  }, []);
 
-  const HaeKayttajanTiedot = async () => {
-  
-    console.log("Haetaan käyttäjän omat tiedot")
-    const myUID = auth().currentUser.uid;
-    const tiedot = await firestore().collection("users").doc(myUID).get();
-    console.log(tiedot._data)
-    //Nyt tiedot kentästä voi noukkia tarvittavat tiedot.
+
+  function TallennaData() {
+    
+    let body = {
+      data: {
+        tags: tagList,
+        bio: userTiedot.bio
+      },
+      uid: global.myUserData.uid,
+      idToken: global.myUserData.idToken,
+    }
+
+    fetch(global.url + "profileUpdate",
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+      }
+    )
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data)
+      })
+      .catch(err => console.error(err))
+
+  }
+
+  // function HaeKayttajanTiedot_autoupdate() {
+  //   let ref = firestore().collection("users").doc(auth().currentUser.uid)
+  //   ref.onSnapshot((querySnapshot) => {
+  //     let iäkäs = querySnapshot.data().age
+  //     // console.log('user ika : ', iäkäs) // prints 23 tai new value
+  //     setUserTiedot({
+  //      age: (querySnapshot.data().age),
+  //      bio: (querySnapshot.data().bio),
+  //      name: (querySnapshot.data().displayName)
+  //     })
+  //     setTagList(querySnapshot.data().tags)
+  //   })
+      
+  // }
+
+  const HaeTiedot = async () => {
+  const ref = firestore().collection("users").doc(auth().currentUser.uid)
+  const doc = await ref.get();
+  if(!doc.exists){
+    console.log('document not found')
+  }else{
+    console.log('success HERE HERE ::::', doc.data())
+     setUserTiedot({
+       age: (doc.data().age),
+       bio: (doc.data().bio),
+       name: (doc.data().displayName)
+      })
+      setTagList(doc.data().tags)
+  }
+}
+
+  const addTag = () => {
+    setTagList([...tagList, tag])
+    setTag('');
   }
 
   return (
@@ -67,7 +133,7 @@ export default function EditProfile() {
       <Button
         onPress={TallennaData}
         title="Tallenna tiedot"
-        style={{  }} //tähän jotain?
+        style={{  }}
       />
     </View>
 

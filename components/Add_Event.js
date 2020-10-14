@@ -93,7 +93,6 @@ function Add_Eventti(props) {
 
 
   return (
-
     <ScrollView style={styles.addEventScrollView}>
 
       {view ? (
@@ -139,6 +138,7 @@ function Add_Eventti(props) {
               onEndEditing={addTag}
             />
             <View style={styles.container, styles.containerMarginLeft}>
+
               <Text style={styles.header}>Tag List</Text>
               <FlatList
                 keyExtractor={(item, index) => index.toString()}
@@ -187,4 +187,3 @@ const mapStateToProps = (state) => ({
 const Add_Event = connect(mapStateToProps, { addEvent })(Add_Eventti);
 // Export ln:177
 export default Add_Event;
-

@@ -6,7 +6,6 @@ import RadioGroup from 'react-native-radio-button-group';
 import { Entypo } from '@expo/vector-icons';
 import styles from '../styles';
 
-
 export default function Register({ navigation }) {
 
     const [kayttajaTiedot, setKayttajaTiedot] = React.useState({ email: '', password: '', age: '', displayName: '', gender: '' });
@@ -116,6 +115,7 @@ export default function Register({ navigation }) {
 
                 <DatePicker
                     style={styles.registerDatePicker}
+
                     date={date}
                     onDateChange={value => setDate(value)}
                     mode="date"
@@ -146,6 +146,7 @@ export default function Register({ navigation }) {
                 onPress={() => registerUser()}
                 title="Luo käyttäjä"
                 containerStyle={styles.registerUserButton}
+
             />
         </ScrollView>
     );

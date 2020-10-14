@@ -3,12 +3,49 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import Carousel from './Carousel';
 import styles from '../styles';
 
-
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Profile() {
 
-    const [count, setCount] = React.useState('')
-    const onPress = () => setCount("KUVA AVAUTUU");
+    const [user, setUser] = React.useState({
+        name: 'nimi',
+        age: 'ikä',
+        bio: 'bio',
+    });
+
+    {/*
+    React.useEffect(() => {
+          //console.log(firebase.auth().currentUser)
+          HaeKayttaja();
+        });
+
+        
+
+    function HaeKayttaja() {
+        let bodii =  {
+            "uid" : "qREmoPw72NRHB2JA6uBCKJyuWhY2",
+            "tags" : ["perunat"]
+        }
+    fetch(global.url + "profileUpdate", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bodii)
+      })
+        .then(response => response.json())
+        // .then(response => console.log(response))
+        .then(data => {
+          setUser(
+            name = "nimi",
+            age = "ikä",
+            bio = "bio")
+          console.log(data.result)
+        })
+        .catch(err => console.error(err))
+      //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
+    } */}
+
+
 
     return (
         <View style={styles.profileContainer}>
