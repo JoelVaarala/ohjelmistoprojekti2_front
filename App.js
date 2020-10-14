@@ -20,7 +20,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import firebase from 'react-native-firebase';
 import ViewLikers from "./components/ViewLikers.js";
-
+import { Icon } from 'react-native-elements'
 import { Provider } from 'react-redux';
 import { store } from './redux/index';
 
@@ -111,7 +111,34 @@ const MyTheme = {
         ) : (
             <Tab.Navigator
               swipeEnabled={false}
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName;
+      
+                  if (route.name === 'Matches') {
+                    iconName = "people";
+                  } else if (route.name === 'Swipes') {
+                    iconName = 'touch-app';
+                  } else if (route.name === 'My Likes') {
+                    iconName = "event-available";
+                  } else if (route.name === 'Profile') {
+                    iconName = 'person';
+                  } else if (route.name === 'Login') {
+                    iconName = 'security';
+                  }
+      
+                  // You can return any component that you like here!
+                  return  <Icon color='orange' size={28} name={iconName} />;
+                },
+              })}
               tabBarOptions={{
+                activeTintColor: 'white',
+                inactiveTintColor: 'white',
+                showIcon: true,
+                showLabel: false,
+              }}
+                >
+              {/*    tabBarOptions={{
                 labelStyle: {
                   fontSize: 10,
                   // color: 'orange', //overridee nyt activetintcolor ja inactiven, vaihdetan jossain kohtaa sprintti 3, sang.
@@ -123,8 +150,10 @@ const MyTheme = {
 
                 // tabStyle: { width: 100 },
                 style: { backgroundColor: "black", paddingTop: 0 },
-              }}
-            >
+              }} 
+            */} 
+           
+            
               <Tab.Screen name="Matches" component={MatchStack} />
               <Tab.Screen name="Swipes" component={SwipingPage} />
               <Tab.Screen name="My Likes" component={ViewLikers} />
@@ -144,4 +173,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  icon: {
+    color: "orange",
+
+  }
 });

@@ -54,7 +54,6 @@ export default class App extends React.Component {
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', }}>
                     <Carousel
                         layout={"default"}
-                        ref={ref => this.carousel = ref}
                         data={this.state.carouselItems}
                         sliderWidth={viewportWidth}
                         itemWidth={viewportWidth}
