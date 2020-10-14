@@ -1,37 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import Carousel from './Carousel';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Profile() {
 
-    const [userTiedot, setUserTiedot] = useState({
-        age: 0,
-        bio: '',
-        name: '',
-    })
-
-    React.useEffect(() => {
-        // console.log('useeffecti', tagList)
-        HaeTiedot();
-    }, []);
-
-    const HaeTiedot = async () => {
-        const ref = firestore().collection("users").doc(auth().currentUser.uid)
-        const doc = await ref.get();
-        if (!doc.exists) {
-            console.log('document not found')
-        } else {
-            console.log('success HERE HERE ::::', doc.data())
-            setUserTiedot({
-                age: (doc.data().age),
-                bio: (doc.data().bio),
-                name: (doc.data().displayName)
-            })
-        }
-    }
+    const [user, setUser] = React.useState({
+        name: 'nimi',
+        age: 'ikä',
+        bio: 'bio',
+    });
 
     {/*
     React.useEffect(() => {
@@ -74,8 +52,8 @@ export default function Profile() {
                 <Carousel />
             </View>
             <View style={{ flex: 3 }}>
-                <Text style={{ fontSize: 40 }}>{userTiedot.name}, {userTiedot.age}</Text>
-                <Text style={{ fontSize: 20 }}>{userTiedot.bio}</Text>
+            <Text style={{ fontSize: 40 }}>{user.name}, {user.age}</Text>
+                <Text style={{ fontSize: 20 }}>{user.bio}</Text>
             </View>
         </View>
     );
