@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
-import { Input, Button, Text } from 'react-native-elements';
+import { Input, Button, Text, ButtonGroup } from 'react-native-elements';
 import DatePicker from 'react-native-date-picker';
-import RadioGroup from 'react-native-radio-button-group';
 import { Entypo } from '@expo/vector-icons';
 import styles from '../styles';
 
@@ -12,6 +11,10 @@ export default function Register({ navigation }) {
     const [naytasalasana, setNaytaSalasana] = React.useState(true);
     const [salasanaIcon, setSalasanaIcon] = React.useState('eye');
     const [date, setDate] = React.useState(Date.now());
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+    //sukupuolen ButtonGorup valinnat
+    const buttons = ['Mies', 'Nainen', 'Muu'];
 
     //tällä muutetaan valitun syntymäajan päivämäärä unix ajaksi
     React.useEffect(() => {
@@ -19,12 +22,20 @@ export default function Register({ navigation }) {
         inputChanged('age', unixIka);
     }, [date]);
 
-    //sukupuolen radiobutton valinnat
-    const genderOptions = [
-        { id: 'male', label: 'Mies' },
-        { id: 'female', label: 'Nainen' },
-        { id: 'other', label: 'Muu' }
-    ];
+    // muutetaan ButtonGroupisa palautuneen valinnan indexi tallennettavaksi sukupuoleksi ja focusataan valittu buttoni
+    function genderConvert(name, value) {
+        let gender;
+        if (value === 0) {
+            gender = 'male'
+        } else if(value === 1) {
+            gender = 'female'
+        } else if(value === 2) {
+            gender = 'other'
+        }
+        console.log(gender);
+        setSelectedIndex(value);
+        inputChanged(name, gender);
+    }
 
     function inputChanged(inputName, inputValue) {
         setKayttajaTiedot({ ...kayttajaTiedot, [inputName]: inputValue });
@@ -67,23 +78,20 @@ export default function Register({ navigation }) {
             .then(res => {
                 console.log(res.result);
             })
-            //tämä testiä varten
             .then(_ => {
-                setKayttajaTiedot({ email: '', password: '', age: '', displayName: '', gender: '' });
-                setDate(Date.now());
-
+                // setKayttajaTiedot({ email: '', password: '', age: '', displayName: '', gender: '' });
+                // setDate(Date.now());
+                navigation.goBack();
             })
             .catch(err => console.error(err))
     }
 
-    function testi() {
-        navigation.goba
-    }
     //TODO
     //labelStyle inputeissa ja itsetehdyt Text "lablet" samalla tyylillä tulevaisuudessa jostain StyleSheatista
     //muuta css hömpötystä
     //salasanalle checki, onko vähintään 6 merkkiä
     //sähköpostile checki, onko legit syntaxi
+    //checki, onnistuiko rekisteröinti, jos onnistui -> loginpage ja kirjaudu automaattisesti
     return (
         <ScrollView style={styles.registerScrollView}>
             <Text h4 style={styles.registerText}>Luo käyttäjä</Text>
@@ -128,7 +136,14 @@ export default function Register({ navigation }) {
                     style={styles.registerGenderText}
                 >Sukupuoli</Text>
 
-                <RadioGroup // muuta setWidthHeight 'useNativeDriver: true' falseksi node moduulissa react-native-radio-button-group/lib/Circle.js, muuten tulee errori: Style property 'height' is not supported by native animated module
+                <ButtonGroup
+                    onPress={value => genderConvert('gender', value)}
+                    selectedIndex={selectedIndex}
+                    buttons={buttons}
+                    containerStyle={{ height: 40 }}
+                />
+
+                {/* <RadioGroup // muuta setWidthHeight 'useNativeDriver: true' falseksi node moduulissa react-native-radio-button-group/lib/Circle.js, muuten tulee errori: Style property 'height' is not supported by native animated module
                     horizontal
                     options={genderOptions}
                     onChange={(value) => inputChanged('gender', value.id)}
@@ -140,7 +155,7 @@ export default function Register({ navigation }) {
                 //     marginRight: 10,
                 //     fillColor: '#279315'
                 // }}
-                />
+                /> */}
             </View>
             <Button
                 onPress={() => registerUser()}

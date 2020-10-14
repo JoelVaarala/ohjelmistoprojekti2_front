@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { Icon } from "react-native-elements";
+import { Icon, ButtonGroup } from "react-native-elements";
 import SwipeCards from "./SwipeCards";
 import * as Location from 'expo-location';
 import styles from '../styles';
@@ -70,9 +70,38 @@ export default function SwipingPage({ navigation, route }) {
     )
   }
 
+  //Nämä ovat ButtonGroupille
+  function updateIndex(name, value) {
+    setSelectedIndex({ ...selectedIndex, [name]: value })
+    console.log(name + ': ' + value)
+  }
+
+  const buttons = ['Users', 'Events', 'Both']
+  const subButtons = ['Open', 'Public', 'Private']
+  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [] });
+
+
   return (
     <View style={styles.container, styles.containerMarginLeft, styles.containerBackground, styles.containerPaddingTop}>
-      <View style={styles.iconLocation}>
+
+        <ButtonGroup
+          onPress={value => updateIndex('main', value)}
+          selectedIndex={selectedIndex.main}
+          buttons={buttons}
+          containerStyle={{ height: 40 }}
+        />
+        {selectedIndex.main != 0 ? (
+          <ButtonGroup
+          onPress={value => updateIndex('sub', value)}
+          selectMultiple={true}
+          selectedIndexes={selectedIndex.sub}
+          buttons={subButtons}
+          containerStyle={{ height: 40 }}
+          style={{paddingBottom: 50}}
+        />
+        ) : (null)}
+
+      <View style={{ flex: 1, justifyContent: "flex-start", paddingTop: 50 }}>
         {/* <SwipeCards vaihtoehdot={swipettavat} /> */}
         <LuoSwipecardi />
       </View>
@@ -90,4 +119,3 @@ export default function SwipingPage({ navigation, route }) {
     </View>
   );
 }
-
