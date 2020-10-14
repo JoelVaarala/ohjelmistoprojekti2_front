@@ -1,52 +1,39 @@
 import * as React from 'react';
-import { Text, View, SafeAreaView, Dimensions } from 'react-native';
+import { Text, View, SafeAreaView, Dimensions, Image } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
+import firestore from '@react-native-firebase/firestore';
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 export default class App extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            activeIndex: 0,
-            carouselItems: [
-                {
-                    title: "Item 1",
-                    text: "Text 1",
-                },
-                {
-                    title: "Item 2",
-                    text: "Text 2",
-                },
-                {
-                    title: "Item 3",
-                    text: "Text 3",
-                },
-                {
-                    title: "Item 4",
-                    text: "Text 4",
-                },
-                {
-                    title: "Item 5",
-                    text: "Text 5",
-                },
-            ]
+     constructor(props, {navigation, route}) {
+         //console.log(' LOOK HERE   ',props.kuvat)
+         super(props);
+         this.state = {
+             activeIndex: 0,
+             carouselItems: this.props.kuvat 
         }
-    }
+     }
+
 
     _renderItem({ item, index }) {
         return (
             <View style={{
                 backgroundColor: 'floralwhite',
-                flex: 1
+                flex: 1,
+                
             }}>
-                <Text style={{ fontSize: 30 }}>{item.title}</Text>
-                <Text>{item.text}</Text>
+                <Image
+                style={{width: '100%', height: '100%'}}
+                source={{ uri: item}}
+                /> 
             </View>
 
         )
     }
+
+    
 
     render() {
         return (
@@ -55,9 +42,10 @@ export default class App extends React.Component {
                     <Carousel
                         layout={"default"}
                         ref={ref => this.carousel = ref}
-                        data={this.state.carouselItems}
+                        data={this.props.kuvat}
+                        //data={this.props.kuvat}
                         sliderWidth={viewportWidth}
-                        itemWidth={viewportWidth}
+                        itemWidth={(viewportWidth*0.5)}
                         sliderHeight={viewportHeight}
                         renderItem={this._renderItem}
                         onSnapToItem={index => this.setState({ activeIndex: index })} />
