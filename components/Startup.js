@@ -53,138 +53,146 @@ export default function Startup({ navigation }) {
         setErrorMsg('Permission to access location was denied');
       }
       let location = await (await Location.getCurrentPositionAsync({})).coords;
-      console.log(location)
-      console.log("sijaintia ei päivitetä nyt")
-      //UpdateFirebase({ latitude: location.latitude, longitude: location.longitude })
-      // return ({ });
-      // return {latitute: , longitude: }
-      // paivitaKayttajanSijainti({latitude : location.coords.latitude, longitude: location.coords.longitude})
+       UpdateFirebase(location)
+
     })();
   }
 
   //tää menee endpointin kautta.
   function UpdateFirebase(newloc) {
-    var mydoc = auth().currentUser.uid;
-    //console.log(mydoc)
-    firestore().collection('users').doc(mydoc).update({ "location": new firestore.GeoPoint(newloc.latitude, newloc.longitude) })
-      .then(function () {
-        console.log("Document successfully updated!");
-        //päivitetään firebaseen käyttäjän sijainti
-      })
-      .catch(function (error) {
-        // The document probably doesn't exist.
-        console.error("Error updating document: ", error);
-      });
-
-  }
-
-  const login = () => {
-    auth()
-      .signInWithEmailAndPassword(kayttaja, salasana)
-      .then(() => {
-        console.log('User logged in');
-        // console.log(auth().currentUser)
-        global.myUserData.uid = auth().currentUser.uid;
-        auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
-          global.myUserData.idToken = idToken;
-        }).catch(function (error) {
-          // Handle error
-        });
-        //UpdateLocation();
-        //Debugin takia tässä, poistettu 28.9.2020
-        //LahetaViestiFirebaseen();
-      })
-
-      .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
-        }
-
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-        }
-
-        console.error(error);
-      });
-    //auth().
-    // console.log(url);
-  }
-
-
-
-
-  const yritaKirjautua = async () => {
-    try {
-      let value = await AsyncStorage.getItem('kirjautumisTiedot');
-      console.log('asyncista tullut:' + value);
-      if (value != null) {
-
-        global.fbtoken = value;
-        setIsRegisterScreen(false);
-        // setVaihto(false);
-        // onkoTokenVanhentunut(value);
-      } else {
-        //setVaihto(true);
+    let bodii = {
+      "uid": global.myUserData.uid,
+      "idToken": global.myUserData.idToken,
+      "data": {
+        latitude: newloc.latitude,
+        longitude : newloc.longitude
       }
-    } catch (error) {
-      console.log(error);
-
     }
+
+
+    // return;
+    fetch(global.url + "updateLocation", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bodii)
+    })
+      .then(response => response.json())
+      // .then(response => console.log(response))
+      .then(data => {
+        console.log("Updated location")
+      })
+      .catch(err => console.error(err))
+    //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
   }
 
 
+const login = () => {
+  auth()
+    .signInWithEmailAndPassword(kayttaja, salasana)
+    .then(() => {
+      console.log('User logged in');
+      // console.log(auth().currentUser)
+      global.myUserData.uid = auth().currentUser.uid;
+      auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+        global.myUserData.idToken = idToken;
+      }).catch(function (error) {
+        // Handle error
+      });
+      UpdateLocation();
+      //Debugin takia tässä, poistettu 28.9.2020
+      //LahetaViestiFirebaseen();
+    })
 
+    .catch(error => {
+      if (error.code === 'auth/email-already-in-use') {
+        console.log('That email address is already in use!');
+      }
 
+      if (error.code === 'auth/invalid-email') {
+        console.log('That email address is invalid!');
+      }
 
-  const tallennaToken = async (data) => {
-    try {
-      await AsyncStorage.setItem('tokenKey', data);
-      props.onkoToken();
-    } catch (error) {
-      console.log('Async error: ' + error);
-    }
-  }
-
-  //https://firebase.google.com/docs/auth/admin/verify-id-tokens#web
-  //hakee käyttäjän webbtokenin jota tarvitaan kun lähetetään viestejä, swipejä tms backendpalvelimelle.
-  function testausta() {
-
-    auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
-      // Send token to your backend via HTTPS
-      // ...
-      tallennaToken(idToken); //tallennetaan asyncciin, voitas kyl tallentaa vaikka globaliin myös? 
-    }).catch(function (error) {
-      // Handle error
+      console.error(error);
     });
+  //auth().
+  // console.log(url);
+}
+
+
+
+
+const yritaKirjautua = async () => {
+  try {
+    let value = await AsyncStorage.getItem('kirjautumisTiedot');
+    console.log('asyncista tullut:' + value);
+    if (value != null) {
+
+      global.fbtoken = value;
+      setIsRegisterScreen(false);
+      // setVaihto(false);
+      // onkoTokenVanhentunut(value);
+    } else {
+      //setVaihto(true);
+    }
+  } catch (error) {
+    console.log(error);
+
   }
+}
 
-  return (
-    <View>
-      <Input
-        containerStyle={{ paddingTop: 100 }}
-        lable="Käyttäjätunnus"
-        placeholder="Käyttäjätunnus"
-        onChangeText={kayttaja => setKayttaja(kayttaja)}
-        value={kayttaja}
-      />
-      <Input
-        lable="Salasana"
-        placeholder="Salasana"
-        secureTextEntry={true}
-        onChangeText={salasana => setSalasana(salasana)}
-        value={salasana}
-      />
-      <Button
-        onPress={login} title="Login"
-        containerStyle={{ paddingHorizontal: 10 }}
-      />
-      <Text>{msg}</Text>
 
-      <Button
-        onPress={() => navigation.navigate('Rekisteröidy')}
-        title="REKISTERÖIDYaaaaaaa"
-        containerStyle={{ paddingHorizontal: 10 }}
-      />
-    </View>
-  );
+
+const tallennaToken = async (data) => {
+  try {
+    await AsyncStorage.setItem('tokenKey', data);
+    props.onkoToken();
+  } catch (error) {
+    console.log('Async error: ' + error);
+  }
+}
+
+//https://firebase.google.com/docs/auth/admin/verify-id-tokens#web
+//hakee käyttäjän webbtokenin jota tarvitaan kun lähetetään viestejä, swipejä tms backendpalvelimelle.
+function testausta() {
+
+  auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+    // Send token to your backend via HTTPS
+    // ...
+    tallennaToken(idToken); //tallennetaan asyncciin, voitas kyl tallentaa vaikka globaliin myös? 
+  }).catch(function (error) {
+    // Handle error
+  });
+}
+
+return (
+  <View>
+    <Input
+      containerStyle={{ paddingTop: 100 }}
+      lable="Käyttäjätunnus"
+      placeholder="Käyttäjätunnus"
+      onChangeText={kayttaja => setKayttaja(kayttaja)}
+      value={kayttaja}
+    />
+    <Input
+      lable="Salasana"
+      placeholder="Salasana"
+      secureTextEntry={true}
+      onChangeText={salasana => setSalasana(salasana)}
+      value={salasana}
+    />
+    <Button
+      onPress={login} title="Login"
+      containerStyle={{ paddingHorizontal: 10 }}
+    />
+    <Text>{msg}</Text>
+
+    <Button
+      onPress={() => navigation.navigate('Rekisteröidy')}
+      title="REKISTERÖIDYaaaaaaa"
+      containerStyle={{ paddingHorizontal: 10 }}
+    />
+  </View>
+);
 }

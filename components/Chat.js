@@ -21,33 +21,15 @@ export default function Chat(props) {
 
 
   //tää täytyy fixaaa EI TOIMI
-  function GoToAvatar({ navigation, route}) {
+  function GoToAvatar({ navigation }) {
     return (
-      <Avatar 
-      onPress={() => navigation.navigate('MatchProfile')}
-      size="large" rounded 
-      source={{ uri: avatar_url }} />
+      <Avatar
+        onPress={() => navigation.navigate('MatchProfile')}
+        size="large" rounded
+        source={{ uri: avatar_url }}
+      />
     );
   }
-
-
-  //Tämä on heitetty nyt App.js , kutsutaan kerran ja vain täältä.
-  //firebase.app();
-  // React.useEffect(() => {
-  //   console.log("use effect")
-  //   //firebase.initializeApp()
-  //   firebase.initializeApp(global.firebaseConfig);
-  //   console.log(firebase.config.toString())
-  //    //yritaKirjautua();
-
-  // }, []);
-
-  //Tämä on debuggausta varten, testataan viestin lähettämistä
-  React.useEffect(() => {
-    //LahetaViestiFirebaseen()
-  }, []);
-
-
 
   //Tällä pystyy lähettää viestinm parametrinä tulee viestin teksti.
   //Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
@@ -60,10 +42,8 @@ export default function Chat(props) {
         message: viesti,
         match: props.route.params.chatti, //tää pitäs tulla propsi parametristä
       },
-
-      "uid": global.myUserData.uid,
-      "idToken": global.myUserData.idToken,
-
+      uid: global.myUserData.uid,
+      idToken: global.myUserData.idToken,
     }
     //console.log(body)
     fetch(global.url + "message",
@@ -81,6 +61,7 @@ export default function Chat(props) {
       })
       .catch(err => console.error(err))
   }
+
 
   // --UPDATED METHOD TO GET MESSAGES REALTIME
   // ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
@@ -103,6 +84,7 @@ export default function Chat(props) {
         if (doc.data().sender == auth().currentUser.uid) {
           sender = 1;
         }
+
         // lisätään arrayhin halutut viesti datat
         keskustelunViestit.push({
           _id: keskustelunViestit.length + 1,
@@ -133,14 +115,49 @@ export default function Chat(props) {
     LahetaViestiFirebaseen(messages[0].text);
   }, [])
 
+  // Matchin poisto funkari
+  const removeMatch = () => {
+    console.log('matchin poisto', props.route.params.chatti)
+
+    let url = global.url + 'removeMatch';
+    let bodi = {
+      idToken: "Dummyyy", // FIX ME
+      uid: global.myUserData.uid,
+      data: {
+        match: props.route.params.chatti,
+      }
+    }
+
+    console.log(bodi);
+    console.log(JSON.stringify(bodi))
+
+    fetch(url,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodi),
+      })
+      .then(response => response.json())
+      .then(res => {
+        console.log('.then res ->', res);
+      })
+      .catch(err => console.error(err))
+  }
+
+
 
   return (
     <View style={styles.container}>
-      <View style={{justifyContent: 'space-around', flexDirection: 'row', padding: 5, backgroundColor: 'grey'}}>
-      <Icon size={20} reverse name="info"  /*tällä napilla voidaan myöhemmin poistaa match*/ />
-      <GoToAvatar />
+
+      <View style={{ justifyContent: 'space-around', flexDirection: 'row', padding: 5, backgroundColor: 'black' }}>
+        <Icon size={20} reverse name="info" onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*/ />
+        <GoToAvatar navigation={props.navigation} />
       </View>
+
       <GiftedChat
+        // optionTintColor  = {'red'}
         messages={messages}
         onSend={messages => onSend(messages)}
         //onSend={handleSend}
@@ -148,11 +165,11 @@ export default function Chat(props) {
           _id: 1,
         }}
       />
-      <Button
+      {/* <Button
         onPress={getConversationsRT}
         title="debug log"
         containerStyle={{ paddingHorizontal: 10 }}
-      />
+      /> */}
     </View>
   );
 }
@@ -160,6 +177,7 @@ export default function Chat(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor : 'black'
   },
 });
 
