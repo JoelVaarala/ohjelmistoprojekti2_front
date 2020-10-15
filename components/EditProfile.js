@@ -90,6 +90,7 @@ export default function EditProfile() {
 
   return (
     <View style={styles.container}>
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 30}}>
       <View style={{ flexDirection: 'row' }}>
         <Text
           style={styles.text}>
@@ -98,12 +99,15 @@ export default function EditProfile() {
     
         </Text>
       </View>
-      <Icon reverse name='image' />
-      <Text style={styles.text}>Lisää kuva</Text>
-      <Text style={styles.text} >Tietoja sinusta:</Text>
-      <View style={styles.textAreaContainer}>
-        <TextInput value={userTiedot.bio} style={styles.textArea} multiline={true} 
-          numberOfLines={3} maxLength={500}  onChangeText={text => setUserTiedot({...userTiedot,bio: text})}/>
+          <Icon reverse name='image' />
+          <Text style={{color: 'orange', fontWeight: 'bold'}}>Lisää kuva</Text>
+      </View>
+      <View style={{flex: 1, paddingTop: 50,}}>
+        <Text style={{justifyContent: 'center', alignItems: 'center', color: 'orange', fontWeight: 'bold', fontSize: 20}} >Bio:</Text>
+        <View style={{ height: 90, width: 500, backgroundColor: 'white', color: 'black' }}>
+          <TextInput value={userTiedot.bio} style={styles.textArea} multiline={true} 
+            numberOfLines={3} maxLength={500}  onChangeText={text => setUserTiedot({...userTiedot,bio: text})}/>
+        </View>
       </View>
       {/* meillä ei oo asuinpaikkaa nyt */}
       {/* <Text style={styles.text}>Asuinpaikka: </Text>
@@ -111,14 +115,15 @@ export default function EditProfile() {
         <TextInput style={styles.textArea} placeholder='Asuinpaikka' />
       </View> */}
       <View style={styles.omatContainerit}>
-        <View>
-          <Text>Lisää tägi</Text>
+        <View style={{flex: 1, marginTop: 50, marginLeft: 20 }}>
+          <View>
+          <Text style={{fontWeight: 'bold', color: 'orange'}}>Lisää tägi</Text>
           <TextInput onChangeText={tag => setTag(tag)} value={tag} onEndEditing={addTag} 
-                style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, backgroundColor: 'white' }}>
+                style={{ height: 40, width: 200, backgroundColor: 'white', color: 'black' }}>
           </TextInput>
         </View>
         <View>
-          <Text>Your tags:</Text>
+          <Text style={{fontWeight: 'bold', color: 'orange'}}>Your tags:</Text>
           <FlatList contentContainerStyle={styles.content}
             horizontal={false}
             numColumns={3}
@@ -129,11 +134,13 @@ export default function EditProfile() {
           />
         </View>
       </View>
-      <Button
-        onPress={TallennaData}
-        title="Tallenna tiedot"
-        style={{  }}
-      />
+      </View>
+      <View style={{flex: 1, marginBottom: 10, marginLeft: 80, marginRight: 80}}>
+        <Button
+          onPress={TallennaData}
+          title="Tallenna tiedot"
+        />
+        </View>
     </View>
 
   );
@@ -143,28 +150,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#eaeaea',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    backgroundColor: 'black'
   },
+
   button: {
     alignItems: "center",
     backgroundColor: "#DDDDDD",
     padding: 10
   },
   textAreaContainer: {
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     padding: 5,
     alignSelf: 'stretch'
   },
   textArea: {
     textAlignVertical: "top",
     alignSelf: 'stretch',
-    fontSize: 15
+    fontSize: 15,
+    backgroundColor: 'white',
+    color: 'black'
+    
   },
   text: {
     fontSize: 20,
     paddingTop: 2,
     paddingBottom: 1,
+    fontWeight: 'bold',
+    color: 'orange'
   },
   button: {
     backgroundColor: "#DDDDDD",
@@ -175,11 +187,13 @@ const styles = StyleSheet.create({
   tag: {
     padding: 6,
     fontSize: 20,
-    color: 'white',
+    color: 'orange',
     marginVertical: 7,
     marginHorizontal: 10,
-    backgroundColor: 'green',
+    backgroundColor: 'black',
     borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'orange',
   },
   omatContainerit: {
     flex: 4,
