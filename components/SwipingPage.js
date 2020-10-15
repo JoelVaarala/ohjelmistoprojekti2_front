@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { Icon, ButtonGroup } from "react-native-elements";
+import { Icon, ButtonGroup, ThemeProvider } from "react-native-elements";
 import SwipeCards from "./SwipeCards";
 import * as Location from 'expo-location';
 
@@ -76,10 +76,18 @@ export default function SwipingPage({ navigation, route }) {
 
   const buttons = ['Users', 'Events', 'Both']
   const subButtons = ['Open', 'Public', 'Private']
-  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [] });
+  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [1] });
+
+  const theme = {
+    colors: {
+      primary: 'orange'
+    }
+    
+  }
 
   return (
     <View style={styles.container}>
+      <ThemeProvider theme={theme}>
 
         <ButtonGroup
           onPress={value => updateIndex('main', value)}
@@ -97,6 +105,7 @@ export default function SwipingPage({ navigation, route }) {
           style={{paddingBottom: 50}}
         />
         ) : (null)}
+      </ThemeProvider>
 
       <View style={{ flex: 1, justifyContent: "flex-start", paddingTop: 50, }}>
         {/* <SwipeCards vaihtoehdot={swipettavat} /> */}
