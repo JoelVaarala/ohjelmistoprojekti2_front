@@ -209,7 +209,7 @@ export default function ViewLikers({ navigation, route }) {
                 <View style={styles.picker}>
                     <Picker
                         selectedValue={selectedEvent}
-                        style={{ height: 50, width: 150 }}
+                        style={{ height: 50, width: 150, }}
                         onValueChange={(itemValue, itemIndex) => setEvent(itemValue)}
                     >
                         {
@@ -219,8 +219,50 @@ export default function ViewLikers({ navigation, route }) {
                         }
                     </Picker>
                 </View>
-                <Text style={{ fontSize: 20 }}>  People who swiped for your event!</Text>
-                <Jooh />
+                <Text style={{ fontSize: 20, color: 'orange' }}>  People who swiped for your event!</Text>
+                {
+                    peoplesWhoWantToJoin.map((l, i) => (
+                        <ListItem key={i} bottomDivider>
+                            <Avatar source={{ uri: l.images[0] }} />
+                            <ListItem.Content>
+                                <View>
+                                    <ListItem.Title>{l.displayName}  {l.age}</ListItem.Title>
+                                    <ListItem.Subtitle>{l.tags}</ListItem.Subtitle>
+
+                                </View>
+                                <Text> 4km </Text>
+                            </ListItem.Content>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                            }}>
+
+                                <Button
+                                    //style={styles.button}
+                                    type="outline"
+                                    raised={true}
+                                    icon={{
+                                        name: "arrow-right",
+                                        size: 30,
+                                        color: "lightgreen"
+                                    }}
+                                    onPress ={() => Accept(true,l.uid)}                                
+                                    />
+                                <Button
+                                    type="outline"
+                                    raised={true}
+                                    onPress ={() => Accept(false,l.uid)}                                
+                                    icon={{
+                                        name: "arrow-right",
+                                        size: 30,
+                                        color: "red"
+                                    }}
+                                />
+                            </View>
+                        </ListItem>
+                    ))
+                }
+
             </View>
         </View>
     );
@@ -230,7 +272,7 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 50,
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: 'black',
     },
     button: {
         alignItems: "center",
@@ -240,7 +282,7 @@ const styles = StyleSheet.create({
     picker: {
         //flex: 1,
         // paddingTop: 0,
-        alignItems: "center"
+        alignItems: "center",
     },
 });
 
