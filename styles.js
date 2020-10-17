@@ -9,8 +9,26 @@ export default StyleSheet.create({
         justifyContent: 'flex-start',
       },
 
-      containerMarginLeft: {
+      containerFlexStart: {
+        flex: 1,
+        justifyContent: 'flex-start'
+      },
+
+      containerAlignItemsCenter: {
+        flex: 1,
+        alignItems: 'center'
+      },
+
+      flexThree: {
+        flex: 3
+      },
+
+      marginLeftTwenty: {
         marginLeft: 20,
+      },
+
+      heightForty: {
+        height: 40
       },
 
       containerCenter: {
@@ -18,17 +36,84 @@ export default StyleSheet.create({
         justifyContent: "center",
       },
 
-      containerBackground: {
-        backgroundColor: '#fff'
+      backgroundBlack: {
+        backgroundColor: 'black'
       },
 
-      containerPaddingTop: {
+      marginTopFifty: {
+        marginTop: 50
+      },
+
+      marginTopThirty: {
+        marginTop: 30
+      },
+
+      paddingTopFifty: {
         paddingTop: 50,
+      },
+
+      paddingTopTen: {
+        paddingTop: 10,
       },
 
       paddingBottomFifty: {
         paddingBottom: 50
       },
+
+      iconsPadding: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 20,
+      },
+
+      flexDirectionRow: {
+        flexDirection: 'row'
+      },
+
+      justifyContentSpaceBetween: {
+        justifyContent: 'space-between'
+      },
+
+      alignItemsFlexEnd: {
+        alignItems: 'flex-end'
+      },
+
+      textOrangeBold: {
+        color: 'orange',
+        fontWeight: 'bold'
+      },
+
+      orangeMarginTopFive: {
+        color: 'orange',
+        marginTop: 5
+      },
+
+      saveButton: {flex: 1, 
+        marginLeft: 80, 
+        marginRight: 80
+      },
+
+      addTagInputBox: {
+        height: 40, 
+        width: 200, 
+        backgroundColor: 'white', 
+        color: 'black'
+      },
+
+      userTextStyle: {
+        fontSize: 40,
+        color: 'orange'
+      },
+
+      userBioStyle: {
+        fontSize: 20,
+        color: 'orange'
+      },
+
+      fontSizeTwenty: {
+        fontSize: 20
+      },
+
       //SwipingPage
 
       tagListContainer: {
@@ -70,11 +155,11 @@ startingscreenContainer: {
   justifyContent: 'center',
 },
 
-editProfileTextAreaContainer: {
-  backgroundColor: 'white',
-  padding: 5,
-  alignSelf: 'stretch'
-},
+editProfileTextAreaContainer: { 
+  height: 90, 
+  width: 500, 
+  backgroundColor: 'white', 
+  color: 'black' },
 
 myProfileContainer: {
   flex: 1,
@@ -284,11 +369,6 @@ chatButton: {
 //EditProfile
 
 
-
-  editProfileUser: {
-      flexDirection: 'row'
-  },
-
   editProfilebutton: {
     alignItems: "center",
     backgroundColor: "#DDDDDD",
@@ -306,23 +386,6 @@ chatButton: {
     paddingBottom: 1,
   },
 
-  editProfileButton2: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    width: 200,
-    justifyContent: 'flex-start',
-  },
-
-  editProfileTag: {
-    padding: 6,
-    fontSize: 20,
-    color: 'white',
-    marginVertical: 7,
-    marginHorizontal: 10,
-    backgroundColor: 'green',
-    borderRadius: 6,
-  },
-
   omatContainerit: {
     flex: 4,
     paddingTop: 20,
@@ -330,17 +393,12 @@ chatButton: {
     paddingLeft: 80
   },
 
-  editProfileContent: {
-    paddingTop: 10,
-  },
-
   tagTextInput: { 
-      height: 40, 
-      width: 200, 
-      borderColor: 'gray', 
-      borderWidth: 1, 
-      backgroundColor: 'white' 
-    },
+    height: 40, 
+    width: 200, 
+    backgroundColor: 'white', 
+    color: 'black' 
+  },
 
 //___________________________________________________________________________________________________
 //Globaalit
@@ -535,13 +593,13 @@ registerRadioGroup: {
     width: 200,
     justifyContent: 'flex-start',
   },
-  settingsTag: {
+  tagBox: {
     padding: 6,
     fontSize: 16,
-    color: 'white',
+    color: 'black',
     marginVertical: 7,
     marginHorizontal: 10,
-    backgroundColor: 'green',
+    backgroundColor: 'orange',
     borderRadius: 6,
   },
   settingsOmatContainerit: {
@@ -578,9 +636,8 @@ registerRadioGroup: {
   settingsAddTag: { 
       height: 40, 
       width: 200, 
-      borderColor: 'gray', 
-      borderWidth: 1, 
-      backgroundColor: 'white' 
+      backgroundColor: 'white',
+      color: 'black',
     },
 
 textInputBackground: {

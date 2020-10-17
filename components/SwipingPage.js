@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { Icon, ButtonGroup, ThemeProvider } from "react-native-elements";
 import SwipeCards from "./SwipeCards";
 import * as Location from 'expo-location';
+import styles from '../styles';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function SwipingPage({ navigation, route }) {
@@ -86,14 +87,14 @@ export default function SwipingPage({ navigation, route }) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, styles.containerCenter, styles.backgroundBlack]}>
       <ThemeProvider theme={theme}>
 
         <ButtonGroup
           onPress={value => updateIndex('main', value)}
           selectedIndex={selectedIndex.main}
           buttons={buttons}
-          containerStyle={{ height: 40, backgroundColor: 'black', }}
+          containerStyle={[styles.backgroundBlack, styles.heightForty]}
         />
         {selectedIndex.main != 0 ? (
           <ButtonGroup
@@ -101,48 +102,27 @@ export default function SwipingPage({ navigation, route }) {
           selectMultiple={true}
           selectedIndexes={selectedIndex.sub}
           buttons={subButtons}
-          containerStyle={{ height: 40, backgroundColor: 'black' }}
-          style={{paddingBottom: 50}}
+          containerStyle={[styles.backgroundBlack, styles.heightForty]}
+          style={styles.paddingBottomFifty}
         />
         ) : (null)}
       </ThemeProvider>
 
-      <View style={{ flex: 1, justifyContent: "flex-start", paddingTop: 50, }}>
+      <View style={[styles.containerFlexStart, styles.paddingTopFifty]}>
         {/* <SwipeCards vaihtoehdot={swipettavat} /> */}
         <LuoSwipecardi />
       </View>
-      <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
-        <View style={styles.icons}>
+      <View style={[styles.container, styles.flexDirectionRow, styles.justifyContentSpaceBetween, styles.alignItemsFlexEnd]}>
+      <View style={styles.iconsPadding}>
           <Icon size={27} reverse name="cancel" />
         </View>
-        <View style={styles.icons}>
+        <View style={styles.iconsPadding}>
           <Icon size={27} reverse name="info" />
         </View>
-        <View style={styles.icons}>
+        <View style={styles.iconsPadding}>
           <Icon size={27} reverse name="favorite" />
         </View>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 0,
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: 'black'
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-  },
-  icons: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 20,
-  },
-});
