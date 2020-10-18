@@ -9,6 +9,7 @@ import styles from '../styles';
 export default function SwipingPage({ navigation, route }) {
 
   [swipettavat, setSwipettavat] = React.useState([]);
+  const [nykyinenSwipettava, setNykyinenSwipettava] = React.useState('');
 
   //ratkaistava vielä se että swipettavat ei päivity swipecardsiin.
 
@@ -57,6 +58,8 @@ export default function SwipingPage({ navigation, route }) {
         //console.log(data)
         console.log(data.result)
         setSwipettavat(data.result)
+        let id = data.result[0].uid
+        setNykyinenSwipettava(id)
       })
       .catch(err => console.error(err))
     //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
@@ -117,7 +120,8 @@ export default function SwipingPage({ navigation, route }) {
           <Icon size={27} reverse name="cancel" />
         </View>
         <View style={styles.iconsPadding}>
-          <Icon size={27} reverse name="info" />
+           {/* ONGELMA: näyttää edellisen swipettävän profiilin jos sivu ei ole ehtinyt päivittyä, ensin kokeiltu {match : swipettavat[0].uid} */}
+          <Icon size={27} reverse name="info" onPress={() => navigation.navigate('Matchprofile', {match : nykyinenSwipettava})} />
         </View>
         <View style={styles.iconsPadding}>
           <Icon size={27} reverse name="favorite" />
