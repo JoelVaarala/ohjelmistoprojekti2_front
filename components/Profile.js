@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import Carousel2 from './Carousel';
 import firestore from '@react-native-firebase/firestore';
+import styles from '../styles';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Profile( {navigation, route}, props) {
@@ -86,33 +87,22 @@ export default function Profile( {navigation, route}, props) {
 
     return (
         
-        <View style={styles.container}>
+        <View style={styles.containerAlignItemsCenter}>
 
-            <View style={{ alignItems: 'center',   flex: 3 }}>
+            <View style={[styles.containerAlignItemsCenter, styles.flexThree]}>
              
-                 <Carousel2 kuvat={pics} style={{ flex: 1
+                 <Carousel2 kuvat={pics} style={ styles.flexOne
                      //height: '50%', width: '50%'
-                     }}/> 
+                     }/> 
                    
             </View>
 
-            <View style={{ flex: 3 }}>
-                <Text style={{ fontSize: 40, color: 'orange', }}>{user.name}, {user.age}</Text>
-                <Text style={{ fontSize: 20, color: 'orange', }}>{user.bio}</Text>
+            <View style={styles.flexThree}>
+                <Text style={styles.userTextStyle}>{user.name}, {user.age}</Text>
+                <Text style={styles.userBioStyle}>{user.bio}</Text>
             </View>
 
         </View>
        
     );
 }
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        backgroundColor: 'black',
-    },
-    
-});

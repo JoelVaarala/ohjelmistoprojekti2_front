@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, ImageBackground, Image } from 'react-native';
+import { Text, View, FlatList, ImageBackground, Image } from 'react-native';
 import { Avatar, ListItem, Overlay } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import firebase from 'react-native-firebase';
 import auth from '@react-native-firebase/auth';
 import Kuva from './assets/logo.png'
+import styles from '../styles';
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Matches({ navigation, route }) {
 
@@ -114,7 +115,7 @@ export default function Matches({ navigation, route }) {
         console.log("Pressed: " + item.matchid)
         navigation.navigate('Chat', { chatti: item.matchid })
       }}
-      containerStyle={{ backgroundColor: 'rgba(255,154,0,0)' }}
+      containerStyle={styles.matchesBackgroundColor}
     >
       <Avatar rounded source={{ uri: item.avatar_url }} />
     </ListItem>
@@ -125,39 +126,25 @@ export default function Matches({ navigation, route }) {
 
   return (
 
-    // <ImageBackground style={styles.image} source={'http://jaanisavolainen.com/paskaa/logo.png'} >
-      <View style={styles.container}>
+    // <ImageBackground style={styles.matchesImage} source={'http://jaanisavolainen.com/paskaa/logo.png'} >
+      <View style={[styles.flexOne, styles.backgroundBlack]}>
 
         <View>
-          {/* <Text style={{
-          fontSize: 20, color: 'orange',
-          fontWeight: 'bold',
-          fontFamily: 'roboto'
-        }}>Matches</Text> */}
+          {/* <Text style={[styles.fontSizeTwenty, styles.textOrangeBold, styles.fontRoboto]}>Matches</Text> */}
           <FlatList
             horizontal={true}
             data={myMatches}
             renderItem={renderItem}
           >
           </FlatList>
-          <Text style={{
-            fontSize: 20, color: 'orange',
-            fontWeight: 'bold',
-            fontFamily: 'roboto'
-          }}>Messages</Text>
+          <Text style={[styles.fontSizeTwenty, styles.textOrangeBold, styles.fontRoboto]}>Messages</Text>
           {
             list.map((l, i) => (
-              <ListItem key={i} bottomDivider containerStyle={{ backgroundColor: 'rgba(255,154,0,0)' }} >
+              <ListItem key={i} bottomDivider containerStyle={styles.matchesBackgroundColor} >
                 <Avatar rounded source={{ uri: l.avatar_url }} backgroundColor={'black'} />
-                <ListItem.Content style={{ opacity: 1 }}>
-                  <ListItem.Title style={{
-                    color: 'white', fontWeight: 'bold',
-                    fontFamily: 'roboto'
-                  }}>{l.name}</ListItem.Title>
-                  <ListItem.Subtitle style={{
-                    color: 'gray',
-                    fontFamily: 'roboto'
-                  }}>{l.subtitle}</ListItem.Subtitle>
+                <ListItem.Content style={styles.opacityOne}>
+                  <ListItem.Title style={[styles.textOrangeBold, styles.fontRoboto]}>{l.name}</ListItem.Title>
+                  <ListItem.Subtitle style={styles.textGreyRoboto}>{l.subtitle}</ListItem.Subtitle>
                 </ListItem.Content>
               </ListItem>
             ))
@@ -168,7 +155,7 @@ export default function Matches({ navigation, route }) {
           <Text></Text>
           <Text></Text>
           <Image
-            style={styles.logo}
+            style={styles.matchesLogo}
             source={{
               uri: 'http://jaanisavolainen.com/paskaa/logo2.png'
             }}></Image>
@@ -178,31 +165,3 @@ export default function Matches({ navigation, route }) {
 
   );
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    // paddingTop: 50,
-    flex: 1,
-    backgroundColor: 'black',
-
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-  },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
-  },
-  logo: {
-    // justifyContent: 'center',
-    // alignContent: 'center',
-    // alignItems: 'center',
-    width: 400,
-    height: 50,
-    padding: '15%'
-  },
-});
