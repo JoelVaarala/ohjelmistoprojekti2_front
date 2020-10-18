@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Button, FlatList, Text, View, TextInput } from 'react-native';
+import { Button, FlatList, Text, View, TextInput } from 'react-native';
 import { Icon, Input } from 'react-native-elements'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';

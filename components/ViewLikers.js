@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, StatusBar, Image, Text, Picker } from 'react-native';
+import { SafeAreaView, View, FlatList, StatusBar, Image, Text, Picker } from 'react-native';
 import { Avatar, ListItem, Overlay, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firestore from '@react-native-firebase/firestore';

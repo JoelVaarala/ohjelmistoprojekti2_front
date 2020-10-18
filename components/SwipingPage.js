@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import { Icon, ButtonGroup, ThemeProvider } from "react-native-elements";
 import SwipeCards from "./SwipeCards";
 import * as Location from 'expo-location';

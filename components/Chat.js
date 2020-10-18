@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useCallback, useEffect } from 'react'
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import Startup from './Startup';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { Icon, Avatar } from "react-native-elements";
+import styles from '../styles';
 
 // import firebase from 'react-native-firebase';
 
@@ -184,9 +185,9 @@ export default function Chat(props) {
 
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.flexOne, styles.backgroundBlack]}>
 
-      <View style={{ justifyContent: 'space-around', flexDirection: 'row', padding: 5, backgroundColor: 'black' }}>
+      <View style={styles.chatStyle}>
         <Icon size={20} reverse name="info" onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*/ />
         <GoToAvatar navigation={props.navigation} />
       </View>
@@ -204,18 +205,11 @@ export default function Chat(props) {
       {/* <Button
         onPress={getConversationsRT}
         title="debug log"
-        containerStyle={{ paddingHorizontal: 10 }}
+        containerStyle={styles.chatButton}
       /> */}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor : 'black'
-  },
-});
 
 
 // ____________________ Vanhaa koodia ____________________________

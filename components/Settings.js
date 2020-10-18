@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, SafeAreaView, StyleSheet, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from 'react-native';
+import { ScrollView, SafeAreaView, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from 'react-native';
 import { Input, Slider } from 'react-native-elements'
 import RangeSlider from 'rn-range-slider';
 import CheckBox from '@react-native-community/checkbox';

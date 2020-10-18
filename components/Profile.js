@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import Carousel2 from './Carousel';
 import firestore from '@react-native-firebase/firestore';
 import styles from '../styles';

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { Text, View, Button } from "react-native";
 import { Icon, Avatar } from "react-native-elements";
 import ImagePicker from 'react-native-image-picker';
 import styles from '../styles';

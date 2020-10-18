@@ -68,8 +68,16 @@ export default StyleSheet.create({
         marginLeft: 10
       },
 
+      marginTopTen: {
+        marginTop: 10
+      },
+
       paddingBottomFifty: {
         paddingBottom: 50
+      },
+
+      paddingTopHundred: {
+        paddingTop: 100
       },
 
       iconsPadding: {
@@ -126,39 +134,40 @@ export default StyleSheet.create({
         fontSize: 20
       },
 
-  viewLikersContainer: {
-    paddingTop: 50,
-    flex: 1,
-    backgroundColor: '#fff',
-},
+      viewLikersContainer: {
+        paddingTop: 50,
+        flex: 1,
+        backgroundColor: '#fff',
+      },
 
-startingscreenContainer: {
-  flex: 1,
-  backgroundColor: '#fff',
-  alignItems: 'center',
-  justifyContent: 'center',
-},
+      startingscreenContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
 
-editProfileTextAreaContainer: { 
-  height: 90, 
-  width: 500, 
-  backgroundColor: 'white', 
-  color: 'black' },
+      editProfileTextAreaContainer: { 
+        height: 90, 
+        width: 500, 
+        backgroundColor: 'white', 
+        color: 'black' 
+      },
 
-myProfileContainer: {
-  flex: 1,
-  backgroundColor: '#fff'
-},
+      myProfileContainer: {
+        flex: 1,
+        backgroundColor: '#fff'
+      },
 
-profileContainer: {
-  alignItems: 'center',
-  flex: 6,
-},
+      profileContainer: {
+        alignItems: 'center',
+        flex: 6,
+      },
 
-settingsContainer: {
-  flex: 1,
-  backgroundColor: '#fff',
-},
+      settingsContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+      },
 
       button: {
         alignItems: "center",
@@ -177,7 +186,31 @@ settingsContainer: {
       },
 
       flexOne: {
-          flex: 1,
+        flex: 1,
+      },
+
+      previewButtonStyle: {
+        flexDirection: 'row', 
+        alignContent: 'center', 
+        alignItems: 'center', 
+        justifyContent: 'space-evenly'
+      },
+
+      matchesBackgroundColor: {
+        backgroundColor: 'rgba(255,154,0,0)' 
+      },
+
+      fontRoboto: {
+        fontFamily: 'roboto'
+      },
+
+      textGreyRoboto: {
+        color: 'grey',
+        fontFamily: 'roboto'
+      },
+
+      opacityOne: {
+        opacity: 1
       },
 //___________________________________________________________________________________________________
       //SwipeCard-components
@@ -305,24 +338,25 @@ eventAddMargin: {
 //___________________________________________________________________________________________________
 //Carousel
 
-carouselBackground: {
-    flex: 1,
-    backgroundColor: 'floralwhite'
-},
-
-carouselFontSize: {
-    fontSize: 30,
-},
-
 carouselSafeAreaView: {
     flex: 1,
     paddingTop: 0,
 },
 
-carouselLayout: {
+carouselContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+},
+
+imageSize: {
+  width: '100%', 
+  height: '100%'
+},
+
+carouselBackgroundFloralWhite: {
+  backgroundColor: 'floralwhite',
+  flex: 1,
 },
 
 //___________________________________________________________________________________________________
@@ -336,12 +370,6 @@ chatStyle: {
     padding: 5, 
     backgroundColor: 'black' 
 },
-
-/*
-chatButton: {
-    paddingHorizontal: 10
-},
-*/
 
 
 //___________________________________________________________________________________________________
@@ -465,7 +493,7 @@ registerBirthdayMarginLeft: {
     marginLeft: '10'
 },
 
-registerBirthdayText: {
+registerTitleStyle: {
     color: 'grey',
     fontSize: 17,
     fontWeight: 'bold',
@@ -538,7 +566,7 @@ StartupUsername: {
     paddingTop: 100,
 },
 
-startupButtons: {
+paddingHorizontalTen: {
     paddingHorizontal: 10,
 },
 

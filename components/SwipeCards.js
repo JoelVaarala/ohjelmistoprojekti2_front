@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import { color } from "react-native-reanimated";
 import SwipeCards from "react-native-swipe-cards";
 import { Icon, Avatar } from "react-native-elements";
