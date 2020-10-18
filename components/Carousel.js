@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Text, View, SafeAreaView, Dimensions, Image } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import firestore from '@react-native-firebase/firestore';
+import styles from '../styles';
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
@@ -19,13 +20,9 @@ export default class App extends React.Component {
 
     _renderItem({ item, index }) {
         return (
-            <View style={{
-                backgroundColor: 'floralwhite',
-                flex: 1,
-                
-            }}>
+            <View style={styles.carouselBackgroundFloralWhite}>
                 <Image
-                style={{width: '100%', height: '100%'}}
+                style={styles.imageSize}
                 source={{ uri: item}}
                 /> 
             </View>
@@ -37,8 +34,8 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <SafeAreaView style={{ flex: 1, paddingTop: 0, }}>
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', }}>
+            <SafeAreaView style={styles.carouselSafeAreaView}>
+                <View style={styles.carouselContainer}>
                     <Carousel
                         layout={"default"}
                         ref={ref => this.carousel = ref}

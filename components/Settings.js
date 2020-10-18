@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, SafeAreaView, StyleSheet, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from 'react-native';
+import { ScrollView, SafeAreaView, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from 'react-native';
 import { Input, Slider } from 'react-native-elements'
 import RangeSlider from 'rn-range-slider';
 import CheckBox from '@react-native-community/checkbox';
@@ -7,6 +7,7 @@ import Constants from 'expo-constants';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import styles from '../styles';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Settings() {
@@ -176,32 +177,32 @@ export default function Settings() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.flexOne, styles.backgroundBlack]}>
       <ScrollView>
         <View style={styles.omatContainerit}>
-          <View style={{ backgroundColor: 'black',  }} >
-            <Text style={{color: 'orange', fontWeight: 'bold'}}>Lisää tägi</Text>
+          <View style={styles.backgroundBlack} >
+            <Text style={styles.textOrangeBold}>Lisää tägi</Text>
             <TextInput onChangeText={tag => setTag(tag)} value={tag} onEndEditing={addTag}
-              style={{ height: 40, width: 200, backgroundColor: 'white', color: 'orange' }}>
+              style={styles.addTagInputBox}>
             </TextInput>
           </View>
           <View>
-            <Text style={{color: 'orange', fontWeight: 'bold'}}>Tags:</Text>
-            <FlatList contentContainerStyle={styles.content}
+            <Text style={styles.textOrangeBold}>Tags:</Text>
+            <FlatList contentContainerStyle={styles.paddingTopTen}
               horizontal={false}
               numColumns={3}
               data={tagList}
               keyExtractor={((item, index) => index.toString())}
               renderItem={({ item }) =>
-                <Text style={styles.tag}>{item}</Text>}
+                <Text style={styles.tagBox}>{item}</Text>}
             />
           </View>
         </View>
         <View style={styles.omatContainerit}>
           <View>
-            <Text style={{color: 'orange', fontWeight: 'bold'}}>Etäisyys:</Text>
+            <Text style={styles.textOrangeBold}>Etäisyys:</Text>
             <RangeSlider
-              style={{ width: 250, height: 60 }}
+              style={styles.settingsRangerSlider}
               gravity={'center'}
               rangeEnabled={false}
               min={1}
@@ -213,11 +214,11 @@ export default function Settings() {
                 setDistance(distance)
               }} />
           </View>
-          <Text style={{color: 'orange', fontWeight: 'bold'}}> {distance} km</Text>
-          <View style={{ paddingTop: 50 }}>
-            <Text style={{color: 'orange', fontWeight: 'bold'}}> Iät</Text>
+          <Text style={styles.textOrangeBold}> {distance} km</Text>
+          <View style={styles.paddingTopFifty}>
+            <Text style={styles.textOrangeBold}> Iät</Text>
             <RangeSlider
-              style={{ width: 250, height: 60 }}
+              style={styles.settingsRangerSlider}
               gravity={'center'}
               min={14}
               max={100}
@@ -231,20 +232,20 @@ export default function Settings() {
               onValueChanged={(lowAge, highAge, fromUser) => {
                 setLowAge(lowAge), setHighAge(highAge)
               }} />
-            <Text style={{color: 'orange', fontWeight: 'bold'}}> {lowAge} - {highAge} vuotiaat</Text>
+            <Text style={styles.textOrangeBold}> {lowAge} - {highAge} vuotiaat</Text>
           </View>
         </View>
 
 
         <View style={styles.omatContainerit}>
-          <Text style={{color: 'orange', fontWeight: 'bold'}}>Sukupuoli</Text>
+          <Text style={styles.textOrangeBold}>Sukupuoli</Text>
           <View style={styles.checkbox}>
             <CheckBox
               disabled={false}
               value={female}
               onValueChange={(newValue) => setFemale(newValue)}
             />
-            <Text style={{ marginTop: 5, color: 'orange' }}>Naiset</Text>
+            <Text style={styles.orangeMarginTopFive}>Naiset</Text>
           </View>
           <View style={styles.checkbox}>
             <CheckBox
@@ -252,7 +253,7 @@ export default function Settings() {
               value={male}
               onValueChange={(newValue) => setMale(newValue)}
             />
-            <Text style={{ marginTop: 5, color: 'orange' }}>Miehet</Text>
+            <Text style={styles.orangeMarginTopFive}>Miehet</Text>
           </View>
           <View style={styles.checkbox}>
             <CheckBox
@@ -260,18 +261,18 @@ export default function Settings() {
               value={other}
               onValueChange={(newValue) => setOther(newValue)}
             />
-            <Text style={{ marginTop: 5, color: 'orange' }}>Muut</Text>
+            <Text style={styles.orangeMarginTopFive}>Muut</Text>
           </View>
         </View>
         <View style={styles.omatContainerit}>
-          <Text style={{color: 'orange', fontWeight: 'bold'}}>Hakukohteena </Text>
+          <Text style={styles.textOrangeBold}>Hakukohteena </Text>
           <View style={styles.checkbox}>
             <CheckBox
               disabled={false}
               value={events}
               onValueChange={(newValue) => setEvents(newValue)}
             />
-            <Text style={{ marginTop: 5, color: 'orange' }}>Tapahtumat</Text>
+            <Text style={styles.orangeMarginTopFive}>Tapahtumat</Text>
           </View>
           <View style={styles.checkbox}>
             <CheckBox
@@ -279,7 +280,7 @@ export default function Settings() {
               value={people}
               onValueChange={(newValue) => setPeople(newValue)}
             />
-            <Text style={{ marginTop: 5, color: 'orange' }}>Ihmiset</Text>
+            <Text style={styles.orangeMarginTopFive}>Ihmiset</Text>
           </View>
         </View>
 
@@ -301,11 +302,10 @@ export default function Settings() {
             />
           )} */}
         </View>
-        <View style={{flex: 1, marginLeft: 80, marginRight: 80}}>
+        <View style={styles.saveButton}>
           <Button
             onPress={TallennaData}
             title="Tallenna tiedot"
-            style={{ paddingHorizontal: 10, alignItems: 'stretch' }}
           />
         </View>
       </ScrollView>
@@ -313,43 +313,3 @@ export default function Settings() {
 
   );
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-  },
-  scrollView: {
-
-  },
-  button: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    width: 200,
-    justifyContent: 'flex-start',
-  },
-  tag: {
-    padding: 6,
-    fontSize: 16,
-    color: 'orange',
-    marginVertical: 7,
-    marginHorizontal: 10,
-    backgroundColor: 'black',
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: 'orange'
-  },
-  omatContainerit: {
-    flex: 4,
-    paddingTop: 20,
-    alignItems: 'flex-start',
-    paddingLeft: 80
-  },
-  content: {
-    paddingTop: 10,
-  },
-  checkbox: {
-    flexDirection: 'row'
-  }
-})

@@ -9,8 +9,30 @@ export default StyleSheet.create({
         justifyContent: 'flex-start',
       },
 
-      containerMarginLeft: {
+      containerFlexStart: {
+        flex: 1,
+        justifyContent: 'flex-start'
+      },
+
+      containerAlignItemsCenter: {
+        flex: 1,
+        alignItems: 'center'
+      },
+
+      alignSelfCenter: {
+        alignSelf: 'center'
+      },
+
+      flexThree: {
+        flex: 3
+      },
+
+      marginLeftTwenty: {
         marginLeft: 20,
+      },
+
+      heightForty: {
+        height: 40
       },
 
       containerCenter: {
@@ -18,78 +40,134 @@ export default StyleSheet.create({
         justifyContent: "center",
       },
 
-      containerBackground: {
-        backgroundColor: '#fff'
+      backgroundBlack: {
+        backgroundColor: 'black'
       },
 
-      containerPaddingTop: {
+      marginTopFifty: {
+        marginTop: 50
+      },
+
+      marginTopThirty: {
+        marginTop: 30
+      },
+
+      paddingTopTwenty: {
+        paddingTop: 50
+      },
+
+      paddingTopFifty: {
         paddingTop: 50,
+      },
+
+      paddingTopTen: {
+        paddingTop: 10,
+      },
+
+      marginLeftTen: {
+        marginLeft: 10
+      },
+
+      marginTopTen: {
+        marginTop: 10
       },
 
       paddingBottomFifty: {
         paddingBottom: 50
       },
-      //SwipingPage
 
-      tagListContainer: {
-        flex: 1,
-        //backgroundColor: '#eaeaea',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-        marginLeft: 20
+      paddingTopHundred: {
+        paddingTop: 100
       },
 
-      chatContainer: {
+      iconsPadding: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 20,
+      },
+
+      flexDirectionRow: {
+        flexDirection: 'row'
+      },
+
+      justifyContentSpaceBetween: {
+        justifyContent: 'space-between'
+      },
+
+      alignItemsFlexEnd: {
+        alignItems: 'flex-end'
+      },
+
+      textOrangeBold: {
+        color: 'orange',
+        fontWeight: 'bold'
+      },
+
+      orangeMarginTopFive: {
+        color: 'orange',
+        marginTop: 5
+      },
+
+      saveButton: {flex: 1, 
+        marginLeft: 80, 
+        marginRight: 80
+      },
+
+      addTagInputBox: {
+        height: 40, 
+        width: 200, 
+        backgroundColor: 'white', 
+        color: 'black'
+      },
+
+      userTextStyle: {
+        fontSize: 40,
+        color: 'orange'
+      },
+
+      userBioStyle: {
+        fontSize: 20,
+        color: 'orange'
+      },
+
+      fontSizeTwenty: {
+        fontSize: 20
+      },
+
+      viewLikersContainer: {
+        paddingTop: 50,
         flex: 1,
-        backgroundColor : 'black'
-    },
+        backgroundColor: '#fff',
+      },
 
-    editProfileContainer: {
-      flex: 1,
-      backgroundColor: '#eaeaea',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-    },
+      startingscreenContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
 
-    matchesContainer: {
-      //paddingTop: 50,
-      flex: 1,
-      backgroundColor: 'black',
-  },
+      editProfileTextAreaContainer: { 
+        height: 90, 
+        width: 500, 
+        backgroundColor: 'white', 
+        color: 'black' 
+      },
 
-  viewLikersContainer: {
-    paddingTop: 50,
-    flex: 1,
-    backgroundColor: '#fff',
-},
+      myProfileContainer: {
+        flex: 1,
+        backgroundColor: '#fff'
+      },
 
-startingscreenContainer: {
-  flex: 1,
-  backgroundColor: '#fff',
-  alignItems: 'center',
-  justifyContent: 'center',
-},
+      profileContainer: {
+        alignItems: 'center',
+        flex: 6,
+      },
 
-editProfileTextAreaContainer: {
-  backgroundColor: 'white',
-  padding: 5,
-  alignSelf: 'stretch'
-},
-
-myProfileContainer: {
-  flex: 1,
-  backgroundColor: '#fff'
-},
-
-profileContainer: {
-  alignItems: 'center',
-  flex: 6,
-},
-
-settingsContainer: {
-  flex: 1,
-  backgroundColor: '#fff',
-},
+      settingsContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+      },
 
       button: {
         alignItems: "center",
@@ -106,20 +184,33 @@ settingsContainer: {
         borderBottomColor: 'gray',
         borderBottomWidth: 1,
       },
-      card: {
-        justifyContent: "center",
-        alignItems: "center",
-        width: 350,
-        height: 445,
-        resizeMode: "cover",
-        borderWidth: 2,
-        borderColor: "black",
-        borderRadius: 5,
-        bottom: 20,
-      },
 
       flexOne: {
-          flex: 1,
+        flex: 1,
+      },
+
+      previewButtonStyle: {
+        flexDirection: 'row', 
+        alignContent: 'center', 
+        alignItems: 'center', 
+        justifyContent: 'space-evenly'
+      },
+
+      matchesBackgroundColor: {
+        backgroundColor: 'rgba(255,154,0,0)' 
+      },
+
+      fontRoboto: {
+        fontFamily: 'roboto'
+      },
+
+      textGreyRoboto: {
+        color: 'grey',
+        fontFamily: 'roboto'
+      },
+
+      opacityOne: {
+        opacity: 1
       },
 //___________________________________________________________________________________________________
       //SwipeCard-components
@@ -133,19 +224,32 @@ settingsContainer: {
         justifyContent: 'center'
       },
 
+      card: {
+        justifyContent: "center",
+        alignItems: "center",
+        width: 350,
+        height: 445,
+        resizeMode: "cover",
+        borderWidth: 2,
+        borderColor: "black",
+        borderRadius: 5,
+        bottom: 20,
+      },
+
       //Card bottom shadow thingy
-      imageShadow: {
+      darkishStyle: { 
         height: 400, 
         width: 350, 
+        bottom: -100, 
         right: 15, 
-        top: 25, 
         opacity: 0.9, 
-        borderRadius: 5
+        borderRadius: 5 
       },
       
       //Card size
-      cardContainer: { position: "absolute", 
-      top: 0, 
+      cardContainer: { 
+      position: "absolute", 
+      top: -75, 
       left: 15, 
       right: 150, 
       justifyContent: "flex-end", 
@@ -153,8 +257,8 @@ settingsContainer: {
     },
 
     //Event info at bottom side of card
-    eventInfoMargin: {
-        bottom: 50
+    marginBottomForty: {
+        marginBottom: 40
     },
 
     //Event info text style
@@ -168,13 +272,6 @@ settingsContainer: {
     eventInfoBio: { 
         fontSize: 12,
         color: "white" 
-    },
-
-    eventButton: { 
-      flexDirection: 'row', 
-      alignContent: 'center', 
-      alignItems: 'center', 
-      justifyContent: 'space-evenly' 
     },
 
 //___________________________________________________________________________________________________
@@ -241,24 +338,25 @@ eventAddMargin: {
 //___________________________________________________________________________________________________
 //Carousel
 
-carouselBackground: {
-    flex: 1,
-    backgroundColor: 'floralwhite'
-},
-
-carouselFontSize: {
-    fontSize: 30,
-},
-
 carouselSafeAreaView: {
     flex: 1,
     paddingTop: 0,
 },
 
-carouselLayout: {
+carouselContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+},
+
+imageSize: {
+  width: '100%', 
+  height: '100%'
+},
+
+carouselBackgroundFloralWhite: {
+  backgroundColor: 'floralwhite',
+  flex: 1,
 },
 
 //___________________________________________________________________________________________________
@@ -273,27 +371,9 @@ chatStyle: {
     backgroundColor: 'black' 
 },
 
-/*
-chatButton: {
-    paddingHorizontal: 10
-},
-*/
-
 
 //___________________________________________________________________________________________________
 //EditProfile
-
-
-
-  editProfileUser: {
-      flexDirection: 'row'
-  },
-
-  editProfilebutton: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-  },
 
   editProfileTextArea: {
     textAlignVertical: "top",
@@ -306,23 +386,6 @@ chatButton: {
     paddingBottom: 1,
   },
 
-  editProfileButton2: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    width: 200,
-    justifyContent: 'flex-start',
-  },
-
-  editProfileTag: {
-    padding: 6,
-    fontSize: 20,
-    color: 'white',
-    marginVertical: 7,
-    marginHorizontal: 10,
-    backgroundColor: 'green',
-    borderRadius: 6,
-  },
-
   omatContainerit: {
     flex: 4,
     paddingTop: 20,
@@ -330,17 +393,12 @@ chatButton: {
     paddingLeft: 80
   },
 
-  editProfileContent: {
-    paddingTop: 10,
-  },
-
   tagTextInput: { 
-      height: 40, 
-      width: 200, 
-      borderColor: 'gray', 
-      borderWidth: 1, 
-      backgroundColor: 'white' 
-    },
+    height: 40, 
+    width: 200, 
+    backgroundColor: 'white', 
+    color: 'black' 
+  },
 
 //___________________________________________________________________________________________________
 //Globaalit
@@ -406,20 +464,6 @@ matchesButton: {
 //___________________________________________________________________________________________________
 //MyProfile
 
-myProfileUser: {
-    fontSize: 20, 
-    top: 5
-},
-
-
-
-//ei käytössä?
-myProfileButton: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10
-  },
-
   myProfileAvatarContainer: {
     marginTop: 15,
     alignItems: 'center'
@@ -432,34 +476,6 @@ myProfileButton: {
     top: 20
   },
 
-//___________________________________________________________________________________________________
-//Profile
-
-
-
-profileAlignItem: {
-    alignItems: 'center', 
-    flex: 6 
-},
-
-profileUserText: {
-    fontSize: 40,
-},
-
-profileUserBio: {
-    fontSize: 20,
-},
-
-profileFlexThree: {
-    flex: 3,
-},
-
-//Ei vielä käytössä?
-profileButton: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-},
 
 //___________________________________________________________________________________________________
 //Register
@@ -477,7 +493,7 @@ registerBirthdayMarginLeft: {
     marginLeft: '10'
 },
 
-registerBirthdayText: {
+registerTitleStyle: {
     color: 'grey',
     fontSize: 17,
     fontWeight: 'bold',
@@ -523,69 +539,20 @@ registerRadioGroup: {
 
 //___________________________________________________________________________________________________
 //Settings
-
-
-
-  settingsScrollView: {
-
-  },
-  settingsButton: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    width: 200,
-    justifyContent: 'flex-start',
-  },
-  settingsTag: {
+  tagBox: {
     padding: 6,
     fontSize: 16,
-    color: 'white',
+    color: 'black',
     marginVertical: 7,
     marginHorizontal: 10,
-    backgroundColor: 'green',
+    backgroundColor: 'orange',
     borderRadius: 6,
-  },
-  settingsOmatContainerit: {
-    flex: 4,
-    paddingTop: 20,
-    alignItems: 'flex-start',
-    paddingLeft: 80
-  },
-  settingsContent: {
-    paddingTop: 10,
-  },
-  settingsCheckbox: {
-    flexDirection: 'row'
-  },
-
-  optionMarginTopFive: {
-    marginTop: 5,
-  },
-
-  saveDataButton: {
-      paddingHorizontal: 10,
-      alignItems: 'stretch',
   },
 
   settingsRangerSlider: {
       width: 250,
       height: 60,
   },
-
-  settingsAgePaddingTop: {
-      paddingTop: 50,
-  },
-
-  settingsAddTag: { 
-      height: 40, 
-      width: 200, 
-      borderColor: 'gray', 
-      borderWidth: 1, 
-      backgroundColor: 'white' 
-    },
-
-textInputBackground: {
-    backgroundColor: 'white',
-},
 
 //___________________________________________________________________________________________________
 //Startingscreen
@@ -599,7 +566,7 @@ StartupUsername: {
     paddingTop: 100,
 },
 
-startupButtons: {
+paddingHorizontalTen: {
     paddingHorizontal: 10,
 },
 
@@ -630,6 +597,12 @@ viewLikersSwipedFontSize: {
 viewLikersItemContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+},
+
+viewLikersButton: {
+  alignItems: "center",
+  backgroundColor: "#DDDDDD",
+  padding: 10
 },
 
 });

@@ -1,8 +1,9 @@
 import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, StatusBar, Image, Text, Picker } from 'react-native';
+import { SafeAreaView, View, FlatList, StatusBar, Image, Text, Picker } from 'react-native';
 import { Avatar, ListItem, Overlay, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firestore from '@react-native-firebase/firestore';
+import styles from '../styles';
 
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
@@ -168,13 +169,10 @@ export default function ViewLikers({ navigation, route }) {
                             </View>
                             <Text> 4km </Text>
                         </ListItem.Content>
-                        <View style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                        }}>
+                        <View style={styles.viewLikersItemContent}>
 
                             <Button
-                                //style={styles.button}
+                                //style={styles.viewLikersButton}
                                 type="outline"
                                 raised={true}
                                 icon={{
@@ -204,12 +202,12 @@ export default function ViewLikers({ navigation, route }) {
 
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.flexOne, styles.backgroundBlack, styles.paddingTopFifty]}>
             <View>
-                <View style={styles.picker}>
+                <View style={styles.viewLikersPicker}>
                     <Picker
                         selectedValue={selectedEvent}
-                        style={{ height: 50, width: 150, }}
+                        style={styles.viewLikersPickerSize}
                         onValueChange={(itemValue, itemIndex) => setEvent(itemValue)}
                     >
                         {
@@ -219,7 +217,7 @@ export default function ViewLikers({ navigation, route }) {
                         }
                     </Picker>
                 </View>
-                <Text style={{ fontSize: 20, color: 'orange' }}>  People who swiped for your event!</Text>
+                <Text style={styles.userBioStyle}>  People who swiped for your event!</Text>
                 {
                     peoplesWhoWantToJoin.map((l, i) => (
                         <ListItem key={i} bottomDivider>
@@ -232,13 +230,10 @@ export default function ViewLikers({ navigation, route }) {
                                 </View>
                                 <Text> 4km </Text>
                             </ListItem.Content>
-                            <View style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                            }}>
+                            <View style={styles.viewLikersItemContent}>
 
                                 <Button
-                                    //style={styles.button}
+                                    //style={styles.viewLikersButton}
                                     type="outline"
                                     raised={true}
                                     icon={{
@@ -267,24 +262,6 @@ export default function ViewLikers({ navigation, route }) {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        paddingTop: 50,
-        flex: 1,
-        backgroundColor: 'black',
-    },
-    button: {
-        alignItems: "center",
-        backgroundColor: "#DDDDDD",
-        padding: 10
-    },
-    picker: {
-        //flex: 1,
-        // paddingTop: 0,
-        alignItems: "center",
-    },
-});
 
 
 
