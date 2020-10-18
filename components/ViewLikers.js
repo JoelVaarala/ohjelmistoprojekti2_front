@@ -31,29 +31,42 @@ export default function ViewLikers({ navigation, route }) {
         var lol = peopleWhoLikedMe.data().swipes
         var peopleInQueue = await firestore().collection("events").doc(selectedEvent).collection("swipes").
             doc("mySwipes").get()
+        peopleInQueue = peopleInQueue.data().swipes
+        var usersAlreadyInEvent = await firestore().collection('matches').doc(selectedEvent).get();
+        usersAlreadyInEvent = usersAlreadyInEvent.data().users;
+        console.log(usersAlreadyInEvent)
+        //console.log(peopleInQueue)
         //console.log(peopleInQueue.data().swipes)
 
         let temppia = []
-        peopleWhoLikedMe.data().swipes.forEach(element => {
+        //miksei vaa
+        lol.forEach(element => {
             temppia.push(element.user)
         });
 
+        console.log(temppia)
+        temppia = temppia.filter(function (el) {
+            return !usersAlreadyInEvent.includes(el);
+        });
+        console.log(temppia)
+        //nyt pitää  vielä katsoa että ei näytä niitä jotka on jo
         //return;
         var lopulliset = []
-        if (temppia.length === 0)
-            return;
-        var query = await firestore().collection("users").where(firestore.FieldPath.documentId(), "in", temppia).
-            get()
-            .then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {
-                    // doc.data() is never undefined for query doc snapshots
-                    // console.log(doc.id, " => ", doc.data());
-                    var asd = doc.data();
-                    asd.uid = doc.id;
-                    lopulliset.push(doc.data())
-                    //lopulliset[length-1].uid = doc.id;
-                });
-            })
+        if (temppia.length !== 0) {
+            console.log("Enemmän ku 0")
+            var query = await firestore().collection("users").where(firestore.FieldPath.documentId(), "in", temppia).
+                get()
+                .then(function (querySnapshot) {
+                    querySnapshot.forEach(function (doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        // console.log(doc.id, " => ", doc.data());
+                        var asd = doc.data();
+                        asd.uid = doc.id;
+                        lopulliset.push(doc.data())
+                        //lopulliset[length-1].uid = doc.id;
+                    });
+                })
+        }
         console.log("Lopulliset")
         console.log(lopulliset)
         setPeoplesWhoWantToJoin(lopulliset)
@@ -106,8 +119,7 @@ export default function ViewLikers({ navigation, route }) {
         let myData = {
             data: {
                 liked: liked,
-                target: user.uid, //korjaa findSwipeablesin blabla vanhaan.
-                isEvent: false, //tarviko tätä, eiks swipe nyt bäkissä automaattisesti katsonut et onks user vai event
+                target: user, //korjaa findSwipeablesin blabla vanhaan.
                 swipeAs: selectedEvent
             },
             "uid": global.myUserData.uid,
@@ -115,7 +127,7 @@ export default function ViewLikers({ navigation, route }) {
         }
         console.log("Swiped " + liked + " for " + user)
         console.log(JSON.stringify(myData))
-        return;
+        console.log(user)
         fetch(global.url + "swipe", {
             // fetch("http://192.168.56.1:5001/ohpro2-f30e5/us-central1/swipe" , {
             method: 'POST',
@@ -135,11 +147,61 @@ export default function ViewLikers({ navigation, route }) {
     }
 
 
-    function Accept(liked,uid) {
+    function Accept(liked, uid) {
         console.log("Accept")
         console.log(uid)
-        PostSwipe(liked,uid)
+        PostSwipe(liked, uid)
     }
+
+    function Jooh() {
+        {
+            return (
+
+                peoplesWhoWantToJoin.map((l, i) => (
+                    <ListItem key={i} bottomDivider>
+                        <Avatar source={{ uri: l.images[0] }} />
+                        <ListItem.Content>
+                            <View>
+                                <ListItem.Title>{l.displayName}  {l.age}</ListItem.Title>
+                                <ListItem.Subtitle>{l.tags}</ListItem.Subtitle>
+
+                            </View>
+                            <Text> 4km </Text>
+                        </ListItem.Content>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                        }}>
+
+                            <Button
+                                //style={styles.button}
+                                type="outline"
+                                raised={true}
+                                icon={{
+                                    name: "arrow-right",
+                                    size: 30,
+                                    color: "lightgreen"
+                                }}
+                                onPress={() => Accept(true, l.uid)}
+                            />
+                            <Button
+                                type="outline"
+                                raised={true}
+                                onPress={() => Accept(false, l.uid)}
+                                icon={{
+                                    name: "arrow-right",
+                                    size: 30,
+                                    color: "red"
+                                }}
+                            />
+                        </View>
+                    </ListItem>
+                )))
+        }
+    }
+
+
+
 
     return (
         <View style={styles.container}>
@@ -147,7 +209,7 @@ export default function ViewLikers({ navigation, route }) {
                 <View style={styles.picker}>
                     <Picker
                         selectedValue={selectedEvent}
-                        style={{ height: 50, width: 150 }}
+                        style={{ height: 50, width: 150, }}
                         onValueChange={(itemValue, itemIndex) => setEvent(itemValue)}
                     >
                         {
@@ -157,7 +219,7 @@ export default function ViewLikers({ navigation, route }) {
                         }
                     </Picker>
                 </View>
-                <Text style={{ fontSize: 20 }}>  People who swiped for your event!</Text>
+                <Text style={{ fontSize: 20, color: 'orange' }}>  People who swiped for your event!</Text>
                 {
                     peoplesWhoWantToJoin.map((l, i) => (
                         <ListItem key={i} bottomDivider>
@@ -200,6 +262,7 @@ export default function ViewLikers({ navigation, route }) {
                         </ListItem>
                     ))
                 }
+
             </View>
         </View>
     );
@@ -209,7 +272,7 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 50,
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: 'black',
     },
     button: {
         alignItems: "center",
@@ -219,7 +282,7 @@ const styles = StyleSheet.create({
     picker: {
         //flex: 1,
         // paddingTop: 0,
-        alignItems: "center"
+        alignItems: "center",
     },
 });
 

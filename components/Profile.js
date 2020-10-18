@@ -97,8 +97,8 @@ export default function Profile( {navigation, route}, props) {
             </View>
 
             <View style={{ flex: 3 }}>
-                <Text style={{ fontSize: 40 }}>{user.name}, {user.age}</Text>
-                <Text style={{ fontSize: 20 }}>{user.bio}</Text>
+                <Text style={{ fontSize: 40, color: 'orange', }}>{user.name}, {user.age}</Text>
+                <Text style={{ fontSize: 20, color: 'orange', }}>{user.bio}</Text>
             </View>
 
         </View>
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
+        backgroundColor: 'black',
     },
     
 });

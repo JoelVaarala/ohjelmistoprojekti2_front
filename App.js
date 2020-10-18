@@ -112,28 +112,34 @@ const MyTheme = {
             <Tab.Navigator
               swipeEnabled={false}
               screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
+                tabBarIcon: ({ focused, color, size}) => {
                   let iconName;
-      
+                  let iconColor;
+                  
                   if (route.name === 'Matches') {
                     iconName = "people";
+                    iconColor = focused ? 'red' : 'orange';
                   } else if (route.name === 'Swipes') {
                     iconName = 'touch-app';
+                    iconColor = focused ? 'red' : 'orange';
                   } else if (route.name === 'My Likes') {
                     iconName = "event-available";
+                    iconColor = focused ? 'red' : 'orange';
                   } else if (route.name === 'Profile') {
                     iconName = 'person';
+                    iconColor = focused ? 'red' : 'orange';
                   } else if (route.name === 'Login') {
                     iconName = 'security';
+                    iconColor = focused ? 'red' : 'orange';
                   }
       
                   // You can return any component that you like here!
-                  return  <Icon color='orange' size={28} name={iconName} />;
+                  return  <Icon color={iconColor} size={28} name={iconName} />;
                 },
               })}
               tabBarOptions={{
-                activeTintColor: 'white',
-                inactiveTintColor: 'white',
+                activeTintColor: 'red',
+                inactiveTintColor: 'orange',
                 showIcon: true,
                 showLabel: false,
               }}
