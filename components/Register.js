@@ -3,6 +3,7 @@ import { View, ScrollView } from 'react-native';
 import { Input, Button, Text, ButtonGroup } from 'react-native-elements';
 import DatePicker from 'react-native-date-picker';
 import { Entypo } from '@expo/vector-icons';
+import styles from '../styles';
 
 export default function Register({ navigation }) {
 
@@ -92,8 +93,8 @@ export default function Register({ navigation }) {
     //sähköpostile checki, onko legit syntaxi
     //checki, onnistuiko rekisteröinti, jos onnistui -> loginpage ja kirjaudu automaattisesti
     return (
-        <ScrollView style={{ paddingTop: 20, flex: 1 }}>
-            <Text h4 style={{ alignSelf: 'center' }}>Luo käyttäjä</Text>
+        <ScrollView style={styles.flexOne, styles.paddingTop}>
+            <Text h4 style={styles.alignSelfCenter}>Luo käyttäjä</Text>
             <Input
                 label="Sähköposti"
                 placeholder="Sähköposti"
@@ -115,13 +116,13 @@ export default function Register({ navigation }) {
                 value={kayttajaTiedot.displayName}
             />
 
-            <View style={{ marginLeft: 10 }}>
+            <View style={styles.marginLeftTen}>
                 <Text  //jos on joku parempi label systeemi, saa muuttaa tämän
-                    style={{ color: 'grey', fontSize: 17, fontWeight: 'bold', marginBottom: 10 }}
+                    style={styles.registerTitleStyle}
                 >Syntymä aika</Text>
 
                 <DatePicker
-                    style={{ alignSelf: 'center' }}
+                    style={styles.alignSelfCenter}
                     date={date}
                     onDateChange={value => setDate(value)}
                     mode="date"
@@ -129,36 +130,29 @@ export default function Register({ navigation }) {
                 />
             </View>
 
-            <View style={{ marginLeft: 10, paddingTop: 10 }}>
+            <View style={[styles.marginLeftTen, styles.paddingTopTen]}>
                 <Text  //jos on joku parempi label systeemi, saa muuttaa tämän
-                    style={{ color: 'grey', fontSize: 17, fontWeight: 'bold', marginBottom: 10 }}
+                    style={styles.registerTitleStyle}
                 >Sukupuoli</Text>
 
                 <ButtonGroup
                     onPress={value => genderConvert('gender', value)}
                     selectedIndex={selectedIndex}
                     buttons={buttons}
-                    containerStyle={{ height: 40 }}
+                    containerStyle={styles.heightForty}
                 />
 
                 {/* <RadioGroup // muuta setWidthHeight 'useNativeDriver: true' falseksi node moduulissa react-native-radio-button-group/lib/Circle.js, muuten tulee errori: Style property 'height' is not supported by native animated module
                     horizontal
                     options={genderOptions}
                     onChange={(value) => inputChanged('gender', value.id)}
-                // circleStyle={{  // tällä voi muutella radiopylpyrän tyyliä
-                //     width: 22,
-                //     height: 22,
-                //     borderColor: '#000',
-                //     borderWidth: 0.8,
-                //     marginRight: 10,
-                //     fillColor: '#279315'
-                // }}
+                // circleStyle={ styles.registerRadioGroup // tällä voi muutella radiopylpyrän tyyliä }
                 /> */}
             </View>
             <Button
                 onPress={() => registerUser()}
                 title="Luo käyttäjä"
-                containerStyle={{ paddingHorizontal: 10, paddingTop: 20, paddingBottom: 80 }}
+                containerStyle={styles.registerUserButton}
             />
         </ScrollView>
     );
