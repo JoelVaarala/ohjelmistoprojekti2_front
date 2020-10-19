@@ -384,6 +384,7 @@ chatStyle: {
     fontSize: 20,
     paddingTop: 2,
     paddingBottom: 1,
+    color: 'orange'
   },
 
   omatContainerit: {

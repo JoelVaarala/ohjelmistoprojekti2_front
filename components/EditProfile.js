@@ -99,17 +99,6 @@ export default function EditProfile() {
       ]
       )
   }
-
-  const varmistus = () => {
-    Alert.alert(
-      'Poista tagi',
-      'Haluatko varmasti poistaa tagin?',
-      [
-        {text: 'Peruuta', onPress: () => console.log('Käyttäjä peruutti'), style: 'cancel'},
-        {text: 'OK', onPress: () => deleteItemById(index)}
-      ]
-    )
-  }
   
   return (
     <View style={[styles.flexOne, styles.backgroundBlack]}>
@@ -117,9 +106,7 @@ export default function EditProfile() {
       <View style={styles.flexDirectionRow}>
         <Text
           style={styles.editProfileText}>
-          {userTiedot.name},
-          {userTiedot.age} 
-    
+          {userTiedot.name}, {userTiedot.age} 
         </Text>
       </View>
           <Icon reverse name='image' />
