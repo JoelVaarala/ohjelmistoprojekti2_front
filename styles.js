@@ -350,6 +350,341 @@ export default StyleSheet.create({
         marginRight: 10
     },
 
+//___________________________________________________________________________________________________
+//SwipingPage
+  
+  //Icons location at bottom of the screen
+  iconLocation: {
+    flex: 1, 
+    justifyContent: "flex-start"
+  },
+
+  //Space between icons
+  iconSpacebetween: {
+    flex: 1, flexDirection: "row", 
+    justifyContent: "space-between", 
+    alignItems: "flex-end"
+  },
+
+  //Padding between icons
+  iconPadding: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+  },
+
+  //Mikä buttoni tää on?!?
+  button: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 10,
+  },
+
+//___________________________________________________________________________________________________
+//Add_Event
+
+addEventScrollView: {
+    flex:1,
+    marginTop: 22,
+},
+
+eventAddMargin: {
+    marginLeft: 10,
+    marginRight: 10
+},
+  /*
+  ei käytössä?
+  button: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 10
+  },
+  */
+  eventHeaders: {
+    fontWeight: 'bold',
+    marginTop: 10
+  },
+  eventTextbox: {
+    height: 40,
+    width: 200,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 1,
+  },
+
+//___________________________________________________________________________________________________
+//Carousel
+
+carouselSafeAreaView: {
+    flex: 1,
+    paddingTop: 0,
+},
+
+carouselContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+},
+
+imageSize: {
+  width: '100%', 
+  height: '100%'
+},
+
+carouselBackgroundFloralWhite: {
+  backgroundColor: 'floralwhite',
+  flex: 1,
+},
+
+//___________________________________________________________________________________________________
+//Chat
+
+
+
+chatStyle: { 
+    justifyContent: 'space-around', 
+    flexDirection: 'row', 
+    padding: 5, 
+    backgroundColor: 'black' 
+},
+
+
+//___________________________________________________________________________________________________
+//EditProfile
+
+  editProfileTextArea: {
+    textAlignVertical: "top",
+    alignSelf: 'stretch',
+    fontSize: 15
+  },
+  editProfileText: {
+    fontSize: 20,
+    paddingTop: 2,
+    paddingBottom: 1,
+    color: 'orange'
+  },
+
+  omatContainerit: {
+    flex: 4,
+    paddingTop: 20,
+    alignItems: 'flex-start',
+    paddingLeft: 80
+  },
+
+  tagTextInput: { 
+    height: 40, 
+    width: 200, 
+    backgroundColor: 'white', 
+    color: 'black' 
+  },
+
+//___________________________________________________________________________________________________
+//Globaalit
+
+
+
+//ei käytössä?
+matchesButton: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 10
+  },
+  matchesImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center"
+  },
+  matchesLogo: {
+    // justifyContent: 'center',
+    // alignContent: 'center',
+    // alignItems: 'center',
+    width: 400,
+    height: 50,
+    padding: '15%'
+  },
+
+  matchMessage: {
+    fontSize: 20, color: 'orange',
+    fontWeight: 'bold',
+    fontFamily: 'roboto'
+  },
+
+  matchContainerBackground: {
+    backgroundColor: 'rgba(255,154,0,0)'
+  },
+  
+  opacityOne: {
+    opacity: 1,
+  },
+
+  listItemTitleStyle: {
+    color: 'white', 
+    fontWeight: 'bold',
+    fontFamily: 'roboto'
+  },
+
+  listItemSubtitleStyle: {
+    color: 'gray',
+    fontFamily: 'roboto'
+  },
+
+  matchesTextStyle: {
+    fontSize: 20, 
+    color: 'orange',
+    fontWeight: 'bold',
+    fontFamily: 'roboto'
+  },
+
+  avatarRoundedBackground: {
+    backgroundColor: 'rgba(255,154,0,0)'
+  },
+
+//___________________________________________________________________________________________________
+//MyProfile
+
+  myProfileAvatarContainer: {
+    marginTop: 15,
+    alignItems: 'center'
+  },
+
+  iconSpacing: {
+    flex: 1, 
+    flexDirection: 'row', 
+    justifyContent: 'space-around', 
+    top: 20
+  },
+
+
+//___________________________________________________________________________________________________
+//Register
+
+registerScrollView: {
+    flex: 1,
+    paddingTop: 20,
+},
+
+registerText: {
+    alignSelf: 'center'
+},
+
+registerBirthdayMarginLeft: {
+    marginLeft: '10'
+},
+
+registerTitleStyle: {
+    color: 'grey',
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginBottom: 10
+},
+
+registerDatePicker: {
+    alignSelf: 'center',
+},
+
+registerGenderStyle: {
+    marginLeft: 10,
+    paddingTop: 10,
+},
+
+registerGenderText: {
+    color: 'grey', 
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginBottom: 10,
+},
+
+registerUserButton: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 80,
+},
+
+heightForty: {
+  height: 40
+},
+
+/* 
+registerRadioGroup: {
+      width: 22,
+      height: 22,
+      borderColor: '#000',
+      borderWidth: 0.8,
+      marginRight: 10,
+      fillColor: '#279315'
+},
+*/
+
+//___________________________________________________________________________________________________
+//Settings
+  tagBox: {
+    padding: 6,
+    fontSize: 16,
+    color: 'black',
+    marginVertical: 7,
+    marginHorizontal: 10,
+    backgroundColor: 'orange',
+    borderRadius: 6,
+  },
+
+  settingsRangerSlider: {
+      width: 250,
+      height: 60,
+  },
+
+//___________________________________________________________________________________________________
+//Startingscreen
+
+
+
+//___________________________________________________________________________________________________
+//Startup
+
+StartupUsername: {
+    paddingTop: 100,
+},
+
+paddingHorizontalTen: {
+    paddingHorizontal: 10,
+},
+
+//___________________________________________________________________________________________________
+//Startup
+
+
+viewLikersbutton: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 10
+},
+viewLikersPicker: {
+    //flex: 1,
+    // paddingTop: 0,
+    alignItems: "center"
+},
+
+viewLikersPickerSize: {
+    height: 50,
+    width: 150,
+},
+
+viewLikersSwipedFontSize: {
+    fontSize: 20,
+},
+
+viewLikersItemContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+},
+
+viewLikersButton: {
+  alignItems: "center",
+  backgroundColor: "#DDDDDD",
+  padding: 10
+},
+
+//});
+
+
       marginLeftTen: {
         marginLeft: 10
       },

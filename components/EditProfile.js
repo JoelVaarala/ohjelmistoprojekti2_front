@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, FlatList, Text, View, TextInput } from 'react-native';
+import { Alert, Button, FlatList, Text, View, TextInput } from 'react-native';
 import { Icon, Input } from 'react-native-elements'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -50,7 +50,7 @@ export default function EditProfile() {
         // console.log(data)
       })
       .catch(err => console.error(err))
-
+      Alert.alert('Tiedot tallennettiin')
   }
 
   // function HaeKayttajanTiedot_autoupdate() {
@@ -89,15 +89,24 @@ export default function EditProfile() {
     setTag('');
   }
 
+  const deleteItemById = (index) => {
+    Alert.alert(
+      'Poista tagi',
+      'Haluatko varmasti poistaa tagin?',
+      [
+        {text: 'Peruuta', onPress: () => console.log('Käyttäjä peruutti'), style: 'cancel'},
+        {text: 'OK', onPress: () =>  setTagList(tagList.filter((itemi, indexi) => indexi !== index))}
+      ]
+      )
+  }
+  
   return (
     <View style={[styles.flexOne, styles.backgroundBlack]}>
             <View style={[styles.container, styles.containerCenter, styles.marginTopThirty]}>
       <View style={styles.flexDirectionRow}>
         <Text
           style={styles.editProfileText}>
-          {userTiedot.name},
-          {userTiedot.age} 
-    
+          {userTiedot.name}, {userTiedot.age} 
         </Text>
       </View>
           <Icon reverse name='image' />
@@ -130,8 +139,8 @@ export default function EditProfile() {
             numColumns={3}
             data={tagList}
             keyExtractor={((item, index) => index.toString())}
-            renderItem={({ item }) =>
-              <Text onPress={() => deleteItemById(item.id)} style={styles.tagBox}>{item}</Text>}
+            renderItem={({ item, index }) =>
+              <Text onPress={() => deleteItemById(index)} style={styles.tagBox}>{item}</Text>}
           />
         </View>
       </View>
