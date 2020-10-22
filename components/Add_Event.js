@@ -1,14 +1,17 @@
-import React, { useEffect, useState, Component } from "react";
-import { Text, View, TextInput, Button, FlatList, ScrollView } from "react-native";
-import { Icon, Input } from "react-native-elements";
-import DatePicker from "react-native-date-picker";
-import Redux from "redux";
-import auth from "@react-native-firebase/auth";
-import { connect } from "react-redux";
-import { store, addEvent } from "../redux/index";
-import styles from "../styles";
+import React, { useEffect, useState, Component } from 'react';
+import { Text, View, TextInput, Button, FlatList, ScrollView , Alert} from 'react-native';
+import { Icon, Input } from 'react-native-elements';
+import DatePicker from 'react-native-date-picker';
+import Redux from 'redux';
+import auth from '@react-native-firebase/auth';
+import { connect } from 'react-redux';
+import { store, addEvent } from '../redux/index';
+import styles from '../styles';
+import { showMessage } from 'react-native-flash-message';
 
-function Add_Eventti(props) {
+
+function Add_Eventti({navigation, route} , props) {
+
   // Statet tapahtuman tiedoille
   const [eventName, setEventName] = useState("");
   const [description, setDescription] = useState("");
@@ -79,12 +82,44 @@ function Add_Eventti(props) {
       },
       body: JSON.stringify(bodi),
     })
-      .then((response) => response.json())
-      .then((res) => {
-        console.log(res, "dsfsdf");
-      })
-      .catch((err) => console.error(err, "moi"));
-  };
+    .then(response => response.json())
+    .then(res => {
+      console.log(res, 'LÄHETYS ONNISTUI')
+      showSuccess();
+      navigation.navigate('Profile')
+    })
+    .catch(err => {
+      console.error(err, 'LÄHETYS EPÄONNISTUI')
+      showFail();
+    });
+  }
+
+  // flash message for failed event creation
+  const showFail = () => {
+    showMessage({
+      message: "Eventin lisäys epäonnistui",
+      description: "better luck next time",
+      type: "default",
+      duration: 1850,
+      backgroundColor: "red",
+      color: "white" 
+      // you can also add onPRess -function
+    });
+  }
+
+  // flash message for successful event creation
+  const showSuccess = () => {
+    showMessage({
+      message: "Eventin lisäys onnistui",
+      description: "wp gg",
+      type: "default",
+      duration: 1850,
+      backgroundColor: "green",
+      color: "white" 
+      // you can also add onPRess -function
+    });
+  }
+
 
   return (
     <ScrollView style={[styles.flexOne, styles.background]}>
@@ -124,8 +159,22 @@ function Add_Eventti(props) {
             </View>
           </View>
 
-          <View style={[styles.saveButton, styles.marginTopTen]}>
-            <Button color="black" onPress={goToPreview} title="Preview" />
+          <View style={styles.previewButtonStyle}>
+            <Button onPress={() => {
+              showMessage({
+                message: "TESTIMESSAGE",
+                description: "TESTI ONNISTUI HYVIN",
+                type: "default",
+                duration: 1850,
+                backgroundColor: "purple",
+                color: "yellow" 
+                // you can also add onPRess -function
+              });
+            }}
+            title="testimessage"
+            color="#841584"
+            />
+            <Button onPress={goToPreview} title="preview" />
           </View>
         </View>
       ) : (
@@ -144,10 +193,9 @@ function Add_Eventti(props) {
                   </Text>
                 );
               })}
-            </View>
-          </View>
-          <View style={[styles.saveButton, styles.marginTopTen]}>
-            <Button color="black" onPress={sendEvent} title="Confirm event" />
+            </View> 
+            <Button onPress={sendEvent} title="Confirm event" />
+            <Button onPress={() => navigation.navigate('Profile')} title="profiiliin" />
           </View>
         </View>
       )}

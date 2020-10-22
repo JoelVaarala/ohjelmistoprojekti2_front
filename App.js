@@ -19,6 +19,7 @@ import ViewLikers from './components/ViewLikers.js';
 import { Icon } from 'react-native-elements';
 import { Provider } from 'react-redux';
 import { store } from './redux/index';
+import FlashMessage from 'react-native-flash-message';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -111,49 +112,68 @@ export default function App() {
             <ListStack.Screen name="Register" component={Register} />
           </Stack.Navigator>
         ) : (
-          <Tab.Navigator
-            swipeEnabled={false}
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName;
-                let iconColor;
+            <Tab.Navigator
+              swipeEnabled={false}
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size}) => {
+                  let iconName;
+                  let iconColor;
+                  
+                  if (route.name === 'Matches') {
+                    iconName = "people";
+                    iconColor = focused ? 'red' : 'orange';
+                  } else if (route.name === 'Swipes') {
+                    iconName = 'touch-app';
+                    iconColor = focused ? 'red' : 'orange';
+                  } else if (route.name === 'My Likes') {
+                    iconName = "event-available";
+                    iconColor = focused ? 'red' : 'orange';
+                  } else if (route.name === 'Profile') {
+                    iconName = 'person';
+                    iconColor = focused ? 'red' : 'orange';
+                  } else if (route.name === 'Login') {
+                    iconName = 'security';
+                    iconColor = focused ? 'red' : 'orange';
+                  }
+      
+                  // You can return any component that you like here!
+                  return  <Icon color={iconColor} size={28} name={iconName} />;
+                },
+              })}
+              tabBarOptions={{
+                activeTintColor: 'red',
+                inactiveTintColor: 'orange',
+                showIcon: true,
+                showLabel: false,
+              }}
+                >
+              {/*    tabBarOptions={{
+                labelStyle: {
+                  fontSize: 10,
+                  // color: 'orange', //overridee nyt activetintcolor ja inactiven, vaihdetan jossain kohtaa sprintti 3, sang.
+                  fontWeight: 'bold',
+                  fontFamily: 'roboto'
+                },
+                activeTintColor: 'tomato',
+                inactiveTintColor: 'gray',
 
-                if (route.name === 'Matches') {
-                  iconName = 'people';
-                  iconColor = navIconColor(focused);
-                } else if (route.name === 'Swipes') {
-                  iconName = 'touch-app';
-                  iconColor = navIconColor(focused);
-                } else if (route.name === 'My Likes') {
-                  iconName = 'event-available';
-                  iconColor = navIconColor(focused);
-                } else if (route.name === 'Profile') {
-                  iconName = 'person';
-                  iconColor = navIconColor(focused);
-                } else if (route.name === 'Login') {
-                  iconName = 'security';
-                  iconColor = navIconColor(focused);
-                }
+                // tabStyle: { width: 100 },
+                style: { backgroundColor: "black", paddingTop: 0 },
+              }} 
+            */} 
+           
+            
+              <Tab.Screen name="Matches" component={MatchStack} />
+              <Tab.Screen name="Swipes" component={SwipeStack} />
+              <Tab.Screen name="My Likes" component={ViewLikers} />
+              <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
+              <Tab.Screen name="Login" component={LoginStack} />
+            </Tab.Navigator>
 
-                // You can return any component that you like here!
-                return <Icon color={iconColor} size={28} name={iconName} />;
-              }
-            })}
-            tabBarOptions={{
-              activeTintColor: 'black',
-              inactiveTintColor: 'white',
-              showIcon: true,
-              showLabel: false
-            }}
-          >
-            <Tab.Screen name="Matches" component={MatchStack} />
-            <Tab.Screen name="Swipes" component={SwipeStack} />
-            <Tab.Screen name="My Likes" component={ViewLikers} />
-            <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
-            <Tab.Screen name="Login" component={LoginStack} />
-          </Tab.Navigator>
-        )}
+          )}
       </NavigationContainer>
+      {/* position of flash can also be set bottom, left, right*/}
+      <FlashMessage position="top" />
     </Provider>
   );
 }
