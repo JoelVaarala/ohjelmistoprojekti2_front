@@ -9,6 +9,7 @@ import firebase from 'react-native-firebase';
 import firestore from '@react-native-firebase/firestore';
 import * as Location from 'expo-location';
 import functions from '@react-native-firebase/functions';
+import styles from '../styles';
 
 
 // import  'firebaseconfig';
@@ -169,7 +170,7 @@ function testausta() {
 return (
   <View>
     <Input
-      containerStyle={{ paddingTop: 100 }}
+      containerStyle={styles.paddingTopHundred}
       lable="Käyttäjätunnus"
       placeholder="Käyttäjätunnus"
       onChangeText={kayttaja => setKayttaja(kayttaja)}
@@ -184,14 +185,14 @@ return (
     />
     <Button
       onPress={login} title="Login"
-      containerStyle={{ paddingHorizontal: 10 }}
+      containerStyle={styles.paddingHorizontalTen}
     />
     <Text>{msg}</Text>
 
     <Button
       onPress={() => navigation.navigate('Rekisteröidy')}
       title="REKISTERÖIDYaaaaaaa"
-      containerStyle={{ paddingHorizontal: 10 }}
+      containerStyle={styles.paddingHorizontalTen}
     />
   </View>
 );

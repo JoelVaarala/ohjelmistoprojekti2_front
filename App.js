@@ -80,6 +80,15 @@ export default function App() {
     )
   }
 
+  const SwipeStack = () => {
+    return (
+      <ListStack.Navigator>
+      <ListStack.Screen name="Swipes" component={SwipingPage} />
+      <ListStack.Screen name="Matchprofile" component={Profile} />
+    </ListStack.Navigator>
+    )
+  }
+
   
 const MyTheme = {
   dark: true,
@@ -161,7 +170,7 @@ const MyTheme = {
            
             
               <Tab.Screen name="Matches" component={MatchStack} />
-              <Tab.Screen name="Swipes" component={SwipingPage} />
+              <Tab.Screen name="Swipes" component={SwipeStack} />
               <Tab.Screen name="My Likes" component={ViewLikers} />
               <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
               <Tab.Screen name="Login" component={LoginStack} />

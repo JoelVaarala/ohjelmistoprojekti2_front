@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Button, FlatList, Text, View, TextInput } from 'react-native';
+import { Alert, Button, FlatList, Text, View, TextInput } from 'react-native';
 import { Icon, Input } from 'react-native-elements'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import styles from '../styles';
 
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
@@ -49,7 +50,7 @@ export default function EditProfile() {
         // console.log(data)
       })
       .catch(err => console.error(err))
-
+      Alert.alert('Tiedot tallennettiin')
   }
 
   // function HaeKayttajanTiedot_autoupdate() {
@@ -88,54 +89,63 @@ export default function EditProfile() {
     setTag('');
   }
 
+  const deleteItemById = (index) => {
+    Alert.alert(
+      'Poista tagi',
+      'Haluatko varmasti poistaa tagin?',
+      [
+        {text: 'Peruuta', onPress: () => console.log('Käyttäjä peruutti'), style: 'cancel'},
+        {text: 'OK', onPress: () =>  setTagList(tagList.filter((itemi, indexi) => indexi !== index))}
+      ]
+      )
+  }
+  
   return (
-    <View style={styles.container}>
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 30}}>
-      <View style={{ flexDirection: 'row' }}>
+    <View style={[styles.flexOne, styles.backgroundBlack]}>
+            <View style={[styles.container, styles.containerCenter, styles.marginTopThirty]}>
+      <View style={styles.flexDirectionRow}>
         <Text
-          style={styles.text}>
-          {userTiedot.name},
-          {userTiedot.age} 
-    
+          style={styles.editProfileText}>
+          {userTiedot.name}, {userTiedot.age} 
         </Text>
       </View>
           <Icon reverse name='image' />
-          <Text style={{color: 'orange', fontWeight: 'bold'}}>Lisää kuva</Text>
+          <Text style={styles.textOrangeBold}>Lisää kuva</Text>
       </View>
-      <View style={{flex: 1, paddingTop: 50,}}>
-        <Text style={{justifyContent: 'center', alignItems: 'center', color: 'orange', fontWeight: 'bold', fontSize: 20}} >Bio:</Text>
-        <View style={{ height: 90, width: 500, backgroundColor: 'white', color: 'black' }}>
-          <TextInput value={userTiedot.bio} style={styles.textArea} multiline={true} 
+      <View style={styles.flexOne, styles.paddingTopFifty}>
+        <Text style={[styles.containerCenter, styles.textOrangeBold, styles.fontSizeTwenty]}>Bio:</Text>
+        <View style={styles.editProfileTextAreaContainer}>
+          <TextInput value={userTiedot.bio} style={styles.editProfileTextArea} multiline={true} 
             numberOfLines={3} maxLength={500}  onChangeText={text => setUserTiedot({...userTiedot,bio: text})}/>
         </View>
       </View>
       {/* meillä ei oo asuinpaikkaa nyt */}
       {/* <Text style={styles.text}>Asuinpaikka: </Text>
       <View style={styles.textAreaContainer}> 
-        <TextInput style={styles.textArea} placeholder='Asuinpaikka' />
+        <TextInput {styles.editProfileTextArea} placeholder='Asuinpaikka' />
       </View> */}
       <View style={styles.omatContainerit}>
-        <View style={{flex: 1, marginTop: 50, marginLeft: 20 }}>
+        <View style={[styles.flexOne, styles.marginTopFifty, styles.marginLeftTwenty]}>
           <View>
-          <Text style={{fontWeight: 'bold', color: 'orange'}}>Lisää tägi</Text>
+          <Text style={styles.textOrangeBold}>Lisää tägi</Text>
           <TextInput onChangeText={tag => setTag(tag)} value={tag} onEndEditing={addTag} 
-                style={{ height: 40, width: 200, backgroundColor: 'white', color: 'black' }}>
+                style={styles.tagTextInput} >
           </TextInput>
         </View>
         <View>
-          <Text style={{fontWeight: 'bold', color: 'orange'}}>Your tags:</Text>
-          <FlatList contentContainerStyle={styles.content}
+          <Text style={styles.textOrangeBold}>Your tags:</Text>
+          <FlatList contentContainerStyle={styles.paddingTopTen}
             horizontal={false}
             numColumns={3}
             data={tagList}
             keyExtractor={((item, index) => index.toString())}
-            renderItem={({ item }) =>
-              <Text onPress={() => deleteItemById(item.id)} style={styles.tag}>{item}</Text>}
+            renderItem={({ item, index }) =>
+              <Text onPress={() => deleteItemById(index)} style={styles.tagBox}>{item}</Text>}
           />
         </View>
       </View>
       </View>
-      <View style={{flex: 1, marginBottom: 10, marginLeft: 80, marginRight: 80}}>
+      <View style={styles.saveButton}>
         <Button
           onPress={TallennaData}
           title="Tallenna tiedot"
@@ -145,63 +155,3 @@ export default function EditProfile() {
 
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#eaeaea',
-    backgroundColor: 'black'
-  },
-
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-  },
-  textAreaContainer: {
-    backgroundColor: 'black',
-    padding: 5,
-    alignSelf: 'stretch'
-  },
-  textArea: {
-    textAlignVertical: "top",
-    alignSelf: 'stretch',
-    fontSize: 15,
-    backgroundColor: 'white',
-    color: 'black'
-    
-  },
-  text: {
-    fontSize: 20,
-    paddingTop: 2,
-    paddingBottom: 1,
-    fontWeight: 'bold',
-    color: 'orange'
-  },
-  button: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    width: 200,
-    justifyContent: 'flex-start',
-  },
-  tag: {
-    padding: 6,
-    fontSize: 20,
-    color: 'orange',
-    marginVertical: 7,
-    marginHorizontal: 10,
-    backgroundColor: 'black',
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: 'orange',
-  },
-  omatContainerit: {
-    flex: 4,
-    paddingTop: 20,
-    alignItems: 'flex-start',
-    paddingLeft: 80
-  },
-  content: {
-    paddingTop: 10,
-  },
-});
