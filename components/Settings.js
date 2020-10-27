@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { ScrollView, SafeAreaView, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from 'react-native';
-import { Input, Slider } from 'react-native-elements';
-import RangeSlider from 'rn-range-slider';
-import CheckBox from '@react-native-community/checkbox';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import styles from '../styles';
+import React, { useState } from "react";
+import { ScrollView, SafeAreaView, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from "react-native";
+import { Input, Slider } from "react-native-elements";
+import RangeSlider from "rn-range-slider";
+import CheckBox from "@react-native-community/checkbox";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+import styles from "../styles";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Settings() {
   //tagit
-  const [tag, setTag] = useState('');
+  const [tag, setTag] = useState("");
   const [tagList, setTagList] = useState([]);
 
   const addTag = () => {
     setTagList([...tagList, tag]);
-    setTag('');
+    setTag("");
   };
 
   //sliderit
@@ -32,12 +32,12 @@ export default function Settings() {
 
   //datetimepicker
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
+  const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
+    setShow(Platform.OS === "ios");
     setDate(currentDate);
   };
 
@@ -47,7 +47,7 @@ export default function Settings() {
   };
 
   const showDatepicker = () => {
-    showMode('date');
+    showMode("date");
   };
 
   const formatDate = (date) => {
@@ -58,20 +58,20 @@ export default function Settings() {
   }, []);
 
   const HaeTiedot = async () => {
-    let ref = firestore().collection('users').doc(auth().currentUser.uid).collection('filters').doc('myFilters');
+    let ref = firestore().collection("users").doc(auth().currentUser.uid).collection("filters").doc("myFilters");
     const doc = await ref.get();
     if (!doc.exists) {
-      console.log('document not found');
+      console.log("document not found");
     } else {
-      console.log('success HERE HERE ::::', doc.data());
+      console.log("success HERE HERE ::::", doc.data());
 
       setTagList(doc.data().tags);
       setDistance(doc.data().distance);
       setLowAge(doc.data().minAge);
       setHighAge(doc.data().maxAge);
       let looking = doc.data().lookingFor;
-      let events = looking.indexOf('events') > -1;
-      let people = looking.indexOf('users') > -1;
+      let events = looking.indexOf("events") > -1;
+      let people = looking.indexOf("users") > -1;
       if (events == true) {
         setEvents(true);
       }
@@ -79,9 +79,9 @@ export default function Settings() {
         setPeople(true);
       }
       let genders = doc.data().genders;
-      let male = genders.indexOf('male') > -1;
-      let female = genders.indexOf('female') > -1;
-      let other = genders.indexOf('other') > -1;
+      let male = genders.indexOf("male") > -1;
+      let female = genders.indexOf("female") > -1;
+      let other = genders.indexOf("other") > -1;
       if (male == true) {
         setMale(true);
       }
@@ -101,22 +101,22 @@ export default function Settings() {
       data: {
         minAge: minAge,
         maxAge: maxAge,
-        lookingFOr: ['FIXME'],
+        lookingFOr: ["FIXME"],
         displayName: event_s,
-        genders: ['FIXME'],
+        genders: ["FIXME"],
         distance: distance,
         eventsInXHours: 1,
-        tags: []
-      }
+        tags: [],
+      },
     };
 
     console.log(body);
-    fetch(global.url + 'filtersUpdate', {
-      method: 'POST',
+    fetch(global.url + "filtersUpdate", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -125,7 +125,7 @@ export default function Settings() {
       .catch((err) => console.error(err));
   }
   function HaeSettingsValues() {
-    let ref = firestore().collection('users').doc(auth().currentUser.uid);
+    let ref = firestore().collection("users").doc(auth().currentUser.uid);
     ref.onSnapshot((querySnapshot) => {
       let sukupuutto = querySnapshot.data().gender;
       console.log(sukupuutto);
@@ -139,24 +139,24 @@ export default function Settings() {
         data: {
           minAge: lowAge,
           maxAge: highAge,
-          lookingFor: ['events', 'users'],
-          genders: ['rakkautta', 'rauhaa'],
+          lookingFor: ["events", "users"],
+          genders: ["rakkautta", "rauhaa"],
           distance: distance,
           eventsInXHours: 7,
-          tags: tagList
-        }
+          tags: tagList,
+        },
       },
       uid: global.myUserData.uid,
-      idToken: global.myUserData.idToken
+      idToken: global.myUserData.idToken,
     };
     console.log(JSON.stringify(body));
     return;
-    fetch(global.url + 'profileUpdate', {
-      method: 'POST',
+    fetch(global.url + "profileUpdate", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -165,23 +165,18 @@ export default function Settings() {
       .catch((err) => console.error(err));
   }
 
-  const checkBoxColor = () => ({ true: '#000' });
+  const checkBoxColor = () => ({ true: "#000" });
 
   return (
-    <SafeAreaView style={[styles.flexOne, styles.backgroundBlack]}>
+    <SafeAreaView style={[styles.flexOne, styles.background]}>
       <ScrollView>
         <View style={styles.omatContainerit}>
-          <View style={styles.backgroundBlack}>
-            <Text style={styles.textOrangeBold}>Lisää tägi</Text>
-            <TextInput
-              onChangeText={(tag) => setTag(tag)}
-              value={tag}
-              onEndEditing={addTag}
-              style={styles.addTagInputBox}
-            ></TextInput>
+          <View style={styles.background}>
+            <Text style={styles.title}>Add a tag:</Text>
+            <TextInput onChangeText={(tag) => setTag(tag)} value={tag} onEndEditing={addTag} style={styles.addTagInputBox}></TextInput>
           </View>
           <View>
-            <Text style={styles.textOrangeBold}>Tags:</Text>
+            <Text style={styles.title}>Tags:</Text>
             <FlatList
               contentContainerStyle={styles.paddingTopTen}
               horizontal={false}
@@ -194,10 +189,10 @@ export default function Settings() {
         </View>
         <View style={styles.omatContainerit}>
           <View>
-            <Text style={styles.textOrangeBold}>Etäisyys:</Text>
+            <Text style={styles.title}>Distance:</Text>
             <RangeSlider
               style={styles.settingsRangerSlider}
-              gravity={'center'}
+              gravity={"center"}
               rangeEnabled={false}
               min={1}
               max={100}
@@ -209,12 +204,12 @@ export default function Settings() {
               }}
             />
           </View>
-          <Text style={styles.textOrangeBold}> {distance} km</Text>
+          <Text style={styles.title}> {distance} km</Text>
           <View style={styles.paddingTopFifty}>
-            <Text style={styles.textOrangeBold}> Iät</Text>
+            <Text style={styles.title}> Ages:</Text>
             <RangeSlider
               style={styles.settingsRangerSlider}
-              gravity={'center'}
+              gravity={"center"}
               min={14}
               max={100}
               step={1}
@@ -228,62 +223,37 @@ export default function Settings() {
                 setLowAge(lowAge), setHighAge(highAge);
               }}
             />
-            <Text style={styles.textOrangeBold}>
-              {' '}
-              {lowAge} - {highAge} vuotiaat
+            <Text style={styles.title}>
+              {" "}
+              {lowAge} - {highAge} ages
             </Text>
           </View>
         </View>
 
         <View style={styles.omatContainerit}>
-          <Text style={styles.textOrangeBold}>Sukupuoli</Text>
-          <View style={styles.checkbox}>
-            <CheckBox
-              tintColors={checkBoxColor()}
-              disabled={false}
-              value={female}
-              onValueChange={(newValue) => setFemale(newValue)}
-            />
-            <Text style={styles.orangeMarginTopFive}>Naiset</Text>
+          <Text style={styles.title}>Gender:</Text>
+          <View>
+            <Text style={styles.checkboxText}>Men</Text>
+            <CheckBox tintColors={checkBoxColor()} disabled={false} value={male} onValueChange={(newValue) => setMale(newValue)} />
           </View>
-          <View style={styles.checkbox}>
-            <CheckBox
-              tintColors={checkBoxColor()}
-              disabled={false}
-              value={male}
-              onValueChange={(newValue) => setMale(newValue)}
-            />
-            <Text style={styles.orangeMarginTopFive}>Miehet</Text>
+          <View>
+            <Text style={styles.checkboxText}>Women</Text>
+            <CheckBox tintColors={checkBoxColor()} disabled={false} value={female} onValueChange={(newValue) => setFemale(newValue)} />
           </View>
-          <View style={styles.checkbox}>
-            <CheckBox
-              tintColors={checkBoxColor()}
-              disabled={false}
-              value={other}
-              onValueChange={(newValue) => setOther(newValue)}
-            />
-            <Text style={styles.orangeMarginTopFive}>Muut</Text>
+          <View>
+            <Text style={styles.checkboxText}>Other</Text>
+            <CheckBox tintColors={checkBoxColor()} disabled={false} value={other} onValueChange={(newValue) => setOther(newValue)} />
           </View>
         </View>
         <View style={styles.omatContainerit}>
-          <Text style={styles.textOrangeBold}>Hakukohteena </Text>
-          <View style={styles.checkbox}>
-            <CheckBox
-              tintColors={checkBoxColor()}
-              disabled={false}
-              value={events}
-              onValueChange={(newValue) => setEvents(newValue)}
-            />
-            <Text style={styles.orangeMarginTopFive}>Tapahtumat</Text>
+          <Text style={styles.title}>Searching for: </Text>
+          <View>
+            <Text style={styles.checkboxText}>Events</Text>
+            <CheckBox tintColors={checkBoxColor()} disabled={false} value={events} onValueChange={(newValue) => setEvents(newValue)} />
           </View>
-          <View style={styles.checkbox}>
-            <CheckBox
-              tintColors={checkBoxColor()}
-              disabled={false}
-              value={people}
-              onValueChange={(newValue) => setPeople(newValue)}
-            />
-            <Text style={styles.orangeMarginTopFive}>Ihmiset</Text>
+          <View>
+            <Text style={styles.checkboxText}>People</Text>
+            <CheckBox tintColors={checkBoxColor()} disabled={false} value={people} onValueChange={(newValue) => setPeople(newValue)} />
           </View>
         </View>
 
@@ -305,7 +275,7 @@ export default function Settings() {
           )} */}
         </View>
         <View style={styles.saveButton}>
-          <Button color="black" onPress={TallennaData} title="Tallenna tiedot" />
+          <Button color="black" onPress={TallennaData} title="Save" />
         </View>
       </ScrollView>
     </SafeAreaView>

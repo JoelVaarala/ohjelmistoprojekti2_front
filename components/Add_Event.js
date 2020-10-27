@@ -87,34 +87,36 @@ function Add_Eventti(props) {
   };
 
   return (
-    <ScrollView style={[styles.addEventScrollView, styles.backgroundBlack]}>
+    <ScrollView style={[styles.flexOne, styles.background]}>
       {view ? (
-        <View style={[styles.eventAddMargin, styles.backgroundBlack]}>
+        <View style={[styles.marginLeftRightTen, styles.background]}>
           <View>
-            <Text style={[styles.textOrangeBold, styles.marginTopTen]}>Anna tapahtumalle nimi : </Text>
+            <Text style={[styles.title, styles.MarginTopTwenty]}>Event name : </Text>
             <TextInput
-              style={styles.eventTextbox}
+              style={styles.addEventTextbox}
               onChangeText={(text) => setEventName(text)}
               value={eventName}
               //onEndEditing={() => store.dispatch(addName(eventName))}
               //_tällä lähetteisi eventName kun näppäimistö suljetaan
             />
 
-            <Text style={[styles.textOrangeBold, styles.marginTopTen]}>Anna tapahtuman kuvaus : </Text>
-            <TextInput style={styles.eventTextbox} onChangeText={(text) => setDescription(text)} value={description} />
+            <Text style={[styles.title, styles.marginTopTen]}>Event description : </Text>
+            <TextInput style={styles.addEventTextbox} onChangeText={(text) => setDescription(text)} value={description} />
           </View>
 
           <View>
-            <Text style={[styles.textOrangeBold, styles.marginTopTen]}>Valitse alkamis aika : </Text>
+            <Text style={[styles.title, styles.marginTopTen]}>Starting time : </Text>
             <DatePicker style={styles.alignSelfCenter} date={date} onDateChange={(value) => setDate(value)} mode="datetime" locale="fi" />
           </View>
 
-          <View style={[styles.container, styles.marginLeftTwenty]}>
-            <Text style={[styles.textOrangeBold, styles.marginTopTen]}>Anna tapahtumalle tägejä : </Text>
-            <TextInput style={styles.eventTextbox} onChangeText={(text) => setTag(text)} value={tag} onEndEditing={addTag} />
+          <View style={[styles.container]}>
+            <Text style={[styles.title, styles.marginTopTen]}>Event tags : </Text>
+            <TextInput style={styles.addEventTextbox} onChangeText={(text) => setTag(text)} value={tag} onEndEditing={addTag} />
             <View style={[styles.container, styles.marginLeftTwenty]}>
-              <Text style={[styles.textOrangeBold, styles.marginTopTen]}>Tag List</Text>
+              <Text style={[styles.title, styles.marginTopTen]}>Tag List</Text>
               <FlatList
+                horizontal={false}
+                numColumns={4}
                 keyExtractor={(item, index) => index.toString()}
                 data={tags}
                 renderItem={({ item }) => <Text style={styles.tagBox}>{item}</Text>}
@@ -122,24 +124,31 @@ function Add_Eventti(props) {
             </View>
           </View>
 
-          <View style={styles.previewButtonStyle}>
-            <Button color="black" onPress={goToPreview} title="preview" />
+          <View style={[styles.saveButton, styles.marginTopTen]}>
+            <Button color="black" onPress={goToPreview} title="Preview" />
           </View>
         </View>
       ) : (
-        <View>
-          <Text style={[styles.textOrangeBold, styles.marginTopTen]}>Preview!!</Text>
-          <Text style={[styles.textOrangeBold, styles.marginTopTen]}>Luomasi tapahtuma </Text>
-          <Text>Nimi : {store.getState().EventReducer[0].eventName}</Text>
-          <Text>Kuvaus : {store.getState().EventReducer[0].description}</Text>
-          <Text>Ajankohta : {store.getState().EventReducer[0].date.toString()}</Text>
-          <Text>Tagit : </Text>
-          <View>
-            {store.getState().EventReducer[0].tags.map((item) => {
-              return <Text key={item.toString()}>{item}</Text>;
-            })}
+        <View style={styles.marginLeftTen}>
+          <Text style={[styles.title, styles.marginTopTen]}>Your event review :</Text>
+          <View style={styles.marginTopTen}>
+            <Text style={[styles.title, styles.marginTopTen]}>Name : {store.getState().EventReducer[0].eventName}</Text>
+            <Text style={[styles.title, styles.marginTopTen]}>Description : {store.getState().EventReducer[0].description}</Text>
+            <Text style={[styles.title, styles.marginTopTen]}>Starting date : {store.getState().EventReducer[0].date.toString()}</Text>
+            <Text style={[styles.title, styles.marginTopTen]}>Tags : </Text>
+            <View>
+              {store.getState().EventReducer[0].tags.map((item) => {
+                return (
+                  <Text style={styles.addEventPreviewText} key={item.toString()}>
+                    {item}
+                  </Text>
+                );
+              })}
+            </View>
           </View>
-          <Button onPress={sendEvent} title="Confirm event" />
+          <View style={[styles.saveButton, styles.marginTopTen]}>
+            <Button color="black" onPress={sendEvent} title="Confirm event" />
+          </View>
         </View>
       )}
     </ScrollView>
