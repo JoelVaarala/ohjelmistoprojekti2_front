@@ -58,8 +58,12 @@ export default function SwipingPage({ navigation, route }) {
         //console.log(data)
         console.log(data.result)
         setSwipettavat(data.result)
-        let id = data.result[0].uid
-        setNykyinenSwipettava(id)
+        {data.result[0] && data.result[0].uid ? 
+          setNykyinenSwipettava(data.result[0].uid)
+          : 
+          setNykyinenSwipettava('')
+        }
+      
       })
       .catch(err => console.error(err))
     //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
@@ -121,7 +125,13 @@ export default function SwipingPage({ navigation, route }) {
         </View>
         <View style={styles.iconsPadding}>
            {/* ONGELMA: näyttää edellisen swipettävän profiilin jos sivu ei ole ehtinyt päivittyä, ensin kokeiltu {match : swipettavat[0].uid} */}
-          <Icon size={27} reverse name="info" onPress={() => navigation.navigate('Matchprofile', {match : nykyinenSwipettava})} />
+       
+           { nykyinenSwipettava != '' ? 
+        <Icon size={27} reverse name="info" onPress={() => navigation.navigate('Matchprofile', {match : nykyinenSwipettava})} /> 
+        :
+        <Icon size={27} reverse name="info" /> 
+      }
+      
         </View>
         <View style={styles.iconsPadding}>
           <Icon size={27} reverse name="favorite" />
