@@ -1,22 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import styles from '../styles';
 
 //Tässä käyttäjä rekisteröityy jos ei ole valideja tunnuksia tallessa, muutoin tämä ruutu skipataan kun validointi tehty
 export default function StartingScreen() {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, styles.containerCenter]}>
       <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

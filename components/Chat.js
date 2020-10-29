@@ -1,30 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState, useCallback, useEffect } from 'react'
-import { Button, StyleSheet, Text, View } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
-import Startup from './Startup';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
+import { StatusBar } from "expo-status-bar";
+import React, { useState, useCallback, useEffect } from "react";
+import { Button, Text, View } from "react-native";
+import { GiftedChat } from "react-native-gifted-chat";
+import Startup from "./Startup";
+import firestore from "@react-native-firebase/firestore";
+import auth from "@react-native-firebase/auth";
 import { Icon, Avatar } from "react-native-elements";
+import styles from "../styles";
 
 // import firebase from 'react-native-firebase';
 
-
-
-
 //Tämä on chatti mätsin kanssa
 export default function Chat(props) {
-
   // States
   const [messages, setMessages] = useState([]);
-  const avatar_url = 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg'
-  const [matchinUID, setMatchinUID] = useState('');
+  const avatar_url = "https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg";
+  const [matchinUID, setMatchinUID] = useState("");
 
-  
   // React.useEffect(() => {
   //   getMatchID()
   // }, [])
-  
+
   // // hae matchin id
   // const refff = firestore().collection('matches').doc(props.route.params.chatti)
   // function getMatchID() {
@@ -40,17 +36,9 @@ export default function Chat(props) {
   //   })
   // }
 
-
   //tää täytyy fixaaa EI TOIMI
   function GoToAvatar({ navigation }) {
-    return (
-      <Avatar
-        onPress={() => navigation.navigate('MatchProfile', { match: matchinUID })}
-        size="large" rounded
-        source={{ uri: avatar_url }}
-        
-      />
-    );
+    return <Avatar onPress={() => navigation.navigate("MatchProfile", { match: matchinUID })} size="large" rounded source={{ uri: avatar_url }} />;
   }
 
   //Tällä pystyy lähettää viestinm parametrinä tulee viestin teksti.
@@ -66,48 +54,40 @@ export default function Chat(props) {
       },
       uid: global.myUserData.uid,
       idToken: global.myUserData.idToken,
-    }
+    };
     //console.log(body)
-    fetch(global.url + "message",
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body)
-      }
-    )
-      .then(response => response.json())
-      .then(data => {
+    fetch(global.url + "message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((data) => {
         // console.log(data)
       })
-      .catch(err => console.error(err))
+      .catch((err) => console.error(err));
   }
-
-
-
 
   // --UPDATED METHOD TO GET MESSAGES REALTIME
   // ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
-  const ref = firestore().collection('matches').doc(props.route.params.chatti).collection('messages').orderBy('timestamp', 'desc');
-  
-  function getConversationsRT() {
+  const ref = firestore().collection("matches").doc(props.route.params.chatti).collection("messages").orderBy("timestamp", "desc");
 
+  function getConversationsRT() {
     // luodaan snapshot joka, "hakee" firestoren sisällön
     ref.onSnapshot((querySnapshot) => {
       // array johon laitetaan firestoren viestit
       const keskustelunViestit = [];
       // tulostaa kuinka monta viestiä collection sisältää
-      console.log('Total messages: ', querySnapshot.size);
+      console.log("Total messages: ", querySnapshot.size);
       // looppi jossa muodostetaan viestit jokaisesta tietueesta
       querySnapshot.forEach((doc) => {
-
-        console.log('Viestin sisältö : ', doc.data().message);
+        console.log("Viestin sisältö : ", doc.data().message);
         // Alla selvitetään onko henkilö lähettäjä/vastaanottaja, jotta tiedetään kummalle puolelle näyttöä viestit renderöidään
         let sender = doc.data().sender;
         if (doc.data().sender == auth().currentUser.uid) {
-          sender = 'asd';
-          
+          sender = "asd";
         }
 
         // lisätään arrayhin halutut viesti datat
@@ -117,106 +97,91 @@ export default function Chat(props) {
           createdAt: new Date(doc.data().timestamp._seconds * 1000),
           user: {
             _id: sender,
-            name: 'joku',
-            avatar: 'https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg' 
-          }
+            name: "joku",
+            avatar: "https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg",
+          },
         });
         // asettaan taulun stateen jota Giftedchat käyttää datana
         setMessages(keskustelunViestit);
-
-      })
-    })
+      });
+    });
   }
-
 
   useEffect(() => {
     //console.log("Chatin useEffect")
     getConversationsRT();
   }, []);
 
-
   // invert shit chatin kääntelyyn mahd.
   const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+    setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
     //console.log(messages[0].text)
     LahetaViestiFirebaseen(messages[0].text);
-  }, [])
+  }, []);
 
   // Matchin poisto funkari
   const removeMatch = () => {
-    console.log('matchin poisto', props.route.params.chatti)
+    console.log("matchin poisto", props.route.params.chatti);
 
-    let url = global.url + 'removeMatch';
+    let url = global.url + "removeMatch";
     let bodi = {
       idToken: "Dummyyy", // FIX ME
       uid: global.myUserData.uid,
       data: {
         match: props.route.params.chatti,
-      }
-    }
+      },
+    };
 
     console.log(bodi);
-    console.log(JSON.stringify(bodi))
+    console.log(JSON.stringify(bodi));
 
-    fetch(url,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bodi),
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bodi),
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(".then res ->", res);
       })
-      .then(response => response.json())
-      .then(res => {
-        console.log('.then res ->', res);
-      })
-      .catch(err => console.error(err))
-  }
+      .catch((err) => console.error(err));
+  };
 
   // avatar kuvaa painamalla pääsee katsomaan henkilön profiilia
-  function avatarOpensProfile(props2){
-      // console.log('props2 : ',props2)
-      // console.log('props : ',props)
-      console.log(props2)
-      props.navigation.navigate('MatchProfile', { match: props2._id })
+  function avatarOpensProfile(props2) {
+    // console.log('props2 : ',props2)
+    // console.log('props : ',props)
+    console.log(props2);
+    props.navigation.navigate("MatchProfile", { match: props2._id });
   }
 
-
-
   return (
-    <View style={styles.container}>
-
-      <View style={{ justifyContent: 'space-around', flexDirection: 'row', padding: 5, backgroundColor: 'black' }}>
-        <Icon size={20} reverse name="info" onPress={() => removeMatch()}/*tällä napilla voidaan myöhemmin poistaa match*/ />
+    <View style={[styles.flexOne, styles.background]}>
+      <View style={styles.chatStyle}>
+        <Icon size={20} reverse name="info" onPress={() => removeMatch()} /*tällä napilla voidaan myöhemmin poistaa match*/ />
         <GoToAvatar navigation={props.navigation} />
       </View>
 
       <GiftedChat
         // optionTintColor  = {'red'}
         messages={messages}
-        onSend={messages => onSend(messages)}
+        onSend={(messages) => onSend(messages)}
         //onSend={handleSend}
         user={{
-          _id: 'asd',
+          _id: "asd",
         }}
         onPressAvatar={avatarOpensProfile}
       />
       {/* <Button
         onPress={getConversationsRT}
         title="debug log"
-        containerStyle={{ paddingHorizontal: 10 }}
+        containerStyle={styles.chatButton}
       /> */}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor : 'black'
-  },
-});
-
 
 // ____________________ Vanhaa koodia ____________________________
 
@@ -233,7 +198,6 @@ const styles = StyleSheet.create({
         console.log('message send!');
       });
     } */
-
 
 /* chat user id's of specific doc
 const getChatterUID = async () => {

@@ -1,516 +1,314 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
+const backgroundTheme = "white";
+const textColor = "#2A98FF";
 
 export default StyleSheet.create({
-
-      container: {
-        flex: 1,
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-      },
-
-      containerMarginLeft: {
-        marginLeft: 20,
-      },
-
-      containerCenter: {
-        alignItems: "center",
-        justifyContent: "center",
-      },
-
-      containerBackground: {
-        backgroundColor: '#fff'
-      },
-
-      containerPaddingTop: {
-        paddingTop: 50,
-      },
-
-      paddingBottomFifty: {
-        paddingBottom: 50
-      },
-      //SwipingPage
-
-      tagListContainer: {
-        flex: 1,
-        //backgroundColor: '#eaeaea',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-        marginLeft: 20
-      },
-
-      chatContainer: {
-        flex: 1,
-        backgroundColor : 'black'
-    },
-
-    editProfileContainer: {
-      flex: 1,
-      backgroundColor: '#eaeaea',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-    },
-
-    matchesContainer: {
-      //paddingTop: 50,
-      flex: 1,
-      backgroundColor: 'black',
+  //backgrounds
+  background: {
+    backgroundColor: backgroundTheme,
   },
-
-  viewLikersContainer: {
-    paddingTop: 50,
+  carouselBackground: {
+    backgroundColor: "floralwhite",
     flex: 1,
-    backgroundColor: '#fff',
-},
-
-startingscreenContainer: {
-  flex: 1,
-  backgroundColor: '#fff',
-  alignItems: 'center',
-  justifyContent: 'center',
-},
-
-editProfileTextAreaContainer: {
-  backgroundColor: 'white',
-  padding: 5,
-  alignSelf: 'stretch'
-},
-
-myProfileContainer: {
-  flex: 1,
-  backgroundColor: '#fff'
-},
-
-profileContainer: {
-  alignItems: 'center',
-  flex: 6,
-},
-
-settingsContainer: {
-  flex: 1,
-  backgroundColor: '#fff',
-},
-
-      button: {
-        alignItems: "center",
-        backgroundColor: "#DDDDDD",
-        padding: 10
-      },
-      headers: {
-        fontWeight: 'bold',
-        marginTop: 10
-      },
-      textbox: {
-        height: 40,
-        width: 200,
-        borderBottomColor: 'gray',
-        borderBottomWidth: 1,
-      },
-      card: {
-        justifyContent: "center",
-        alignItems: "center",
-        width: 350,
-        height: 445,
-        resizeMode: "cover",
-        borderWidth: 2,
-        borderColor: "black",
-        borderRadius: 5,
-        bottom: 20,
-      },
-
-      flexOne: {
-          flex: 1,
-      },
-//___________________________________________________________________________________________________
-      //SwipeCard-components
-      noMoreCardsText: {
-        fontSize: 22,
-      },
-
-      //No more cards content at center of screen
-      noMoreCardsContent: {
-        flex: 1,
-        justifyContent: 'center'
-      },
-
-      //Card bottom shadow thingy
-      imageShadow: {
-        height: 400, 
-        width: 350, 
-        right: 15, 
-        top: 25, 
-        opacity: 0.9, 
-        borderRadius: 5
-      },
-      
-      //Card size
-      cardContainer: { position: "absolute", 
-      top: 0, 
-      left: 15, 
-      right: 150, 
-      justifyContent: "flex-end", 
-      alignItems: "flex-start" 
-    },
-
-    //Event info at bottom side of card
-    eventInfoMargin: {
-        bottom: 50
-    },
-
-    //Event info text style
-    eventInfo: { 
-        fontSize: 18, 
-        color: "white", 
-        fontWeight: "bold" 
-    },
-
-    //Event info bio style
-    eventInfoBio: { 
-        fontSize: 12,
-        color: "white" 
-    },
-
-    eventButton: { 
-      flexDirection: 'row', 
-      alignContent: 'center', 
-      alignItems: 'center', 
-      justifyContent: 'space-evenly' 
-    },
-
-//___________________________________________________________________________________________________
-//SwipingPage
-  
-  //Icons location at bottom of the screen
-  iconLocation: {
-    flex: 1, 
-    justifyContent: "flex-start"
   },
-
-  //Space between icons
-  iconSpacebetween: {
-    flex: 1, flexDirection: "row", 
-    justifyContent: "space-between", 
-    alignItems: "flex-end"
+  //title and text
+  title: {
+    fontSize: 18,
+    color: textColor,
   },
-
-  //Padding between icons
-  iconPadding: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 20,
+  myProfileUserText: {
+    fontSize: 20,
+    color: "black",
   },
+  checkboxText: {
+    fontSize: 14,
+    color: textColor,
+    marginTop: 5,
+  },
+  addEventPreviewText: {
+    fontSize: 14,
+    color: textColor,
+  },
+  matchesName: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  matchesBackgroundColor: {
+    //Greyish
+    backgroundColor: "#DDDDDD",
+  },
+  //buttons
 
-  //Mikä buttoni tää on?!?
-  button: {
+  previewButtonStyle: {
+    flexDirection: "row",
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  registerUserButton: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 80,
+  },
+  saveButton: {
+    flex: 1,
+    marginLeft: 80,
+    marginRight: 80,
+    marginBottom: 20,
+  },
+  viewLikersbutton: {
     alignItems: "center",
     backgroundColor: "#DDDDDD",
     padding: 10,
   },
-
-//___________________________________________________________________________________________________
-//Add_Event
-
-addEventScrollView: {
-    flex:1,
-    marginTop: 22,
-},
-
-eventAddMargin: {
-    marginLeft: 10,
-    marginRight: 10
-},
-  /*
-  ei käytössä?
-  button: {
+  tagBox: {
+    padding: 6,
+    fontSize: 16,
+    color: textColor,
+    marginVertical: 7,
+    marginHorizontal: 10,
+    backgroundColor: "white",
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "black",
+  },
+  //Containers
+  container: {
+    flex: 1,
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+  },
+  justifyContentFlexStart: {
+    flex: 1,
+    justifyContent: "flex-start",
+  },
+  containerCenter: {
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
+    justifyContent: "center",
   },
-  */
-  eventHeaders: {
-    fontWeight: 'bold',
-    marginTop: 10
+  cardContainer: {
+    position: "absolute",
+    top: -75,
+    left: 15,
+    right: 150,
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
   },
-  eventTextbox: {
+  //fontFamily
+  textGreyRoboto: {
+    color: "grey",
+    fontFamily: "roboto",
+  },
+
+  fontRoboto: {
+    fontFamily: "roboto",
+  },
+
+  //flexDirection
+
+  flexDirectionRow: {
+    flexDirection: "row",
+  },
+  //viewLikersItemContent
+  viewLikersItemContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  //no more cards
+  noMoreCardsContent: {
+    flex: 1,
+    justifyContent: "center",
+  },
+
+  //images
+  //card bottom shadow
+  shadowImage: {
+    height: 400,
+    width: 300,
+    bottom: 0,
+    right: 15,
+    opacity: 0.9,
+    borderRadius: 5,
+  },
+  imageSize: {
+    width: "100%",
+    height: "100%",
+  },
+  //height & width
+  heightForty: {
+    height: 40,
+  },
+  viewLikersPickerSize: {
+    height: 50,
+    width: 150,
+  },
+  //Space between icons
+  iconSpacing: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    top: 20,
+  },
+
+  //alignSelfCenter
+
+  alignSelfCenter: {
+    alignSelf: "center",
+  },
+
+  //justifyContent
+
+  justifyContentSpaceBetween: {
+    justifyContent: "space-between",
+  },
+
+  //fontSize
+  userTextStyle: {
+    fontSize: 40,
+    color: textColor,
+  },
+  noMoreCardsText: {
+    fontSize: 22,
+  },
+  swipesUserInfo: {
+    fontSize: 18,
+    color: "white",
+  },
+  eventInfoBio: {
+    fontSize: 12,
+    color: "white",
+  },
+  //opacity
+  opacityOne: {
+    opacity: 1,
+  },
+
+  //textbox things
+  addEventTextbox: {
     height: 40,
     width: 200,
-    borderBottomColor: 'gray',
+    borderBottomColor: "gray",
     borderBottomWidth: 1,
   },
 
-//___________________________________________________________________________________________________
-//Carousel
+  //textInput
+  addTagInputBox: {
+    height: 40,
+    width: 200,
+    backgroundColor: "white",
+    color: textColor,
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 4,
+  },
+  editProfileBioTextArea: {
+    height: 90,
+    width: 500,
+    backgroundColor: "white",
+    color: textColor,
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 6,
+  },
 
-carouselBackground: {
-    flex: 1,
-    backgroundColor: 'floralwhite'
-},
+  //radioInput
+  /* 
+    registerRadioGroup: {
+        width: 22,
+        height: 22,
+        borderColor: '#000',
+        borderWidth: 0.8,
+        marginRight: 10,
+        fillColor: '#279315'
+    },
+    */
 
-carouselFontSize: {
-    fontSize: 30,
-},
-
-carouselSafeAreaView: {
+  //rangerSlider
+  settingsRangerSlider: {
+    width: 250,
+    height: 60,
+  },
+  //paddingHorizontal
+  paddingHorizontalTen: {
+    paddingHorizontal: 10,
+  },
+  //card things
+  card: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 300,
+    height: 345,
+    resizeMode: "cover",
+    borderWidth: 2,
+    borderColor: "black",
+    borderRadius: 5,
+    bottom: 20,
+  },
+  carouselSafeAreaView: {
     flex: 1,
     paddingTop: 0,
-},
-
-carouselLayout: {
+  },
+  carouselContainer: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-},
-
-//___________________________________________________________________________________________________
-//Chat
-
-
-
-chatStyle: { 
-    justifyContent: 'space-around', 
-    flexDirection: 'row', 
-    padding: 5, 
-    backgroundColor: 'black' 
-},
-
-/*
-chatButton: {
-    paddingHorizontal: 10
-},
-*/
-
-
-//___________________________________________________________________________________________________
-//EditProfile
-
-
-
-  editProfileUser: {
-      flexDirection: 'row'
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  chatStyle: {
+    justifyContent: "space-around",
+    flexDirection: "row",
+    padding: 5,
+    backgroundColor: backgroundTheme,
   },
 
-  editProfilebutton: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-  },
+  //___________________________________________________________________________________________________
+  //EditProfile
 
   editProfileTextArea: {
     textAlignVertical: "top",
-    alignSelf: 'stretch',
-    fontSize: 15
+    alignSelf: "stretch",
+    fontSize: 15,
   },
   editProfileText: {
-    fontSize: 20,
-    paddingTop: 2,
+    fontSize: 23,
+    marginTop: 15,
     paddingBottom: 1,
-  },
-
-  editProfileButton2: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    width: 200,
-    justifyContent: 'flex-start',
-  },
-
-  editProfileTag: {
-    padding: 6,
-    fontSize: 20,
-    color: 'white',
-    marginVertical: 7,
-    marginHorizontal: 10,
-    backgroundColor: 'green',
-    borderRadius: 6,
+    color: textColor,
   },
 
   omatContainerit: {
     flex: 4,
     paddingTop: 20,
-    alignItems: 'flex-start',
-    paddingLeft: 80
+    alignItems: "flex-start",
+    paddingLeft: 80,
   },
 
-  editProfileContent: {
-    paddingTop: 10,
+  tagTextInput: {
+    height: 40,
+    width: 200,
+    backgroundColor: "white",
+    color: textColor,
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 6,
   },
-
-  tagTextInput: { 
-      height: 40, 
-      width: 200, 
-      borderColor: 'gray', 
-      borderWidth: 1, 
-      backgroundColor: 'white' 
-    },
-
-//___________________________________________________________________________________________________
-//Globaalit
-
-
-
-//ei käytössä?
-matchesButton: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-  },
-  matchesImage: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
-  },
-  matchesLogo: {
-    // justifyContent: 'center',
-    // alignContent: 'center',
-    // alignItems: 'center',
-    width: 400,
-    height: 50,
-    padding: '15%'
-  },
-
-  matchMessage: {
-    fontSize: 20, color: 'orange',
-    fontWeight: 'bold',
-    fontFamily: 'roboto'
-  },
-
-  matchContainerBackground: {
-    backgroundColor: 'rgba(255,154,0,0)'
-  },
-  
   opacityOne: {
     opacity: 1,
   },
-
-  listItemTitleStyle: {
-    color: 'white', 
-    fontWeight: 'bold',
-    fontFamily: 'roboto'
-  },
-
-  listItemSubtitleStyle: {
-    color: 'gray',
-    fontFamily: 'roboto'
-  },
-
-  matchesTextStyle: {
-    fontSize: 20, 
-    color: 'orange',
-    fontWeight: 'bold',
-    fontFamily: 'roboto'
-  },
-
-  avatarRoundedBackground: {
-    backgroundColor: 'rgba(255,154,0,0)'
-  },
-
-//___________________________________________________________________________________________________
-//MyProfile
-
-myProfileUser: {
-    fontSize: 20, 
-    top: 5
-},
-
-
-
-//ei käytössä?
-myProfileButton: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10
-  },
-
   myProfileAvatarContainer: {
     marginTop: 15,
-    alignItems: 'center'
+    alignItems: "center",
   },
 
   iconSpacing: {
-    flex: 1, 
-    flexDirection: 'row', 
-    justifyContent: 'space-around', 
-    top: 20
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    top: 20,
   },
 
-//___________________________________________________________________________________________________
-//Profile
-
-
-
-profileAlignItem: {
-    alignItems: 'center', 
-    flex: 6 
-},
-
-profileUserText: {
-    fontSize: 40,
-},
-
-profileUserBio: {
-    fontSize: 20,
-},
-
-profileFlexThree: {
-    flex: 3,
-},
-
-//Ei vielä käytössä?
-profileButton: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-},
-
-//___________________________________________________________________________________________________
-//Register
-
-registerScrollView: {
-    flex: 1,
-    paddingTop: 20,
-},
-
-registerText: {
-    alignSelf: 'center'
-},
-
-registerBirthdayMarginLeft: {
-    marginLeft: '10'
-},
-
-registerBirthdayText: {
-    color: 'grey',
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginBottom: 10
-},
-
-registerDatePicker: {
-    alignSelf: 'center',
-},
-
-registerGenderStyle: {
-    marginLeft: 10,
-    paddingTop: 10,
-},
-
-registerGenderText: {
-    color: 'grey', 
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginBottom: 10,
-},
-
-registerUserButton: {
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 80,
-},
-
-heightForty: {
-  height: 40
-},
-
-/* 
+  /* 
 registerRadioGroup: {
       width: 22,
       height: 22,
@@ -521,118 +319,130 @@ registerRadioGroup: {
 },
 */
 
-//___________________________________________________________________________________________________
-//Settings
-
-
-
-  settingsScrollView: {
-
+  viewLikersItemContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  settingsButton: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    width: 200,
-    justifyContent: 'flex-start',
+
+  //alignItem
+
+  alignItemsCenter: {
+    flex: 1,
+    alignItems: "center",
   },
-  settingsTag: {
-    padding: 6,
-    fontSize: 16,
-    color: 'white',
-    marginVertical: 7,
-    marginHorizontal: 10,
-    backgroundColor: 'green',
-    borderRadius: 6,
+  alignItemsFlexEnd: {
+    alignItems: "flex-end",
   },
-  settingsOmatContainerit: {
-    flex: 4,
-    paddingTop: 20,
-    alignItems: 'flex-start',
-    paddingLeft: 80
+
+  //flex
+
+  flexOne: {
+    flex: 1,
   },
-  settingsContent: {
+  flexThree: {
+    flex: 3,
+  },
+
+  //margin
+  marginLeftTen: {
+    marginLeft: 10,
+  },
+  marginLeftTwenty: {
+    marginLeft: 20,
+  },
+  marginTopTen: {
+    marginTop: 10,
+  },
+  MarginTopTwenty: {
+    marginTop: 20,
+  },
+  marginTopThirty: {
+    marginTop: 30,
+  },
+  marginTopFifty: {
+    marginTop: 50,
+  },
+  marginBottomForty: {
+    marginBottom: 40,
+  },
+  marginLeftRightTen: {
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  swipesUserInfosContainer: {
+    marginTop: -65,
+  },
+  //padding
+  paddingTopTen: {
     paddingTop: 10,
   },
-  settingsCheckbox: {
-    flexDirection: 'row'
+  paddingTopFifty: {
+    paddingTop: 50,
   },
-
-  optionMarginTopFive: {
-    marginTop: 5,
-  },
-
-  saveDataButton: {
-      paddingHorizontal: 10,
-      alignItems: 'stretch',
-  },
-
-  settingsRangerSlider: {
-      width: 250,
-      height: 60,
-  },
-
-  settingsAgePaddingTop: {
-      paddingTop: 50,
-  },
-
-  settingsAddTag: { 
-      height: 40, 
-      width: 200, 
-      borderColor: 'gray', 
-      borderWidth: 1, 
-      backgroundColor: 'white' 
-    },
-
-textInputBackground: {
-    backgroundColor: 'white',
-},
-
-//___________________________________________________________________________________________________
-//Startingscreen
-
-
-
-//___________________________________________________________________________________________________
-//Startup
-
-StartupUsername: {
+  paddingTopHundred: {
     paddingTop: 100,
-},
-
-startupButtons: {
-    paddingHorizontal: 10,
-},
-
-//___________________________________________________________________________________________________
-//Startup
-
-
-viewLikersbutton: {
+  },
+  paddingBottomFifty: {
+    paddingBottom: 50,
+  },
+  iconsPadding: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+  },
+  // Event modal
+  mapView: {
+    position: 'absolute', 
+    borderRadius: 20,
+    borderWidth: 2,
+    margin: 20,
+    top: 0, 
+    left: 8, 
+    right: 0, 
+    bottom: 0, 
+    width: '110%', 
+    height: '80%' 
+  },
+  viewFirst: {flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
-},
-viewLikersPicker: {
-    //flex: 1,
-    // paddingTop: 0,
-    alignItems: "center"
-},
-
-viewLikersPickerSize: {
-    height: 50,
-    width: 150,
-},
-
-viewLikersSwipedFontSize: {
-    fontSize: 20,
-},
-
-viewLikersItemContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-},
-
+    marginTop: 22
+  },
+  viewSecond: {
+     flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+  },
+  viewThird: {
+     margin: 20,
+      backgroundColor: "black",
+      borderRadius: 20,
+      paddingLeft: '10%',
+      paddingRight: '10%',
+      width: '80%',
+      height: '75%',
+      alignItems: "center",
+      shadowColor: "#000",
+      borderWidth: 2,
+      borderColor: 'orange',
+      overflow: 'hidden'
+       
+  },
+  touchableHigh: { 
+    backgroundColor: "orange", 
+    borderWidth: 2, 
+    borderColor: 'yellow', 
+    alignSelf: 'center', 
+    padding: 6, 
+    margin: 6, 
+    borderRadius: 20,
+    paddingLeft: 9,
+    paddingRight: 9
+  },
+  modalTextinput: {
+    borderWidth: 2, 
+    borderColor: 'yellow', 
+    backgroundColor: 'orange'
+  }
 });
-
-
-
