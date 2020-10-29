@@ -298,6 +298,7 @@ function Add_Eventti({navigation, route} , props) {
             color="#841584"
             /> */}
             <Button onPress={goToPreview} title="preview" />
+              
           </View>
         </View>
       ) : (
@@ -317,7 +318,8 @@ function Add_Eventti({navigation, route} , props) {
                   </Text>
                 );
               })}
-            </View> 
+
+           </View> 
             <Button onPress={sendEvent} title="Confirm event" />
           </View>
         </View>

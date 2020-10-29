@@ -82,7 +82,7 @@ export default function SwipingPage({ navigation, route }) {
 
   const theme = {
     colors: {
-      primary: "black",
+      primary: "orange",
     },
   };
 

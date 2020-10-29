@@ -5,7 +5,6 @@ import firestore from "@react-native-firebase/firestore";
 import firebase from "react-native-firebase";
 import auth from "@react-native-firebase/auth";
 import styles from "../styles";
-import Logo from "./Logo";
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Matches({ navigation, route }) {
   const [myMatches, setMyMatches] = React.useState([]);
@@ -130,7 +129,6 @@ export default function Matches({ navigation, route }) {
           </ListItem>
         ))}
       </View>
-      <Logo />
     </View>
   );
 }
