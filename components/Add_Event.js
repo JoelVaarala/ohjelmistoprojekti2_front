@@ -311,7 +311,9 @@ function Add_Eventti({ navigation, route }, props) {
                   </Text>
                 );
               })}
+              
             </View>
+
             <Button onPress={sendEvent} title="Confirm event" />
           </View>
         </View>

@@ -39,6 +39,7 @@ global.swipesPageButtonGroupColor = {
   },
 };
 
+
 export default StyleSheet.create({
   //backgrounds
   background: {
@@ -63,7 +64,7 @@ export default StyleSheet.create({
   },
   myProfileUserText: {
     fontSize: 20,
-    color: textColor,
+    color: "black",
   },
   checkboxText: {
     fontSize: 14,
@@ -76,11 +77,11 @@ export default StyleSheet.create({
   },
   matchesName: {
     fontSize: 16,
-    color: textColor,
     fontWeight: "bold",
   },
   matchesBackgroundColor: {
-    backgroundColor: backgroundTheme,
+    //Greyish
+    backgroundColor: "#DDDDDD",
   },
   registerUserText: {
     color: inputTextColor,
@@ -164,10 +165,6 @@ export default StyleSheet.create({
   viewLikersItemContent: {
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-
-  viewLikersTextColor: {
-    color: textColor,
   },
 
   //no more cards
@@ -260,6 +257,8 @@ export default StyleSheet.create({
     width: 500,
     backgroundColor: textAreaBackground,
     color: textColor,
+    borderWidth: 1,
+    borderColor: "black",
     borderRadius: 6,
   },
 
@@ -293,6 +292,8 @@ export default StyleSheet.create({
     width: 300,
     height: 345,
     resizeMode: "cover",
+    borderWidth: 2,
+    borderColor: "black",
     borderRadius: 5,
     bottom: 20,
   },

@@ -202,7 +202,7 @@ export default function ViewLikers({ navigation, route }) {
             ))}
           </Picker>
         </View>
-        <Text style={styles.viewLikersTextColor}> People who swiped for your event!</Text>
+        <Text style={styles.userBioStyle}> People who swiped for your event!</Text>
         {peoplesWhoWantToJoin.map((l, i) => (
           <ListItem key={i} bottomDivider>
             <Avatar source={{ uri: l.images[0] }} />
