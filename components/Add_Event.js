@@ -1,18 +1,16 @@
-import React, { useEffect, useState, Component } from 'react';
-import { Text, View, TextInput, Button, FlatList, ScrollView , Alert, Modal, TouchableHighlight} from 'react-native';
-import { Icon, Input } from 'react-native-elements';
-import DatePicker from 'react-native-date-picker';
-import Redux from 'redux';
-import auth from '@react-native-firebase/auth';
-import { connect } from 'react-redux';
-import { store, addEvent } from '../redux/index';
-import styles from '../styles';
-import { showMessage } from 'react-native-flash-message';
-import MapView, {Marker} from 'react-native-maps';
+import React, { useEffect, useState, Component } from "react";
+import { Text, View, TextInput, Button, FlatList, ScrollView, Alert, Modal, TouchableHighlight } from "react-native";
+import { Icon, Input } from "react-native-elements";
+import DatePicker from "react-native-date-picker";
+import Redux from "redux";
+import auth from "@react-native-firebase/auth";
+import { connect } from "react-redux";
+import { store, addEvent } from "../redux/index";
+import styles from "../styles";
+import { showMessage } from "react-native-flash-message";
+import MapView, { Marker } from "react-native-maps";
 
-
-function Add_Eventti({navigation, route} , props) {
-
+function Add_Eventti({ navigation, route }, props) {
   // Statet tapahtuman tiedoille
   const [eventName, setEventName] = useState("");
   const [description, setDescription] = useState("");
@@ -22,25 +20,24 @@ function Add_Eventti({navigation, route} , props) {
   // State renderöi "kyselyn"(default) tai "preview" (ln:88)
   const [view, setView] = React.useState(true);
 
-  const [value, setValue] = React.useState('sijainti');
-  const [newValue, setNewValue] = React.useState('');
+  const [value, setValue] = React.useState("sijainti");
+  const [newValue, setNewValue] = React.useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [region, setRegion] = React.useState({
-    latitude: global.myUserData.filters.myLocation.latitude, 
-    longitude: global.myUserData.filters.myLocation.longitude, 
-    latitudeDelta: 0.0322, 
-    longitudeDelta: 0.0221
-});
+    latitude: global.myUserData.filters.myLocation.latitude,
+    longitude: global.myUserData.filters.myLocation.longitude,
+    latitudeDelta: 0.0322,
+    longitudeDelta: 0.0221,
+  });
   const [place, setPlace] = React.useState({
-    street: '',
-    city: '',
-    postalcode: ''
+    street: "",
+    city: "",
+    postalcode: "",
   });
 
   React.useEffect(() => {
     fetchAddress();
-  },[]);
- 
+  }, []);
 
   // Lisätään tägit taulukkoon
   const addTag = () => {
@@ -103,17 +100,17 @@ function Add_Eventti({navigation, route} , props) {
       },
       body: JSON.stringify(bodi),
     })
-    .then(response => response.json())
-    .then(res => {
-      console.log(res, 'LÄHETYS ONNISTUI')
-      showSuccess();
-      navigation.navigate('Profile')
-    })
-    .catch(err => {
-      console.error(err, 'LÄHETYS EPÄONNISTUI')
-      showFail();
-    });
-  }
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(res, "LÄHETYS ONNISTUI");
+        showSuccess();
+        navigation.navigate("Profile");
+      })
+      .catch((err) => {
+        console.error(err, "LÄHETYS EPÄONNISTUI");
+        showFail();
+      });
+  };
 
   // flash message for failed event creation
   const showFail = () => {
@@ -123,10 +120,10 @@ function Add_Eventti({navigation, route} , props) {
       type: "default",
       duration: 1850,
       backgroundColor: "red",
-      color: "white" 
+      color: "white",
       // you can also add onPRess -function
     });
-  }
+  };
 
   // flash message for successful event creation
   const showSuccess = () => {
@@ -136,57 +133,53 @@ function Add_Eventti({navigation, route} , props) {
       type: "default",
       duration: 1850,
       backgroundColor: "green",
-      color: "white" 
+      color: "white",
       // you can also add onPRess -function
     });
-  }
+  };
 
   const fetchAddress = () => {
-
     let key = global.key;
-    let long = region.longitude
-    let lat = region.latitude
+    let long = region.longitude;
+    let lat = region.latitude;
 
-    const url = `http://www.mapquestapi.com/geocoding/v1/reverse?key=${key}&location=${lat},${long}&includeRoadMetadata=true&includeNearestIntersection=true`
+    const url = `http://www.mapquestapi.com/geocoding/v1/reverse?key=${key}&location=${lat},${long}&includeRoadMetadata=true&includeNearestIntersection=true`;
 
     fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      setValue(data.results[0].locations[0].adminArea5 + ', ' + data.results[0].locations[0].street)
-      setPlace({
-        street: data.results[0].locations[0].street,
-        city: data.results[0].locations[0].adminArea5,
-        postalcode: data.results[0].locations[0].postalcode
-      })
-    })
-  }
-
+      .then((response) => response.json())
+      .then((data) => {
+        setValue(data.results[0].locations[0].adminArea5 + ", " + data.results[0].locations[0].street);
+        setPlace({
+          street: data.results[0].locations[0].street,
+          city: data.results[0].locations[0].adminArea5,
+          postalcode: data.results[0].locations[0].postalcode,
+        });
+      });
+  };
 
   const fetchCoordinates = () => {
-   
     let key = global.key;
     // api url here (add key and location)
-    const url = `http://www.mapquestapi.com/geocoding/v1/address?key=${key}&location=${newValue}` 
-    
-    fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      if(newValue.length > 3){
-        setValue(newValue)
-        setRegion({
-            latitude: data.results[0].locations[0].latLng.lat, 
-            longitude: data.results[0].locations[0].latLng.lng,
-            latitudeDelta: 0.0322, 
-            longitudeDelta: 0.0221
-        });
-      }
-    })
-    .catch((error) =>{
-        Alert.alert(error);
-    })
-  setNewValue('');
-}
+    const url = `http://www.mapquestapi.com/geocoding/v1/address?key=${key}&location=${newValue}`;
 
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        if (newValue.length > 3) {
+          setValue(newValue);
+          setRegion({
+            latitude: data.results[0].locations[0].latLng.lat,
+            longitude: data.results[0].locations[0].latLng.lng,
+            latitudeDelta: 0.0322,
+            longitudeDelta: 0.0221,
+          });
+        }
+      })
+      .catch((error) => {
+        Alert.alert(error);
+      });
+    setNewValue("");
+  };
 
   return (
     <ScrollView style={[styles.flexOne, styles.background]}>
@@ -208,64 +201,65 @@ function Add_Eventti({navigation, route} , props) {
 
           <View>
             <Text style={[styles.title, styles.marginTopTen]}>Starting time : </Text>
-            <DatePicker style={styles.alignSelfCenter} date={date} onDateChange={(value) => setDate(value)} mode="datetime" locale="fi" />
+            <DatePicker
+              style={[styles.alignSelfCenter, styles.addEventDatePickerBackground]}
+              date={date}
+              onDateChange={(value) => setDate(value)}
+              mode="datetime"
+              locale="fi"
+            />
           </View>
 
-      <Text style={[styles.title, styles.marginTopTen]}>Event location : {value}</Text>
+          <Text style={[styles.title, styles.marginTopTen]}>Event location : {value}</Text>
 
-
-  <View style={styles.viewFirst}>
-      
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
-
-        <View style={styles.viewSecond}>
-
-          <View style={styles.viewThird}>
-      
-              <MapView
-                  style={styles.mapView}
-                  region={region}
-              >
-
-              <Marker
-                  coordinate={{
-                  latitude: region.latitude, 
-                  longitude: region.longitude}}
-                  title= {value}
-              />
-
-              </MapView>
-             
-            <View style={{flex: 1, flexDirection: 'column-reverse', }}>
-              
-            <TouchableHighlight
-              style={styles.touchableHigh}
-              onPress={() => {
-                setModalVisible(!modalVisible);
+          <View style={styles.viewFirst}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
               }}
             >
-              <Text style={{fontWeight: 'bold'}}>SAVE</Text>
-            </TouchableHighlight>
-            <TextInput 
-                style={styles.modalTextinput} 
-                onChangeText={text => setNewValue(text)} 
-                value={newValue} 
-                onEndEditing={fetchCoordinates}
-                placeholder="Street 12, city"
+              <View style={styles.viewSecond}>
+                <View style={styles.viewThird}>
+                  <MapView style={styles.mapView} region={region}>
+                    <Marker
+                      coordinate={{
+                        latitude: region.latitude,
+                        longitude: region.longitude,
+                      }}
+                      title={value}
+                    />
+                  </MapView>
+
+                  <View style={{ flex: 1, flexDirection: "column-reverse" }}>
+                    <TouchableHighlight
+                      style={styles.touchableHigh}
+                      onPress={() => {
+                        setModalVisible(!modalVisible);
+                      }}
+                    >
+                      <Text style={{ fontWeight: "bold" }}>SAVE</Text>
+                    </TouchableHighlight>
+                    <TextInput
+                      style={styles.modalTextinput}
+                      onChangeText={(text) => setNewValue(text)}
+                      value={newValue}
+                      onEndEditing={fetchCoordinates}
+                      placeholder="Street 12, city"
+                    />
+                  </View>
+                </View>
+              </View>
+            </Modal>
+            <Button
+              onPress={() => {
+                setModalVisible(true);
+              }}
+              title="OPEN MAP"
             />
-            </View>
           </View>
-        </View>
-      </Modal>
-      <Button onPress={() => {setModalVisible(true)}} title="OPEN MAP"/>
-  </View>
 
           <View style={[styles.container]}>
             <Text style={[styles.title, styles.marginTopTen]}>Event tags : </Text>
@@ -317,7 +311,9 @@ function Add_Eventti({navigation, route} , props) {
                   </Text>
                 );
               })}
-            </View> 
+              
+            </View>
+
             <Button onPress={sendEvent} title="Confirm event" />
           </View>
         </View>
@@ -325,7 +321,6 @@ function Add_Eventti({navigation, route} , props) {
     </ScrollView>
   );
 }
-
 
 const mapStateToProps = (state) => ({
   EventReducer: state.EventReducer,

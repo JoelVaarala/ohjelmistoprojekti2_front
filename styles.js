@@ -1,7 +1,44 @@
 import { StyleSheet } from "react-native";
 
-const backgroundTheme = "white";
-const textColor = "#2A98FF";
+const backgroundTheme = "black";
+const textColor = "orange";
+const logInBackgroundColor = "#F2F2F2"; //Vaalean harmaa väri
+const datePickerBackgroundColor = "white";
+const textAreaBackground = "white";
+const inputTextColor = "black";
+const swipeCardTextColor = "white";
+const tagBoxBackgroundColor = "black";
+const tagBoxBorderColor = "orange";
+const addEventTextboxUnderline = "grey";
+
+global.myTheme = {
+  dark: true,
+  colors: {
+    primary: textColor, // NavIconin alapuolella oleva viiva
+    background: logInBackgroundColor, //log in sivulla näkyvä taustaväri
+    card: backgroundTheme, //NavIconien ympärillä oleva tausta
+    text: textColor, //Screenien otsikon väri
+    notification: "rgb(255, 69, 58)", // punainen väri, en tiedä missä esiintyy
+  },
+};
+
+global.navIconColor = (focused) => (focused ? textColor : "gray"); //NavBar iconien aktiivi ja passiivi värit
+
+global.checkBoxColor = () => ({ true: "orange" }); //checkboxin väri
+
+global.buttonColor = "orange"; //musta taustavärien buttonien värit
+
+global.rangerSliderColor = "#FFA500"; // HEX color = orange
+
+global.viewLikersIconButton1 = "lightgreen";
+global.viewLikersIconButton2 = "red";
+
+global.swipesPageButtonGroupColor = {
+  colors: {
+    primary: "orange",
+  },
+};
+
 
 export default StyleSheet.create({
   //backgrounds
@@ -12,10 +49,18 @@ export default StyleSheet.create({
     backgroundColor: "floralwhite",
     flex: 1,
   },
+
+  addEventDatePickerBackground: {
+    backgroundColor: datePickerBackgroundColor,
+  },
   //title and text
   title: {
     fontSize: 18,
     color: textColor,
+  },
+  registerUserTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
   },
   myProfileUserText: {
     fontSize: 20,
@@ -37,6 +82,11 @@ export default StyleSheet.create({
   matchesBackgroundColor: {
     //Greyish
     backgroundColor: "#DDDDDD",
+  },
+  registerUserText: {
+    color: inputTextColor,
+    fontSize: 16,
+    fontWeight: "bold",
   },
   //buttons
 
@@ -62,16 +112,17 @@ export default StyleSheet.create({
     backgroundColor: "#DDDDDD",
     padding: 10,
   },
+  //Tagbox color and size
   tagBox: {
     padding: 6,
     fontSize: 16,
     color: textColor,
     marginVertical: 7,
     marginHorizontal: 10,
-    backgroundColor: "white",
+    backgroundColor: tagBoxBackgroundColor,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: tagBoxBorderColor,
   },
   //Containers
   container: {
@@ -174,39 +225,37 @@ export default StyleSheet.create({
   },
   swipesUserInfo: {
     fontSize: 18,
-    color: "white",
+    color: swipeCardTextColor,
   },
   eventInfoBio: {
     fontSize: 12,
-    color: "white",
+    color: swipeCardTextColor,
   },
   //opacity
   opacityOne: {
     opacity: 1,
   },
 
-  //textbox things
   addEventTextbox: {
     height: 40,
     width: 200,
-    borderBottomColor: "gray",
+    borderBottomColor: addEventTextboxUnderline,
     borderBottomWidth: 1,
+    color: textColor,
   },
 
   //textInput
   addTagInputBox: {
     height: 40,
     width: 200,
-    backgroundColor: "white",
-    color: textColor,
-    borderWidth: 1,
-    borderColor: "black",
+    backgroundColor: textAreaBackground,
+    color: inputTextColor,
     borderRadius: 4,
   },
   editProfileBioTextArea: {
     height: 90,
     width: 500,
-    backgroundColor: "white",
+    backgroundColor: textAreaBackground,
     color: textColor,
     borderWidth: 1,
     borderColor: "black",
@@ -225,8 +274,8 @@ export default StyleSheet.create({
     },
     */
 
-  //rangerSlider
-  settingsRangerSlider: {
+  //rangerSlider size
+  rangerSliderSize: {
     width: 250,
     height: 60,
   },
@@ -235,6 +284,8 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
   },
   //card things
+
+  //Card size
   card: {
     justifyContent: "center",
     alignItems: "center",
@@ -255,6 +306,10 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
+  carouselImageSize: {
+    height: "50%",
+    width: "50%",
+  },
   chatStyle: {
     justifyContent: "space-around",
     flexDirection: "row",
@@ -274,7 +329,7 @@ export default StyleSheet.create({
     fontSize: 23,
     marginTop: 15,
     paddingBottom: 1,
-    color: textColor,
+    color: inputTextColor,
   },
 
   omatContainerit: {
@@ -283,14 +338,12 @@ export default StyleSheet.create({
     alignItems: "flex-start",
     paddingLeft: 80,
   },
-
+  //input for tagbox
   tagTextInput: {
     height: 40,
     width: 200,
-    backgroundColor: "white",
-    color: textColor,
-    borderWidth: 1,
-    borderColor: "black",
+    backgroundColor: inputTextColor,
+    color: inputTextColor,
     borderRadius: 6,
   },
   opacityOne: {
@@ -392,57 +445,52 @@ registerRadioGroup: {
   },
   // Event modal
   mapView: {
-    position: 'absolute', 
+    position: "absolute",
     borderRadius: 20,
     borderWidth: 2,
     margin: 20,
-    top: 0, 
-    left: 8, 
-    right: 0, 
-    bottom: 0, 
-    width: '110%', 
-    height: '80%' 
+    top: 0,
+    left: 8,
+    right: 0,
+    bottom: 0,
+    width: "110%",
+    height: "80%",
   },
-  viewFirst: {flex: 1,
+  viewFirst: { flex: 1, justifyContent: "center", alignItems: "center", marginTop: 22 },
+  viewSecond: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
-  },
-  viewSecond: {
-     flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22
+    marginTop: 22,
   },
   viewThird: {
-     margin: 20,
-      backgroundColor: "black",
-      borderRadius: 20,
-      paddingLeft: '10%',
-      paddingRight: '10%',
-      width: '80%',
-      height: '75%',
-      alignItems: "center",
-      shadowColor: "#000",
-      borderWidth: 2,
-      borderColor: 'orange',
-      overflow: 'hidden'
-       
+    margin: 20,
+    backgroundColor: "black",
+    borderRadius: 20,
+    paddingLeft: "10%",
+    paddingRight: "10%",
+    width: "80%",
+    height: "75%",
+    alignItems: "center",
+    shadowColor: "#000",
+    borderWidth: 2,
+    borderColor: "orange",
+    overflow: "hidden",
   },
-  touchableHigh: { 
-    backgroundColor: "orange", 
-    borderWidth: 2, 
-    borderColor: 'yellow', 
-    alignSelf: 'center', 
-    padding: 6, 
-    margin: 6, 
+  touchableHigh: {
+    backgroundColor: "orange",
+    borderWidth: 2,
+    borderColor: "yellow",
+    alignSelf: "center",
+    padding: 6,
+    margin: 6,
     borderRadius: 20,
     paddingLeft: 9,
-    paddingRight: 9
+    paddingRight: 9,
   },
   modalTextinput: {
-    borderWidth: 2, 
-    borderColor: 'yellow', 
-    backgroundColor: 'orange'
-  }
+    borderWidth: 2,
+    borderColor: "yellow",
+    backgroundColor: "orange",
+  },
 });

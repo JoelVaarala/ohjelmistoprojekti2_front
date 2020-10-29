@@ -55,7 +55,7 @@ const MyProfile = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.saveButton}>
-        <Button color="black" onPress={() => navigation.navigate("Add_Event")} title="add event" />
+        <Button color={buttonColor} onPress={() => navigation.navigate("Add_Event")} title="add event" />
       </View>
     </View>
   );

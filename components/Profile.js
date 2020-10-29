@@ -195,15 +195,14 @@ export default function Profile({ navigation, route }, props) {
 
 
   return (
-
-    <View style={styles.alignItemsCenter}>
+    <View style={[styles.alignItemsCenter, styles.background]}>
       {view ?
         <View style={[styles.alignItemsCenter, styles.flexThree]}>
           <Carousel2
             kuvat={pics}
             style={
               styles.flexOne
-              //height: '50%', width: '50%'
+            //styles.carouselImageSize
             }
           />
         </View> : <View>{/* Tähän eventille kuva systeemit, kun eventin tiedoista niitä alkaa löytymään*/}</View>}

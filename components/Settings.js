@@ -165,8 +165,6 @@ export default function Settings() {
       .catch((err) => console.error(err));
   }
 
-  const checkBoxColor = () => ({ true: "#000" });
-
   return (
     <SafeAreaView style={[styles.flexOne, styles.background]}>
       <ScrollView>
@@ -191,14 +189,14 @@ export default function Settings() {
           <View>
             <Text style={styles.title}>Distance:</Text>
             <RangeSlider
-              style={styles.settingsRangerSlider}
+              style={styles.rangerSliderSize}
               gravity={"center"}
               rangeEnabled={false}
               min={1}
               max={100}
               step={1}
-              selectionColor="#000000"
-              blankColor="#000000"
+              selectionColor={rangerSliderColor}
+              blankColor={rangerSliderColor}
               onValueChanged={(distance, fromUser) => {
                 setDistance(distance);
               }}
@@ -208,23 +206,21 @@ export default function Settings() {
           <View style={styles.paddingTopFifty}>
             <Text style={styles.title}> Ages:</Text>
             <RangeSlider
-              style={styles.settingsRangerSlider}
+              style={styles.rangerSliderSize}
               gravity={"center"}
               min={14}
               max={100}
               step={1}
               valueType="number"
-              textsize={20}
               rangeLow={lowAge}
               rangeHigh={highAge}
-              selectionColor="#000000"
-              blankColor="#000000"
+              selectionColor={rangerSliderColor}
+              blankColor={rangerSliderColor}
               onValueChanged={(lowAge, highAge, fromUser) => {
                 setLowAge(lowAge), setHighAge(highAge);
               }}
             />
             <Text style={styles.title}>
-              {" "}
               {lowAge} - {highAge} ages
             </Text>
           </View>
@@ -275,7 +271,7 @@ export default function Settings() {
           )} */}
         </View>
         <View style={styles.saveButton}>
-          <Button color="black" onPress={TallennaData} title="Save" />
+          <Button color={buttonColor} onPress={TallennaData} title="Save" />
         </View>
       </ScrollView>
     </SafeAreaView>

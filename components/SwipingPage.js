@@ -80,15 +80,9 @@ export default function SwipingPage({ navigation, route }) {
   const subButtons = ["Open", "Public", "Private"];
   const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [1] });
 
-  const theme = {
-    colors: {
-      primary: "black",
-    },
-  };
-
   return (
     <View style={[styles.container, styles.containerCenter, styles.background]}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={swipesPageButtonGroupColor}>
         <ButtonGroup
           onPress={(value) => updateIndex("main", value)}
           selectedIndex={selectedIndex.main}
