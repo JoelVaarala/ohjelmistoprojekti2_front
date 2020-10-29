@@ -1,24 +1,24 @@
-import 'react-native-gesture-handler'; //Tää pitää olla päälimmäisenä koska syyt?
-import React from 'react';
-import MyProfile from './components/MyProfile';
-import SwipingPage from './components/SwipingPage';
-import Matches from './components/Matches';
-import Chat from './components/Chat';
-import Profile from './components/Profile';
-import EditProfile from './components/EditProfile';
-import Settings from './components/Settings';
-import Add_Event from './components/Add_Event';
+import "react-native-gesture-handler"; //Tää pitää olla päälimmäisenä koska syyt?
+import React from "react";
+import MyProfile from "./components/MyProfile";
+import SwipingPage from "./components/SwipingPage";
+import Matches from "./components/Matches";
+import Chat from "./components/Chat";
+import Profile from "./components/Profile";
+import EditProfile from "./components/EditProfile";
+import Settings from "./components/Settings";
+import Add_Event from "./components/Add_Event";
 //import FirebaseSaato from './components/FirebaseSaato'
-import Startup from './components/Startup';
-import Register from './components/Register';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import firebase from 'react-native-firebase';
-import ViewLikers from './components/ViewLikers.js';
-import { Icon } from 'react-native-elements';
-import { Provider } from 'react-redux';
-import { store } from './redux/index';
+import Startup from "./components/Startup";
+import Register from "./components/Register";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import firebase from "react-native-firebase";
+import ViewLikers from "./components/ViewLikers.js";
+import { Icon } from "react-native-elements";
+import { Provider } from "react-redux";
+import { store } from "./redux/index";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -32,7 +32,7 @@ export default function App() {
 
   //Tämä hoitaa kirjautumisen ja initializen appii, kutsutaan vain kerran ja tässä.
   React.useEffect(() => {
-    console.log('use effect');
+    console.log("use effect");
     //firebase.initializeApp()
     firebase.initializeApp(global.firebaseConfig);
     //console.log(firebase.config.toString())
@@ -87,16 +87,16 @@ export default function App() {
   const MyTheme = {
     dark: true,
     colors: {
-      primary: 'white',
-      background: 'rgb(242, 242, 242)',
-      card: 'white',
-      text: 'black',
-      border: 'rgb(199, 199, 204)',
-      notification: 'rgb(255, 69, 58)'
-    }
+      primary: "orange",
+      background: "rgb(242, 242, 242)",
+      card: "black",
+      text: "orange",
+      border: "rgb(199, 199, 204)",
+      notification: "rgb(255, 69, 58)",
+    },
   };
 
-  const navIconColor = (focused) => (focused ? 'black' : 'gray');
+  const navIconColor = (focused) => (focused ? "orange" : "gray");
 
   return (
     // <View>
@@ -118,32 +118,32 @@ export default function App() {
                 let iconName;
                 let iconColor;
 
-                if (route.name === 'Matches') {
-                  iconName = 'people';
+                if (route.name === "Matches") {
+                  iconName = "people";
                   iconColor = navIconColor(focused);
-                } else if (route.name === 'Swipes') {
-                  iconName = 'touch-app';
+                } else if (route.name === "Swipes") {
+                  iconName = "touch-app";
                   iconColor = navIconColor(focused);
-                } else if (route.name === 'My Likes') {
-                  iconName = 'event-available';
+                } else if (route.name === "My Likes") {
+                  iconName = "event-available";
                   iconColor = navIconColor(focused);
-                } else if (route.name === 'Profile') {
-                  iconName = 'person';
+                } else if (route.name === "Profile") {
+                  iconName = "person";
                   iconColor = navIconColor(focused);
-                } else if (route.name === 'Login') {
-                  iconName = 'security';
+                } else if (route.name === "Login") {
+                  iconName = "security";
                   iconColor = navIconColor(focused);
                 }
 
                 // You can return any component that you like here!
                 return <Icon color={iconColor} size={28} name={iconName} />;
-              }
+              },
             })}
             tabBarOptions={{
-              activeTintColor: 'black',
-              inactiveTintColor: 'white',
+              activeTintColor: "black",
+              inactiveTintColor: "white",
               showIcon: true,
-              showLabel: false
+              showLabel: false,
             }}
           >
             <Tab.Screen name="Matches" component={MatchStack} />

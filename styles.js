@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
-const backgroundTheme = "white";
-const textColor = "#2A98FF";
+const backgroundTheme = "black";
+const textColor = "orange";
 
 export default StyleSheet.create({
   //backgrounds
@@ -19,7 +19,7 @@ export default StyleSheet.create({
   },
   myProfileUserText: {
     fontSize: 20,
-    color: "black",
+    color: textColor,
   },
   checkboxText: {
     fontSize: 14,
@@ -32,11 +32,11 @@ export default StyleSheet.create({
   },
   matchesName: {
     fontSize: 16,
+    color: textColor,
     fontWeight: "bold",
   },
   matchesBackgroundColor: {
-    //Greyish
-    backgroundColor: "#DDDDDD",
+    backgroundColor: backgroundTheme,
   },
   //buttons
 
@@ -68,10 +68,10 @@ export default StyleSheet.create({
     color: textColor,
     marginVertical: 7,
     marginHorizontal: 10,
-    backgroundColor: "white",
+    backgroundColor: "black",
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "orange",
   },
   //Containers
   container: {
@@ -114,6 +114,10 @@ export default StyleSheet.create({
   viewLikersItemContent: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+
+  viewLikersTextColor: {
+    color: textColor,
   },
 
   //no more cards
@@ -198,9 +202,7 @@ export default StyleSheet.create({
     height: 40,
     width: 200,
     backgroundColor: "white",
-    color: textColor,
-    borderWidth: 1,
-    borderColor: "black",
+    color: "black",
     borderRadius: 4,
   },
   editProfileBioTextArea: {
@@ -208,8 +210,6 @@ export default StyleSheet.create({
     width: 500,
     backgroundColor: "white",
     color: textColor,
-    borderWidth: 1,
-    borderColor: "black",
     borderRadius: 6,
   },
 
@@ -241,8 +241,6 @@ export default StyleSheet.create({
     width: 300,
     height: 345,
     resizeMode: "cover",
-    borderWidth: 2,
-    borderColor: "black",
     borderRadius: 5,
     bottom: 20,
   },
@@ -289,8 +287,6 @@ export default StyleSheet.create({
     width: 200,
     backgroundColor: "white",
     color: textColor,
-    borderWidth: 1,
-    borderColor: "black",
     borderRadius: 6,
   },
   opacityOne: {

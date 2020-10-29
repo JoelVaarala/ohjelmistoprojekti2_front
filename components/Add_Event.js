@@ -125,7 +125,7 @@ function Add_Eventti(props) {
           </View>
 
           <View style={[styles.saveButton, styles.marginTopTen]}>
-            <Button color="black" onPress={goToPreview} title="Preview" />
+            <Button color="orange" onPress={goToPreview} title="Preview" />
           </View>
         </View>
       ) : (
@@ -147,7 +147,7 @@ function Add_Eventti(props) {
             </View>
           </View>
           <View style={[styles.saveButton, styles.marginTopTen]}>
-            <Button color="black" onPress={sendEvent} title="Confirm event" />
+            <Button color="orange" onPress={sendEvent} title="Confirm event" />
           </View>
         </View>
       )}
