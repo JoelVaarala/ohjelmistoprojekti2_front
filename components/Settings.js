@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, SafeAreaView, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from "react-native";
+import { Alert, ScrollView, SafeAreaView, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from "react-native";
 import { Input, Slider } from "react-native-elements";
 import RangeSlider from "rn-range-slider";
 import CheckBox from "@react-native-community/checkbox";
@@ -13,11 +13,21 @@ export default function Settings() {
   //tagit
   const [tag, setTag] = useState("");
   const [tagList, setTagList] = useState([]);
+  const [shouldShow, setShouldShow] = useState(false)
 
   const addTag = () => {
     setTagList([...tagList, tag]);
     setTag("");
+    setShouldShow(!shouldShow)
   };
+
+  const deleteItemById = (index) => {
+    Alert.alert("Poista tagi", "Haluatko varmasti poistaa tagin?", [
+      { text: "Peruuta", onPress: () => console.log("Käyttäjä peruutti"), style: "cancel" },
+      { text: "OK", onPress: () => setTagList(tagList.filter((itemi, indexi) => indexi !== index)) },
+    ]);
+  };
+
 
   //sliderit
   const [lowAge, setLowAge] = useState(14);
@@ -69,6 +79,8 @@ export default function Settings() {
       setDistance(doc.data().distance);
       setLowAge(doc.data().minAge);
       setHighAge(doc.data().maxAge);
+
+      {/*
       let looking = doc.data().lookingFor;
       let events = looking.indexOf("events") > -1;
       let people = looking.indexOf("users") > -1;
@@ -78,6 +90,7 @@ export default function Settings() {
       if (people == true) {
         setPeople(true);
       }
+    */}
       let genders = doc.data().genders;
       let male = genders.indexOf("male") > -1;
       let female = genders.indexOf("female") > -1;
@@ -99,14 +112,13 @@ export default function Settings() {
       idToken: global.myUserData.idToken,
       uid: global.myUserData.uid,
       data: {
-        minAge: minAge,
-        maxAge: maxAge,
-        lookingFOr: ["FIXME"],
-        displayName: event_s,
-        genders: ["FIXME"],
-        distance: distance,
-        eventsInXHours: 1,
-        tags: [],
+        minAge: lowAge,
+          maxAge: highAge,
+          lookingFor: ["events", "users"],
+          genders: ["rakkautta", "rauhaa"],
+          distance: distance,
+          eventsInXHours: 7,
+          tags: tagList,
       },
     };
 
@@ -123,6 +135,7 @@ export default function Settings() {
         // console.log(data)
       })
       .catch((err) => console.error(err));
+      Alert.alert("Tiedot tallennettiin");
   }
   function HaeSettingsValues() {
     let ref = firestore().collection("users").doc(auth().currentUser.uid);
@@ -132,7 +145,7 @@ export default function Settings() {
       // setStates here as shown above
     });
   }
-
+ {/*
   function TallennaData() {
     let body = {
       data: {
@@ -163,25 +176,39 @@ export default function Settings() {
         // console.log(data)
       })
       .catch((err) => console.error(err));
-  }
+  } 
+*/}
 
   return (
     <SafeAreaView style={[styles.flexOne, styles.background]}>
       <ScrollView>
         <View style={styles.omatContainerit}>
-          <View style={styles.background}>
-            <Text style={styles.title}>Add a tag:</Text>
-            <TextInput onChangeText={(tag) => setTag(tag)} value={tag} onEndEditing={addTag} style={styles.addTagInputBox}></TextInput>
-          </View>
+       
           <View>
-            <Text style={styles.title}>Tags:</Text>
+          <Text style={styles.title}>Your tags :</Text>
+            <View>
+              {shouldShow ? 
+                <TextInput placeholder='Add a tag' onChangeText={(tag) => setTag(tag)} value={tag} onEndEditing={addTag} style={styles.tagTextInput}>
+
+                </TextInput>
+               : 
+                <Button title='+' onPress={() => setShouldShow(!shouldShow)} />}
+             
+            </View>
+         
+          </View>
+          <View style={[styles.flexOne, styles.marginLeftTwenty]}>
             <FlatList
               contentContainerStyle={styles.paddingTopTen}
               horizontal={false}
               numColumns={3}
               data={tagList}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => <Text style={styles.tagBox}>{item}</Text>}
+              renderItem={({ item, index }) => (
+                <Text onPress={() => deleteItemById(index)} style={styles.tagBox}>
+                  {item}
+                </Text>
+              )}
             />
           </View>
         </View>
@@ -239,17 +266,6 @@ export default function Settings() {
           <View>
             <Text style={styles.checkboxText}>Other</Text>
             <CheckBox tintColors={checkBoxColor()} disabled={false} value={other} onValueChange={(newValue) => setOther(newValue)} />
-          </View>
-        </View>
-        <View style={styles.omatContainerit}>
-          <Text style={styles.title}>Searching for: </Text>
-          <View>
-            <Text style={styles.checkboxText}>Events</Text>
-            <CheckBox tintColors={checkBoxColor()} disabled={false} value={events} onValueChange={(newValue) => setEvents(newValue)} />
-          </View>
-          <View>
-            <Text style={styles.checkboxText}>People</Text>
-            <CheckBox tintColors={checkBoxColor()} disabled={false} value={people} onValueChange={(newValue) => setPeople(newValue)} />
           </View>
         </View>
 
