@@ -7,7 +7,7 @@ import styles from "../styles";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function SwipingPage({ navigation, route }) {
-  [swipettavat, setSwipettavat] = React.useState([]);
+  const [swipettavat, setSwipettavat] = React.useState([]);
   const [nykyinenSwipettava, setNykyinenSwipettava] = React.useState("");
 
   //ratkaistava vielä se että swipettavat ei päivity swipecardsiin.

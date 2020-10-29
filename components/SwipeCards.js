@@ -94,6 +94,10 @@ export default class extends React.Component {
     console.log(`Maybe for ${card.text}`);
   }
 
+  onClickHandler(){
+    console.log("ASdadsadasd")
+  }
+
   render() {
     // If you want a stack of cards instead of one-per-one view, activate stack mode
     // stack={true}
@@ -108,6 +112,7 @@ export default class extends React.Component {
         handleYup={this.handleYup}
         handleNope={this.handleNope}
         handleMaybe={this.handleMaybe}
+        onClickHandler={this.onClickHandler}
         hasMaybeAction
       />
     );
