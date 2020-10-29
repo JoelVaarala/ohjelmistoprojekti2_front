@@ -84,27 +84,9 @@ export default function App() {
     );
   };
 
-  const MyTheme = {
-    dark: true,
-    colors: {
-      primary: "orange",
-      background: "rgb(242, 242, 242)",
-      card: "black",
-      text: "orange",
-      border: "rgb(199, 199, 204)",
-      notification: "rgb(255, 69, 58)",
-    },
-  };
-
-  const navIconColor = (focused) => (focused ? "orange" : "gray");
-
   return (
-    // <View>
-    //   <Text asd></Text>
-    //   </View>
-
     <Provider store={store}>
-      <NavigationContainer theme={MyTheme}>
+      <NavigationContainer theme={myTheme}>
         {vaihto ? (
           <Stack.Navigator>
             <ListStack.Screen name="Login" component={Startup} />
@@ -140,8 +122,6 @@ export default function App() {
               },
             })}
             tabBarOptions={{
-              activeTintColor: "black",
-              inactiveTintColor: "white",
               showIcon: true,
               showLabel: false,
             }}

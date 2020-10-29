@@ -106,7 +106,13 @@ function Add_Eventti(props) {
 
           <View>
             <Text style={[styles.title, styles.marginTopTen]}>Starting time : </Text>
-            <DatePicker style={styles.alignSelfCenter} date={date} onDateChange={(value) => setDate(value)} mode="datetime" locale="fi" />
+            <DatePicker
+              style={[styles.alignSelfCenter, styles.addEventDatePickerBackground]}
+              date={date}
+              onDateChange={(value) => setDate(value)}
+              mode="datetime"
+              locale="fi"
+            />
           </View>
 
           <View style={[styles.container]}>
@@ -125,7 +131,7 @@ function Add_Eventti(props) {
           </View>
 
           <View style={[styles.saveButton, styles.marginTopTen]}>
-            <Button color="orange" onPress={goToPreview} title="Preview" />
+            <Button color={buttonColor} onPress={goToPreview} title="Preview" />
           </View>
         </View>
       ) : (
@@ -147,7 +153,7 @@ function Add_Eventti(props) {
             </View>
           </View>
           <View style={[styles.saveButton, styles.marginTopTen]}>
-            <Button color="orange" onPress={sendEvent} title="Confirm event" />
+            <Button color={buttonColor} onPress={sendEvent} title="Confirm event" />
           </View>
         </View>
       )}

@@ -89,10 +89,10 @@ export default function Profile({ navigation, route }, props) {
       <View style={[styles.alignItemsCenter, styles.flexThree]}>
         <Carousel2
           kuvat={pics}
-          style={
-            styles.flexOne
-            //height: '50%', width: '50%'
-          }
+          style={[
+            styles.flexOne,
+            //styles.carouselImageSize
+          ]}
         />
       </View>
 

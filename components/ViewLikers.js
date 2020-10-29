@@ -223,7 +223,7 @@ export default function ViewLikers({ navigation, route }) {
                 icon={{
                   name: "arrow-right",
                   size: 30,
-                  color: "lightgreen",
+                  color: viewLikersIconButton1,
                 }}
                 onPress={() => Accept(true, l.uid)}
               />
@@ -234,7 +234,7 @@ export default function ViewLikers({ navigation, route }) {
                 icon={{
                   name: "arrow-right",
                   size: 30,
-                  color: "red",
+                  color: viewLikersIconButton2,
                 }}
               />
             </View>
