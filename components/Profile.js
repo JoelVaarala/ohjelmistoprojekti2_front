@@ -1,5 +1,7 @@
 import React from "react";
 import { Text, View, Image, ScrollView } from "react-native";
+import { Avatar, ListItem, Overlay, Button, ThemeProvider, ButtonGroup } from "react-native-elements";
+
 import Carousel2 from "./Carousel";
 import firestore from "@react-native-firebase/firestore";
 import styles from "../styles";
@@ -18,16 +20,33 @@ export default function Profile({ navigation, route }, props) {
   });
   const [type, setType] = React.useState('');
   const [pics, setPics] = React.useState([]);
+  const [eventInfo, setEventInfo] = React.useState({ participiants: [{ images: ['https://randomuser.me/api/portraits/med/women/1.jpg'] }] })
   // true -> display user __ false -> display event
   const [view, setView] = React.useState(true);
+  const buttons = ["Osallistujat", "Jonossa"];
+
+  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2 });
+
+
+  function updateIndex(name, value) {
+    setSelectedIndex({ ...selectedIndex, [name]: value });
+    console.log(name + ": " + value);
+  }
+
+
+  const theme = {
+    colors: {
+      primary: "black",
+    },
+  };
   let doc = route.params.chet;
-  
+
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       //console.log("Listener")
       //console.log(firebase.auth().currentUser)
       //setPics();
-      
+
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -36,11 +55,11 @@ export default function Profile({ navigation, route }, props) {
 
   React.useEffect(() => {
     //console.log('useEffect chat.js saatu id : ' , props)
-    
+
     haeTiedot();
     console.log('käyttäj id ', auth().currentUser.uid)
     console.log('Profile.js useEffect (route.params.match) = ', route.params.match)
-    console.log('Profile.js useEfect (route.params.chet) = ' , route.params.chet)
+    console.log('Profile.js useEfect (route.params.chet) = ', route.params.chet)
   }, []);
 
   //haetaan infot firebasesta
@@ -52,22 +71,22 @@ export default function Profile({ navigation, route }, props) {
       let matchType = query.data().matchType;
       setType(matchType);
       let user = '';
-      if(matchType == "user"){
+      if (matchType == "user") {
         console.log('user löytyi')
         query.data().users.forEach(element => {
-          console.log('forEach ',element)
-          if(element != auth().currentUser.uid){
+          console.log('forEach ', element)
+          if (element != auth().currentUser.uid) {
             user = element;
           }
         });
-        
+
         haeUser(user);
       }
-      else if(matchType == "event"){
+      else if (matchType == "event") {
         console.log('event löytyi')
         haeEvent();
       }
-    })  
+    })
   }
 
   async function haeUser(user) {
@@ -132,47 +151,99 @@ export default function Profile({ navigation, route }, props) {
 
   // ScrollView returnnin ympärille mahd mahd
   const renderView = () => {
-    return(
-    <Text>moi</Text>
+    return (
+      <Text>moi</Text>
     );
   }
 
+
+  //ainoastaan eventin omistaja näkee buttonin jolla voi kickata osallistujan
+  function Jooh() {
+    {
+      return eventInfo.participiants.map((l, i) => (
+        <ListItem key={i} bottomDivider>
+          <Avatar source={{ uri: l.images[0] }} />
+          <ListItem.Content>
+            <View>
+              <ListItem.Title>
+                {l.displayName} Nimi
+              </ListItem.Title>
+
+              <ListItem.Subtitle>ikä</ListItem.Subtitle>
+            </View>
+          </ListItem.Content>
+          <View style={styles.viewLikersItemContent}>
+
+
+            <Button //tää on kicki button
+              type="outline"
+
+              raised={true}
+              onPress={() => Accept(false, l.uid)}
+              icon={{
+                name: "arrow-right",
+                size: 30,
+                color: "red",
+              }}
+            />
+          </View>
+        </ListItem>
+      ));
+    }
+  }
+
+
+
   return (
-  
-    <View style={styles.alignItemsCenter}>
-       {view ? 
-      <View style={[styles.alignItemsCenter, styles.flexThree]}>
-        <Carousel2
-          kuvat={pics}
-          style={
-            styles.flexOne
-            //height: '50%', width: '50%'
-          }
-        />
-      </View> : <View>{/* Tähän eventille kuva systeemit, kun eventin tiedoista niitä alkaa löytymään*/}</View>}
+    <View style={[styles.alignItemsCenter, styles.background]}>
+      {view ?
+        <View style={[styles.alignItemsCenter, styles.flexThree]}>
+          <Carousel2
+            kuvat={pics}
+            style={
+              styles.flexOne
+            //styles.carouselImageSize
+            }
+          />
+        </View> : <View>{/* Tähän eventille kuva systeemit, kun eventin tiedoista niitä alkaa löytymään*/}</View>}
 
       <View style={styles.flexThree}>
-      {view ? 
-      <View>
-        <Text style={styles.userTextStyle}>
-          {user.name}, {user.age}
-        </Text>
-        <Text style={styles.userBioStyle}>{user.bio}</Text>
-        </View> 
-        : 
-        <View>
-          <Text style={styles.userTextStyle}>
-          {event.name}
-        </Text>
-        <Text style={styles.userBioStyle}>{event.bio}</Text>
-        </View>
+        {view ?
+          <View>
+            <Text style={styles.userTextStyle}>
+              {user.name}, {user.age}
+            </Text>
+            <Text style={styles.userBioStyle}>{user.bio}</Text>
+          </View>
+          :
+          <View>
+            <Text style={styles.userTextStyle}>
+              {event.name}
+            </Text>
+            <Text style={styles.userBioStyle}>{event.bio}</Text>
+            <ThemeProvider theme={theme}>
+              {/* <ButtonGroup
+          onPress={(value) => updateIndex("main", value)}
+          selectedIndex={selectedIndex.main}
+          buttons={buttons}
+          containerStyle={[styles.background, styles.heightForty]}
+        /> */}
+                <ButtonGroup
+                  onPress={(value) => updateIndex("main", value)}
+                  selectedIndex={selectedIndex.main}
+                  buttons={buttons}
+                  containerStyle={[styles.background, styles.heightForty]}
+                />
+            </ThemeProvider>
+            <Jooh></Jooh>
+          </View>
         }
-        
+
       </View>
-        
+
       {/* <ScrollView>{view ? (<Text>true</Text>) : (<Text>false</Text>)} </ScrollView> */}
-          
+
     </View>
-    
+
   );
 }

@@ -151,7 +151,7 @@ export default function EditProfile() {
         </View>
       </View>
       <View style={styles.saveButton}>
-        <Button color="black" onPress={TallennaData} title="Save" />
+        <Button color={buttonColor} onPress={TallennaData} title="Save" />
       </View>
     </View>
   );
