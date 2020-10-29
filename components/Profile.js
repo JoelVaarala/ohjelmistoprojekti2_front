@@ -85,7 +85,7 @@ export default function Profile({ navigation, route }, props) {
   // ScrollView returnnin ympärille mahd mahd
 
   return (
-    <View style={[styles.alignItemsCenter, styles.background]}>
+    <View style={styles.alignItemsCenter}>
       <View style={[styles.alignItemsCenter, styles.flexThree]}>
         <Carousel2
           kuvat={pics}

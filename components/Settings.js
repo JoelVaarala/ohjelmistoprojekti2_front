@@ -165,7 +165,7 @@ export default function Settings() {
       .catch((err) => console.error(err));
   }
 
-  const checkBoxColor = () => ({ true: "#FFA500" });
+  const checkBoxColor = () => ({ true: "#000" });
 
   return (
     <SafeAreaView style={[styles.flexOne, styles.background]}>
@@ -197,8 +197,8 @@ export default function Settings() {
               min={1}
               max={100}
               step={1}
-              selectionColor="#FFA500"
-              blankColor="#FFA500"
+              selectionColor="#000000"
+              blankColor="#000000"
               onValueChanged={(distance, fromUser) => {
                 setDistance(distance);
               }}
@@ -217,8 +217,8 @@ export default function Settings() {
               textsize={20}
               rangeLow={lowAge}
               rangeHigh={highAge}
-              selectionColor="#FFA500"
-              blankColor="#FFA500"
+              selectionColor="#000000"
+              blankColor="#000000"
               onValueChanged={(lowAge, highAge, fromUser) => {
                 setLowAge(lowAge), setHighAge(highAge);
               }}
@@ -275,7 +275,7 @@ export default function Settings() {
           )} */}
         </View>
         <View style={styles.saveButton}>
-          <Button color="orange" onPress={TallennaData} title="Save" />
+          <Button color="black" onPress={TallennaData} title="Save" />
         </View>
       </ScrollView>
     </SafeAreaView>
