@@ -125,7 +125,7 @@ export default function Matches({ navigation, route }) {
       <ListItem.Content style={styles.opacityOne}>
               <ListItem.Title style={[styles.matchesName, styles.fontRoboto]}> {item.name}</ListItem.Title>
               <ListItem.Subtitle style={styles.textGreyRoboto}> {item.matchType}</ListItem.Subtitle>
-              <ListItem.Subtitle style={styles.textGreyRoboto}> Latest message</ListItem.Subtitle>
+              {/* <ListItem.Subtitle style={styles.textGreyRoboto}> Latest message</ListItem.Subtitle> */}
               {/* <ListItem.Subtitle style={styles.textGreyRoboto}> {item.bio}</ListItem.Subtitle> */}
             </ListItem.Content>
     </ListItem>
