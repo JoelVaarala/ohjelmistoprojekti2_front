@@ -9,6 +9,7 @@ import EditProfile from "./components/EditProfile";
 import Settings from "./components/Settings";
 import Add_Event from "./components/Add_Event";
 //import FirebaseSaato from './components/FirebaseSaato'
+
 import Startup from "./components/Startup";
 import Register from "./components/Register";
 import { NavigationContainer } from "@react-navigation/native";
@@ -19,6 +20,7 @@ import ViewLikers from "./components/ViewLikers.js";
 import { Icon } from "react-native-elements";
 import { Provider } from "react-redux";
 import { store } from "./redux/index";
+import FlashMessage from "react-native-flash-message";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -122,6 +124,8 @@ export default function App() {
               },
             })}
             tabBarOptions={{
+              activeTintColor: "black",
+              inactiveTintColor: "white",
               showIcon: true,
               showLabel: false,
             }}
@@ -134,6 +138,8 @@ export default function App() {
           </Tab.Navigator>
         )}
       </NavigationContainer>
+      {/* position of flash can also be set bottom, left, right*/}
+      <FlashMessage position="top" />
     </Provider>
   );
 }

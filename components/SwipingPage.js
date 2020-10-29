@@ -52,10 +52,14 @@ export default function SwipingPage({ navigation, route }) {
       .then((data) => {
         console.log("Find results:");
         //console.log(data)
-        console.log(data.result);
-        setSwipettavat(data.result);
-        let id = data.result[0].uid;
-        setNykyinenSwipettava(id);
+        console.log(data.result)
+        setSwipettavat(data.result)
+        {data.result[0] && data.result[0].uid ? 
+          setNykyinenSwipettava(data.result[0].uid)
+          : 
+          setNykyinenSwipettava('')
+        }
+      
       })
       .catch((err) => console.error(err));
     //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
@@ -106,8 +110,14 @@ export default function SwipingPage({ navigation, route }) {
           <Icon size={27} reverse name="cancel" />
         </View>
         <View style={styles.iconsPadding}>
-          {/* ONGELMA: näyttää edellisen swipettävän profiilin jos sivu ei ole ehtinyt päivittyä, ensin kokeiltu {match : swipettavat[0].uid} */}
-          <Icon size={27} reverse name="info" onPress={() => navigation.navigate("Matchprofile", { match: nykyinenSwipettava })} />
+           {/* ONGELMA: näyttää edellisen swipettävän profiilin jos sivu ei ole ehtinyt päivittyä, ensin kokeiltu {match : swipettavat[0].uid} */}
+       
+           { nykyinenSwipettava != '' ? 
+        <Icon size={27} reverse name="info" onPress={() => navigation.navigate('Matchprofile', {match : nykyinenSwipettava})} /> 
+        :
+        <Icon size={27} reverse name="info" /> 
+      }
+      
         </View>
         <View style={styles.iconsPadding}>
           <Icon size={27} reverse name="favorite" />
