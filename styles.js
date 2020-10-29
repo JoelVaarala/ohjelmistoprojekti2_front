@@ -386,4 +386,59 @@ registerRadioGroup: {
     paddingRight: 20,
     paddingBottom: 20,
   },
+  // Event modal
+  mapView: {
+    position: 'absolute', 
+    borderRadius: 20,
+    borderWidth: 2,
+    margin: 20,
+    top: 0, 
+    left: 8, 
+    right: 0, 
+    bottom: 0, 
+    width: '110%', 
+    height: '80%' 
+  },
+  viewFirst: {flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  viewSecond: {
+     flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+  },
+  viewThird: {
+     margin: 20,
+      backgroundColor: "black",
+      borderRadius: 20,
+      paddingLeft: '10%',
+      paddingRight: '10%',
+      width: '80%',
+      height: '75%',
+      alignItems: "center",
+      shadowColor: "#000",
+      borderWidth: 2,
+      borderColor: 'orange',
+      overflow: 'hidden'
+       
+  },
+  touchableHigh: { 
+    backgroundColor: "orange", 
+    borderWidth: 2, 
+    borderColor: 'yellow', 
+    alignSelf: 'center', 
+    padding: 6, 
+    margin: 6, 
+    borderRadius: 20,
+    paddingLeft: 9,
+    paddingRight: 9
+  },
+  modalTextinput: {
+    borderWidth: 2, 
+    borderColor: 'yellow', 
+    backgroundColor: 'orange'
+  }
 });

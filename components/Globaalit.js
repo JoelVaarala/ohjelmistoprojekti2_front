@@ -19,6 +19,8 @@ let url3 = '';
 let jaaninlocalhost = 'http://192.168.56.1:5001/ohpro2-f30e5/us-central1/'; //käytetään firebasen funktioiden testaamiseen
 let firebaseurl = 'https://us-central1-ohpro2-f30e5.cloudfunctions.net/'
 let herokuurl = "https://ohpro2.herokuapp.com/"
+// api key (random user on mapquest for now 15,000 calls / month)
+let MPkey = 'GevdYMR6HG0TuzaUo55m0XVFtEXH9PAI';
 
 global.myUserData = {
   uid : "",
@@ -42,8 +44,8 @@ global.myUserData = {
     ],
     eventsInXHours: 3,
     myLocation: {
-      latitude: 60,
-      longitude: 25
+      latitude: 60.201373,
+      longitude: 24.934041
     }
 
   }
@@ -58,4 +60,6 @@ global.url = herokuurl;
 
 global.firebaseConfig = fireConf;
 
-global.keskusteluDOC = keskustelu
+global.keskusteluDOC = keskustelu;
+
+global.key = MPkey;
