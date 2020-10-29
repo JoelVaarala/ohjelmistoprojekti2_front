@@ -146,23 +146,7 @@ export default function App() {
                 showIcon: true,
                 showLabel: false,
               }}
-                >
-              {/*    tabBarOptions={{
-                labelStyle: {
-                  fontSize: 10,
-                  // color: 'orange', //overridee nyt activetintcolor ja inactiven, vaihdetan jossain kohtaa sprintti 3, sang.
-                  fontWeight: 'bold',
-                  fontFamily: 'roboto'
-                },
-                activeTintColor: 'tomato',
-                inactiveTintColor: 'gray',
-
-                // tabStyle: { width: 100 },
-                style: { backgroundColor: "black", paddingTop: 0 },
-              }} 
-            */} 
-           
-            
+            >
               <Tab.Screen name="Matches" component={MatchStack} />
               <Tab.Screen name="Swipes" component={SwipeStack} />
               <Tab.Screen name="My Likes" component={ViewLikers} />
