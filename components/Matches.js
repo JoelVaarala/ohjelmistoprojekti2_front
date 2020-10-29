@@ -107,7 +107,7 @@ export default function Matches({ navigation, route }) {
     <ListItem
       onPress={() => {
         console.log("Pressed: " + item.matchid);
-        navigation.navigate("Chat", { chatti: item.matchid });
+        navigation.navigate("Chat", { chatti: item.matchid, photo: item.avatar_url });
       }}
       containerStyle={styles.matchesBackgroundColor}
     >
