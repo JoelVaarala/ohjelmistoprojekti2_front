@@ -1,56 +1,49 @@
-import React, { useState } from 'react';
-import { Alert, Button, FlatList, Text, View, TextInput } from 'react-native';
-import { Icon, Input } from 'react-native-elements'
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import styles from '../styles';
-
+import React, { useState } from "react";
+import { Alert, Button, FlatList, Text, View, TextInput } from "react-native";
+import { Icon, Input } from "react-native-elements";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+import styles from "../styles";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function EditProfile() {
-
   //tagit
-  const [tag, setTag] = useState('')
-  const [tagList, setTagList] = useState([])
+  const [tag, setTag] = useState("");
+  const [tagList, setTagList] = useState([]);
   const [userTiedot, setUserTiedot] = useState({
     age: 0,
-    bio: '',
-    name: '',
-  })
- 
+    bio: "",
+    name: "",
+  });
 
   React.useEffect(() => {
     // console.log('useeffecti', tagList)
     HaeTiedot();
   }, []);
 
-
   function TallennaData() {
-    
     let body = {
       data: {
         tags: tagList,
-        bio: userTiedot.bio
+        bio: userTiedot.bio,
       },
       uid: global.myUserData.uid,
       idToken: global.myUserData.idToken,
-    }
+    };
 
-    fetch(global.url + "profileUpdate",
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body)
-      }
-    )
-      .then(response => response.json())
-      .then(data => {
+    fetch(global.url + "profileUpdate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((data) => {
         // console.log(data)
       })
-      .catch(err => console.error(err))
-      Alert.alert('Tiedot tallennettiin')
+      .catch((err) => console.error(err));
+    Alert.alert("Tiedot tallennettiin");
   }
 
   // function HaeKayttajanTiedot_autoupdate() {
@@ -65,58 +58,59 @@ export default function EditProfile() {
   //     })
   //     setTagList(querySnapshot.data().tags)
   //   })
-      
+
   // }
 
   const HaeTiedot = async () => {
-  const ref = firestore().collection("users").doc(auth().currentUser.uid)
-  const doc = await ref.get();
-  if(!doc.exists){
-    console.log('document not found')
-  }else{
-    console.log('success HERE HERE ::::', doc.data())
-     setUserTiedot({
-       age: (doc.data().age),
-       bio: (doc.data().bio),
-       name: (doc.data().displayName)
-      })
-      setTagList(doc.data().tags)
-  }
-}
+    const ref = firestore().collection("users").doc(auth().currentUser.uid);
+    const doc = await ref.get();
+    if (!doc.exists) {
+      console.log("document not found");
+    } else {
+      console.log("success HERE HERE ::::", doc.data());
+      setUserTiedot({
+        age: doc.data().age,
+        bio: doc.data().bio,
+        name: doc.data().displayName,
+      });
+      setTagList(doc.data().tags);
+    }
+  };
 
   const addTag = () => {
-    setTagList([...tagList, tag])
-    setTag('');
-  }
+    setTagList([...tagList, tag]);
+    setTag("");
+  };
 
   const deleteItemById = (index) => {
-    Alert.alert(
-      'Poista tagi',
-      'Haluatko varmasti poistaa tagin?',
-      [
-        {text: 'Peruuta', onPress: () => console.log('Käyttäjä peruutti'), style: 'cancel'},
-        {text: 'OK', onPress: () =>  setTagList(tagList.filter((itemi, indexi) => indexi !== index))}
-      ]
-      )
-  }
-  
+    Alert.alert("Poista tagi", "Haluatko varmasti poistaa tagin?", [
+      { text: "Peruuta", onPress: () => console.log("Käyttäjä peruutti"), style: "cancel" },
+      { text: "OK", onPress: () => setTagList(tagList.filter((itemi, indexi) => indexi !== index)) },
+    ]);
+  };
+
   return (
-    <View style={[styles.flexOne, styles.backgroundBlack]}>
-            <View style={[styles.container, styles.containerCenter, styles.marginTopThirty]}>
-      <View style={styles.flexDirectionRow}>
-        <Text
-          style={styles.editProfileText}>
-          {userTiedot.name}, {userTiedot.age} 
-        </Text>
+    <View style={[styles.flexOne, styles.background]}>
+      <View style={[styles.container, styles.containerCenter, styles.marginTopThirty]}>
+        <View style={styles.flexDirectionRow}>
+          <Text style={styles.editProfileText}>
+            {userTiedot.name}, {userTiedot.age}
+          </Text>
+        </View>
+        <Icon reverse name="image" />
+        <Text style={styles.title}>Add a picture</Text>
       </View>
-          <Icon reverse name='image' />
-          <Text style={styles.textOrangeBold}>Lisää kuva</Text>
-      </View>
-      <View style={styles.flexOne, styles.paddingTopFifty}>
-        <Text style={[styles.containerCenter, styles.textOrangeBold, styles.fontSizeTwenty]}>Bio:</Text>
-        <View style={styles.editProfileTextAreaContainer}>
-          <TextInput value={userTiedot.bio} style={styles.editProfileTextArea} multiline={true} 
-            numberOfLines={3} maxLength={500}  onChangeText={text => setUserTiedot({...userTiedot,bio: text})}/>
+      <View style={(styles.flexOne, styles.paddingTopFifty)}>
+        <Text style={[styles.containerCenter, styles.title, styles]}>Bio :</Text>
+        <View style={styles.editProfileBioTextArea}>
+          <TextInput
+            value={userTiedot.bio}
+            style={styles.editProfileTextArea}
+            multiline={true}
+            numberOfLines={3}
+            maxLength={500}
+            onChangeText={(text) => setUserTiedot({ ...userTiedot, bio: text })}
+          />
         </View>
       </View>
       {/* meillä ei oo asuinpaikkaa nyt */}
@@ -125,33 +119,31 @@ export default function EditProfile() {
         <TextInput {styles.editProfileTextArea} placeholder='Asuinpaikka' />
       </View> */}
       <View style={styles.omatContainerit}>
-        <View style={[styles.flexOne, styles.marginTopFifty, styles.marginLeftTwenty]}>
+        <View style={[styles.flexOne, styles.marginLeftTwenty]}>
           <View>
-          <Text style={styles.textOrangeBold}>Lisää tägi</Text>
-          <TextInput onChangeText={tag => setTag(tag)} value={tag} onEndEditing={addTag} 
-                style={styles.tagTextInput} >
-          </TextInput>
+            <Text style={styles.title}>Add a tag :</Text>
+            <TextInput onChangeText={(tag) => setTag(tag)} value={tag} onEndEditing={addTag} style={styles.tagTextInput}></TextInput>
+          </View>
+          <View>
+            <Text style={styles.title}>Your tags :</Text>
+            <FlatList
+              contentContainerStyle={styles.paddingTopTen}
+              horizontal={false}
+              numColumns={3}
+              data={tagList}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item, index }) => (
+                <Text onPress={() => deleteItemById(index)} style={styles.tagBox}>
+                  {item}
+                </Text>
+              )}
+            />
+          </View>
         </View>
-        <View>
-          <Text style={styles.textOrangeBold}>Your tags:</Text>
-          <FlatList contentContainerStyle={styles.paddingTopTen}
-            horizontal={false}
-            numColumns={3}
-            data={tagList}
-            keyExtractor={((item, index) => index.toString())}
-            renderItem={({ item, index }) =>
-              <Text onPress={() => deleteItemById(index)} style={styles.tagBox}>{item}</Text>}
-          />
-        </View>
-      </View>
       </View>
       <View style={styles.saveButton}>
-        <Button
-          onPress={TallennaData}
-          title="Tallenna tiedot"
-        />
-        </View>
+        <Button color="black" onPress={TallennaData} title="Save" />
+      </View>
     </View>
-
   );
 }
