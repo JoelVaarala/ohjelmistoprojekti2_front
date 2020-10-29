@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const backgroundTheme = "black";
 const textColor = "orange";
-const logInBackgroundColor = "#F2F2F2"; //Vaalean harmaa väri
+const logInBackgroundColor = "#F2F2F2"; //HEX Vaalean harmaa väri
 const datePickerBackgroundColor = "white";
 const textAreaBackground = "white";
 const inputTextColor = "black";
@@ -10,6 +10,7 @@ const swipeCardTextColor = "white";
 const tagBoxBackgroundColor = "black";
 const tagBoxBorderColor = "orange";
 const addEventTextboxUnderline = "grey";
+const matchesBackgroundColor = "#F2F2F2"; //HEX Vaalean harmaa väri
 
 global.myTheme = {
   dark: true,
@@ -38,7 +39,6 @@ global.swipesPageButtonGroupColor = {
     primary: "orange",
   },
 };
-
 
 export default StyleSheet.create({
   //backgrounds
@@ -79,9 +79,9 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  matchesBackgroundColor: {
+  matchesBackground: {
     //Greyish
-    backgroundColor: "#DDDDDD",
+    backgroundColor: matchesBackgroundColor,
   },
   registerUserText: {
     color: inputTextColor,
@@ -111,6 +111,9 @@ export default StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#DDDDDD",
     padding: 10,
+  },
+  viewLikersTextColor: {
+    color: textColor,
   },
   //Tagbox color and size
   tagBox: {
@@ -371,11 +374,6 @@ registerRadioGroup: {
       fillColor: '#279315'
 },
 */
-
-  viewLikersItemContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
 
   //alignItem
 
