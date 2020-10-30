@@ -4,13 +4,15 @@ import { Input, Button, Text, ButtonGroup } from "react-native-elements";
 import DatePicker from "react-native-date-picker";
 import { Entypo } from "@expo/vector-icons";
 import styles from "../styles";
+import {AuthContext} from './AuthContext';
 
 export default function Register({ navigation }) {
-  const [kayttajaTiedot, setKayttajaTiedot] = React.useState({ email: "", password: "", age: "", displayName: "", gender: "" });
+  const [kayttajaTiedot, setKayttajaTiedot] = React.useState({ email: "", password: "", age: 1, displayName: "", gender: "male" });
   const [naytasalasana, setNaytaSalasana] = React.useState(true);
   const [salasanaIcon, setSalasanaIcon] = React.useState("eye");
   const [date, setDate] = React.useState(Date.now());
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const { signIn } = React.useContext(AuthContext);
 
   //sukupuolen ButtonGorup valinnat
   const buttons = ["Man", "Woman", "Other"];
@@ -71,9 +73,8 @@ export default function Register({ navigation }) {
         console.log(res.result);
       })
       .then((_) => {
-        // setKayttajaTiedot({ email: '', password: '', age: '', displayName: '', gender: '' });
-        // setDate(Date.now());
-        navigation.goBack();
+        // navigation.goBack();
+        signIn(kayttajaTiedot.email, kayttajaTiedot.password);
       })
       .catch((err) => console.error(err));
   }

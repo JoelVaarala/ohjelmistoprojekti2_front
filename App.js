@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler'; //Tää pitää olla päälimmäisenä koska syyt?
 import React from 'react';
+import { Text, AsyncStorage } from "react-native";
 import MyProfile from './components/MyProfile';
 import SwipingPage from './components/SwipingPage';
 import Matches from './components/Matches';
@@ -20,25 +21,143 @@ import { Icon } from 'react-native-elements';
 import { Provider } from 'react-redux';
 import { store } from './redux/index';
 import FlashMessage from 'react-native-flash-message';
+import * as Location from "expo-location";
+import auth from "@react-native-firebase/auth";
+import "./components/Globaalit";
+import { AuthContext } from './components/AuthContext'
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
+firebase.initializeApp(global.firebaseConfig)
+
+// export const AuthContext = React.createContext();
 
 export default function App() {
-  // true -> false, bypass jolla jättää login pagen välistä
-  const [vaihto, setVaihto] = React.useState(false);
 
-  const asetaLogin = () => {};
+  // kirjautunut: false -> true, bypass jolla jättää login pagen välistä
+  const [navigaationVaihto, setNavigaationVaihto] = React.useState({ ladataan: true, kirjautunut: false });
+  const kayttajaKey = 'kayttaja';
+  const salasanaKey = 'salasana';
 
   //Tämä hoitaa kirjautumisen ja initializen appii, kutsutaan vain kerran ja tässä.
-  React.useEffect(() => {
+  React.useEffect(async () => {
     console.log('use effect');
-    //firebase.initializeApp()
-    firebase.initializeApp(global.firebaseConfig);
-    //console.log(firebase.config.toString())
-    //yritaKirjautua();
+    // await firebase.initializeApp(global.firebaseConfig)
+    console.log(firebase.apps[0]._nativeInitialized);
+    
+    // setNavigaationVaihto({ ladataan: false, kirjautunut: false })
+    loginOnStartup();
   }, []);
+
+  //Tämä contexti hallinnoi sisäänkirjautumis flowta
+  const authContext = React.useMemo(
+    () => ({
+      signIn: async (kayttaja, salasana) => {
+        console.log('Logging in alkaa');
+        await login(kayttaja, salasana);
+        AsyncStorage.setItem(kayttajaKey, kayttaja);
+        AsyncStorage.setItem(salasanaKey, salasana);
+        console.log('Logging in loppui')
+        setNavigaationVaihto({ ladataan: false, kirjautunut: true });
+      },
+      signOut: async () => {
+        console.log('Logging out alkaa');
+        await AsyncStorage.removeItem(kayttajaKey);
+        await AsyncStorage.removeItem(salasanaKey);
+        setNavigaationVaihto({ ladataan: false, kirjautunut: false });
+        console.log('Logging out loppuu');
+      },
+    }),
+    []
+  );
+
+  const loginOnStartup = async () => {
+    let kayttaja = await AsyncStorage.getItem(kayttajaKey);
+    let salasana  =  await AsyncStorage.getItem(salasanaKey);
+    console.log('AsyncStorage -> käyttäjä: ' + kayttaja + ', salasana: ' + salasana)
+    if (kayttaja != null && salasana != null) {
+      login(kayttaja, salasana);
+      setNavigaationVaihto({ ladataan: false, kirjautunut: true });
+    } else {
+      setNavigaationVaihto({ ladataan: false, kirjautunut: false });
+    }
+  }
+  
+  const login = async (kayttaja, salasana) => {
+    await auth()
+      .signInWithEmailAndPassword(kayttaja, salasana)
+      .then(() => {
+        console.log("User logged in");
+        // console.log(auth().currentUser)
+        global.myUserData.uid = auth().currentUser.uid;
+        auth()
+          .currentUser.getIdToken(/* forceRefresh */ true)
+          .then(function (idToken) {
+            global.myUserData.idToken = idToken;
+          })
+          .catch(function (error) {
+            // Handle error
+          });
+        // UpdateLocation();
+        //Debugin takia tässä, poistettu 28.9.2020
+        //LahetaViestiFirebaseen();
+      })
+
+      .catch((error) => {
+        if (error.code === "auth/email-already-in-use") {
+          console.log("That email address is already in use!");
+        }
+
+        if (error.code === "auth/invalid-email") {
+          console.log("That email address is invalid!");
+        }
+
+        console.error(error);
+      });
+      await UpdateLocation();
+    //auth().
+    // console.log(url);
+  };
+
+  async function UpdateLocation() {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+      }
+      let location = await (await Location.getCurrentPositionAsync({})).coords;
+      await UpdateFirebase(location);
+    })();
+  }
+
+  //tää menee endpointin kautta.
+  async function UpdateFirebase(newloc) {
+    let bodii = {
+      uid: global.myUserData.uid,
+      idToken: global.myUserData.idToken,
+      data: {
+        latitude: newloc.latitude,
+        longitude: newloc.longitude,
+      },
+    };
+
+    // return;
+    fetch(global.url + "updateLocation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bodii),
+    })
+      .then((response) => response.json())
+      // .then(response => console.log(response))
+      .then((data) => {
+        console.log("Updated location");
+      })
+      .catch((err) => console.error(err));
+    //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
+  }
 
   //Substacki tällä tai sitten luodaa vaa erillsiet sivut joissa on takaisin nappula että toi toolbari piilottuu
   const ProfiiliSettingsStack = () => {
@@ -99,65 +218,80 @@ export default function App() {
 
   const navIconColor = (focused) => (focused ? 'black' : 'gray');
 
-  return (
-    // <View>
-    //   <Text asd></Text>
-    //   </View>
+  const Sisalto = () => {
+    return (
+      <AuthContext.Provider value={authContext}>
+        <Provider store={store}>
 
-    <Provider store={store}>
-      <NavigationContainer theme={MyTheme}>
-        {vaihto ? (
-          <Stack.Navigator>
-            <ListStack.Screen name="Login" component={Startup} />
-            <ListStack.Screen name="Register" component={Register} />
-          </Stack.Navigator>
-        ) : (
-            <Tab.Navigator
-              swipeEnabled={false}
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size}) => {
-                  let iconName;
-                  let iconColor;
-                  
-                  if (route.name === 'Matches') {
-                    iconName = "people";
-                    iconColor = focused ? 'red' : 'orange';
-                  } else if (route.name === 'Swipes') {
-                    iconName = 'touch-app';
-                    iconColor = focused ? 'red' : 'orange';
-                  } else if (route.name === 'My Likes') {
-                    iconName = "event-available";
-                    iconColor = focused ? 'red' : 'orange';
-                  } else if (route.name === 'Profile') {
-                    iconName = 'person';
-                    iconColor = focused ? 'red' : 'orange';
-                  } else if (route.name === 'Login') {
-                    iconName = 'security';
-                    iconColor = focused ? 'red' : 'orange';
-                  }
-      
-                  // You can return any component that you like here!
-                  return  <Icon color={iconColor} size={28} name={iconName} />;
-                },
-              })}
-              tabBarOptions={{
-                activeTintColor: 'red',
-                inactiveTintColor: 'orange',
-                showIcon: true,
-                showLabel: false,
-              }}
-            >
-              <Tab.Screen name="Matches" component={MatchStack} />
-              <Tab.Screen name="Swipes" component={SwipeStack} />
-              <Tab.Screen name="My Likes" component={ViewLikers} />
-              <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
-              <Tab.Screen name="Login" component={LoginStack} />
-            </Tab.Navigator>
+          <NavigationContainer theme={MyTheme}>
 
-          )}
-      </NavigationContainer>
-      {/* position of flash can also be set bottom, left, right*/}
-      <FlashMessage position="top" />
-    </Provider>
-  );
+            {navigaationVaihto.kirjautunut ? (
+              <Tab.Navigator
+                swipeEnabled={false}
+                screenOptions={({ route }) => ({
+                  tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
+                    let iconColor;
+
+                    if (route.name === 'Matches') {
+                      iconName = "people";
+                      iconColor = focused ? 'red' : 'orange';
+                    } else if (route.name === 'Swipes') {
+                      iconName = 'touch-app';
+                      iconColor = focused ? 'red' : 'orange';
+                    } else if (route.name === 'My Likes') {
+                      iconName = "event-available";
+                      iconColor = focused ? 'red' : 'orange';
+                    } else if (route.name === 'Profile') {
+                      iconName = 'person';
+                      iconColor = focused ? 'red' : 'orange';
+                    } else if (route.name === 'Login') {
+                      iconName = 'security';
+                      iconColor = focused ? 'red' : 'orange';
+                    }
+
+                    // You can return any component that you like here!
+                    return <Icon color={iconColor} size={28} name={iconName} />;
+                  },
+                })}
+                tabBarOptions={{
+                  activeTintColor: 'red',
+                  inactiveTintColor: 'orange',
+                  showIcon: true,
+                  showLabel: false,
+                }}
+              >
+                <Tab.Screen name="Matches" component={MatchStack} />
+                <Tab.Screen name="Swipes" component={SwipeStack} />
+                <Tab.Screen name="My Likes" component={ViewLikers} />
+                <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
+                <Tab.Screen name="Login" component={LoginStack} />
+              </Tab.Navigator>
+
+            ) : (
+
+                <Stack.Navigator>
+                  <ListStack.Screen name="Login" component={Startup} />
+                  <ListStack.Screen name="Rekisteröidy" component={Register} />
+                </Stack.Navigator>
+              )}
+
+          </NavigationContainer>
+          {/* position of flash can also be set bottom, left, right*/}
+          <FlashMessage position="top" />
+
+        </Provider>
+      </AuthContext.Provider>
+    )
+  }
+
+  if (navigaationVaihto.ladataan) {
+    return (
+      <Text>Loading screeni tähän</Text>
+    );
+  } else {
+    return (
+      <Sisalto />
+    );
+  }
 }
