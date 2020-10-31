@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert, ScrollView, SafeAreaView, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from "react-native";
-import { Input, Slider } from "react-native-elements";
+import { Input, Slider,  ButtonGroup,ThemeProvider } from "react-native-elements";
 import RangeSlider from "rn-range-slider";
 import CheckBox from "@react-native-community/checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -40,6 +40,16 @@ export default function Settings() {
   const [events, setEvents] = useState(false);
   const [people, setPeople] = useState(false);
 
+
+  //buttongroup
+  const buttons = ["Men", "Women", "Other"];
+  const [selectedIndex, setSelectedIndex] = React.useState({main: [0]});
+
+  function updateIndex(name, value) {
+    setSelectedIndex({ ...selectedIndex, [name]: value });    
+  }
+
+  console.log(selectedIndex);
   //datetimepicker
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
@@ -95,19 +105,41 @@ export default function Settings() {
       let male = genders.indexOf("male") > -1;
       let female = genders.indexOf("female") > -1;
       let other = genders.indexOf("other") > -1;
+      let values = []
       if (male == true) {
-        setMale(true);
+       // setMale(true);
+       values.push(0)
       }
       if (female == true) {
-        setFemale(true);
+        values.push(1)
+       // setFemale(true);
       }
       if (other == true) {
-        setOther(true);
+        values.push(2)
+     //   setOther(true);
       }
+console.log(values)
+setSelectedIndex({ ...selectedIndex, main: values });
     }
   };
 
   function TallennaData() {
+
+    let genders = []
+    if (selectedIndex.main.includes(0)) {
+   //   setGenders(["male"])
+      genders.push("male")
+    }
+    if (selectedIndex.main.includes(1)) {
+  //    setGenders([...genders, "female"])
+      genders.push("female")
+    }
+    if (selectedIndex.main.includes(2)) {
+    //  setGenders([...genders, "other"])
+      genders.push("other")
+    }
+    console.log(genders)
+
     let body = {
       idToken: global.myUserData.idToken,
       uid: global.myUserData.uid,
@@ -115,7 +147,7 @@ export default function Settings() {
         minAge: lowAge,
           maxAge: highAge,
           lookingFor: ["events", "users"],
-          genders: ["rakkautta", "rauhaa"],
+          genders: genders,
           distance: distance,
           eventsInXHours: 7,
           tags: tagList,
@@ -253,10 +285,19 @@ export default function Settings() {
           </View>
         </View>
 
-        <View style={styles.omatContainerit}>
           <Text style={styles.title}>Gender:</Text>
           <View>
-            <Text style={styles.checkboxText}>Men</Text>
+          <ThemeProvider theme={swipesPageButtonGroupColor}>
+        <ButtonGroup
+          onPress={(value) => updateIndex("main", value)}
+          selectMultiple={true}
+          selectedIndexes={selectedIndex.main}
+          buttons={buttons}
+          containerStyle={[styles.background, styles.heightForty]}
+        />
+      </ThemeProvider>
+      </View>
+           {/* <Text style={styles.checkboxText}>Men</Text>
             <CheckBox tintColors={checkBoxColor()} disabled={false} value={male} onValueChange={(newValue) => setMale(newValue)} />
           </View>
           <View>
@@ -265,9 +306,9 @@ export default function Settings() {
           </View>
           <View>
             <Text style={styles.checkboxText}>Other</Text>
-            <CheckBox tintColors={checkBoxColor()} disabled={false} value={other} onValueChange={(newValue) => setOther(newValue)} />
-          </View>
-        </View>
+        <CheckBox tintColors={checkBoxColor()} disabled={false} value={other} onValueChange={(newValue) => setOther(newValue)} /> */}
+         
+      
 
         <View style={styles.omatContainerit}>
           {/* FIXME Tähän tulee aikaslideri josta valitaan tuntien tai päivien päästä */}
