@@ -19,6 +19,7 @@ export default function Startup({ navigation }) {
   const [salasana, setSalasana] = React.useState("secretPassword");
   const [msg, setMsg] = React.useState("");
   const { signIn } = React.useContext(AuthContext);
+  const { signOut } = React.useContext(AuthContext);
 
   global.fbtoken = "";
 
@@ -136,6 +137,7 @@ export default function Startup({ navigation }) {
         title="Create your account"
         containerStyle={styles.paddingHorizontalTen}
       />
+      <Button color="black" onPress={() => signOut()} title="Sign out" />
     </View>
   );
 }

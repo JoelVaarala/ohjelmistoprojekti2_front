@@ -9,7 +9,6 @@ import Profile from './components/Profile';
 import EditProfile from './components/EditProfile';
 import Settings from './components/Settings';
 import Add_Event from './components/Add_Event';
-//import FirebaseSaato from './components/FirebaseSaato'
 import Startup from './components/Startup';
 import Register from './components/Register';
 import { NavigationContainer } from '@react-navigation/native';
