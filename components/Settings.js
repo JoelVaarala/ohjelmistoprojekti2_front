@@ -7,13 +7,16 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import styles from "../styles";
+import {AuthContext} from './AuthContext';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Settings() {
   //tagit
   const [tag, setTag] = useState("");
   const [tagList, setTagList] = useState([]);
+  const { signOut } = React.useContext(AuthContext);
   const [shouldShow, setShouldShow] = useState(false)
+
 
   const addTag = () => {
     setTagList([...tagList, tag]);
@@ -329,6 +332,9 @@ setSelectedIndex({ ...selectedIndex, main: values });
         </View>
         <View style={styles.saveButton}>
           <Button color={buttonColor} onPress={TallennaData} title="Save" />
+        </View>
+        <View style={styles.saveButton}>
+          <Button color="black" onPress={() => signOut()} title="Sign out" />
         </View>
       </ScrollView>
     </SafeAreaView>
