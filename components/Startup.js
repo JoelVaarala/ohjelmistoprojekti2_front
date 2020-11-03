@@ -128,13 +128,13 @@ export default function Startup({ navigation }) {
         value={kayttaja}
       />
       <Input lable="Salasana" placeholder="Salasana" secureTextEntry={true} onChangeText={(salasana) => setSalasana(salasana)} value={salasana} />
-      <Button buttonStyle={{ backgroundColor: "black" }} onPress={() => signIn(kayttaja, salasana)} title="Login" containerStyle={styles.paddingHorizontalTen} />
+      <Button buttonStyle={styles.backgroundTheme} onPress={() => signIn(kayttaja, salasana)} title="Login" containerStyle={styles.paddingHorizontalTen} />
       <Text>{msg}</Text>
 
       <Button
-        buttonStyle={{ backgroundColor: "black" }}
+        buttonStyle={styles.backgroundTheme}
         onPress={() => navigation.navigate("Rekisteröidy")}
-        title="Create your account"
+        title="Register user"
         containerStyle={styles.paddingHorizontalTen}
       />
       <Button color="black" onPress={() => signOut()} title="Sign out" />

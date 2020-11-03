@@ -87,9 +87,7 @@ export default function Register({ navigation }) {
   //checki, onnistuiko rekisteröinti, jos onnistui -> loginpage ja kirjaudu automaattisesti
   return (
     <ScrollView style={(styles.flexOne, styles.paddingTop)}>
-      <Text h4 style={styles.alignSelfCenter}>
-        Luo käyttäjä
-      </Text>
+      <Text style={[styles.alignSelfCenter, styles.registerUserTitle]}>Register user</Text>
       <Input
         label="Email"
         placeholder="matti.matikainen@gmail.com"
@@ -113,7 +111,7 @@ export default function Register({ navigation }) {
 
       <View style={styles.marginLeftTen}>
         <Text //jos on joku parempi label systeemi, saa muuttaa tämän
-          style={styles.title}
+          style={styles.registerUserText}
         >
           Birthdate
         </Text>
@@ -123,7 +121,7 @@ export default function Register({ navigation }) {
 
       <View style={[styles.marginLeftTen, styles.paddingTopTen]}>
         <Text //jos on joku parempi label systeemi, saa muuttaa tämän
-          style={styles.title}
+          style={styles.registerUserText}
         >
           Gender
         </Text>
@@ -142,7 +140,7 @@ export default function Register({ navigation }) {
                 // circleStyle={ styles.registerRadioGroup // tällä voi muutella radiopylpyrän tyyliä }
                 /> */}
       </View>
-      <Button color="black" onPress={() => registerUser()} title="Register user" containerStyle={styles.registerUserButton} />
+      <Button onPress={() => registerUser()} title="Register user" containerStyle={styles.registerUserButton} />
     </ScrollView>
   );
 }

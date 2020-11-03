@@ -202,7 +202,7 @@ export default function ViewLikers({ navigation, route }) {
             ))}
           </Picker>
         </View>
-        <Text style={styles.userBioStyle}> People who swiped for your event!</Text>
+        <Text style={styles.viewLikersTextColor}> People who swiped for your event!</Text>
         {peoplesWhoWantToJoin.map((l, i) => (
           <ListItem key={i} bottomDivider>
             <Avatar source={{ uri: l.images[0] }} />
@@ -223,7 +223,7 @@ export default function ViewLikers({ navigation, route }) {
                 icon={{
                   name: "arrow-right",
                   size: 30,
-                  color: "lightgreen",
+                  color: viewLikersIconButton1,
                 }}
                 onPress={() => Accept(true, l.uid)}
               />
@@ -234,7 +234,7 @@ export default function ViewLikers({ navigation, route }) {
                 icon={{
                   name: "arrow-right",
                   size: 30,
-                  color: "red",
+                  color: viewLikersIconButton2,
                 }}
               />
             </View>

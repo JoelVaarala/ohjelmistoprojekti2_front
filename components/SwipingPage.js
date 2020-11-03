@@ -7,7 +7,7 @@ import styles from "../styles";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function SwipingPage({ navigation, route }) {
-  [swipettavat, setSwipettavat] = React.useState([]);
+  const [swipettavat, setSwipettavat] = React.useState([]);
   const [nykyinenSwipettava, setNykyinenSwipettava] = React.useState("");
 
   //ratkaistava vielä se että swipettavat ei päivity swipecardsiin.
@@ -80,15 +80,9 @@ export default function SwipingPage({ navigation, route }) {
   const subButtons = ["Open", "Public", "Private"];
   const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [1] });
 
-  const theme = {
-    colors: {
-      primary: "black",
-    },
-  };
-
   return (
     <View style={[styles.container, styles.containerCenter, styles.background]}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={swipesPageButtonGroupColor}>
         <ButtonGroup
           onPress={(value) => updateIndex("main", value)}
           selectedIndex={selectedIndex.main}

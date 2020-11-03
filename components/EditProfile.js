@@ -10,6 +10,7 @@ export default function EditProfile() {
   //tagit
   const [tag, setTag] = useState("");
   const [tagList, setTagList] = useState([]);
+  const [shouldShow, setShouldShow] = useState(false)
   const [userTiedot, setUserTiedot] = useState({
     age: 0,
     bio: "",
@@ -80,6 +81,7 @@ export default function EditProfile() {
   const addTag = () => {
     setTagList([...tagList, tag]);
     setTag("");
+    setShouldShow(!shouldShow)
   };
 
   const deleteItemById = (index) => {
@@ -119,13 +121,20 @@ export default function EditProfile() {
         <TextInput {styles.editProfileTextArea} placeholder='Asuinpaikka' />
       </View> */}
       <View style={styles.omatContainerit}>
-        <View style={[styles.flexOne, styles.marginLeftTwenty]}>
           <View>
-            <Text style={styles.title}>Add a tag :</Text>
-            <TextInput onChangeText={(tag) => setTag(tag)} value={tag} onEndEditing={addTag} style={styles.tagTextInput}></TextInput>
+          <Text style={styles.title}>Your tags :</Text>
+            <View>
+              {shouldShow ? 
+                <TextInput placeholder='Add a tag' onChangeText={(tag) => setTag(tag)} value={tag} onEndEditing={addTag} style={styles.tagTextInput}>
+
+                </TextInput>
+               : 
+                <Button title='+' onPress={() => setShouldShow(!shouldShow)} />}
+             
+            </View>
           </View>
           <View>
-            <Text style={styles.title}>Your tags :</Text>
+          <View style={[styles.flexOne, styles.marginLeftTwenty]}>
             <FlatList
               contentContainerStyle={styles.paddingTopTen}
               horizontal={false}
@@ -142,7 +151,7 @@ export default function EditProfile() {
         </View>
       </View>
       <View style={styles.saveButton}>
-        <Button color="black" onPress={TallennaData} title="Save" />
+        <Button color={buttonColor} onPress={TallennaData} title="Save" />
       </View>
     </View>
   );

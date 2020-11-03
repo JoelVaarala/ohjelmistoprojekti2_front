@@ -16,7 +16,7 @@ export default function Chat(props) {
   const [messages, setMessages] = useState([]);
   const avatar_url = "https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg";
   const [matchinUID, setMatchinUID] = useState("");
-
+  let profilePic = props.route.params.photo;
   // React.useEffect(() => {
   //   getMatchID()
   // }, [])
@@ -36,11 +36,11 @@ export default function Chat(props) {
   //   })
   // }
 
-  //tää täytyy fixaaa EI TOIMI
+  //tää täytyy fixaaa EI TOIMI --- Update nyt toimii
   function GoToAvatar({ navigation }) {
-    return <Avatar onPress={() => navigation.navigate("MatchProfile", { match: matchinUID })} size="large" rounded source={{ uri: avatar_url }} />;
+    return <Avatar onPress={() => navigation.navigate("MatchProfile", { chet: props.route.params.chatti})} size="large" rounded source={ {uri: profilePic} } />;
   }
-
+ 
   //Tällä pystyy lähettää viestinm parametrinä tulee viestin teksti.
   //Laitetaan firebasessa validointi ja automaattisna infona lähettäjä, timestamp ja  sallitaan vain message kenttä.
 
@@ -98,7 +98,7 @@ export default function Chat(props) {
           user: {
             _id: sender,
             name: "joku",
-            avatar: "https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg",
+            avatar: profilePic,
           },
         });
         // asettaan taulun stateen jota Giftedchat käyttää datana
@@ -148,13 +148,14 @@ export default function Chat(props) {
       })
       .catch((err) => console.error(err));
   };
-
+  
   // avatar kuvaa painamalla pääsee katsomaan henkilön profiilia
   function avatarOpensProfile(props2) {
     // console.log('props2 : ',props2)
     // console.log('props : ',props)
-    console.log(props2);
-    props.navigation.navigate("MatchProfile", { match: props2._id });
+    console.log('vvvvv', props.route.params.chatti)
+    console.log('Chatistä lähtevät props2 ', props2);
+    props.navigation.navigate("MatchProfile", { match: props2._id , chet: props.route.params.chatti});
   }
 
   return (
@@ -162,6 +163,7 @@ export default function Chat(props) {
       <View style={styles.chatStyle}>
         <Icon size={20} reverse name="info" onPress={() => removeMatch()} /*tällä napilla voidaan myöhemmin poistaa match*/ />
         <GoToAvatar navigation={props.navigation} />
+        
       </View>
 
       <GiftedChat
