@@ -3,7 +3,6 @@ import { Text, View, TextInput, Button, FlatList, ScrollView, Alert, Modal, Touc
 import { Icon, Input } from "react-native-elements";
 import DatePicker from "react-native-date-picker";
 import Redux from "redux";
-import auth from "@react-native-firebase/auth";
 import { connect } from "react-redux";
 import { store, addEvent } from "../redux/index";
 import styles from "../styles";

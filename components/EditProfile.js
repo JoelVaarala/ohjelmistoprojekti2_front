@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Alert, Button, FlatList, Text, View, TextInput } from "react-native";
 import { Icon, Input } from "react-native-elements";
-import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
+import firebase from 'firebase';
+// import auth from "@react-native-firebase/auth";
+// import firestore from "@react-native-firebase/firestore";
 import styles from "../styles";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
@@ -63,7 +64,7 @@ export default function EditProfile() {
   // }
 
   const HaeTiedot = async () => {
-    const ref = firestore().collection("users").doc(auth().currentUser.uid);
+    const ref = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid);
     const doc = await ref.get();
     if (!doc.exists) {
       console.log("document not found");

@@ -3,8 +3,9 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Button, Text, View } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import Startup from "./Startup";
-import firestore from "@react-native-firebase/firestore";
-import auth from "@react-native-firebase/auth";
+import firebase from 'firebase';
+// import firestore from "@react-native-firebase/firestore";
+// import auth from "@react-native-firebase/auth";
 import { Icon, Avatar } from "react-native-elements";
 import styles from "../styles";
 
@@ -72,7 +73,7 @@ export default function Chat(props) {
 
   // --UPDATED METHOD TO GET MESSAGES REALTIME
   // ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
-  const ref = firestore().collection("matches").doc(props.route.params.chatti).collection("messages").orderBy("timestamp", "desc");
+  const ref = firebase.firestore().collection("matches").doc(props.route.params.chatti).collection("messages").orderBy("timestamp", "desc");
 
   function getConversationsRT() {
     // luodaan snapshot joka, "hakee" firestoren sisällön
@@ -86,7 +87,7 @@ export default function Chat(props) {
         console.log("Viestin sisältö : ", doc.data().message);
         // Alla selvitetään onko henkilö lähettäjä/vastaanottaja, jotta tiedetään kummalle puolelle näyttöä viestit renderöidään
         let sender = doc.data().sender;
-        if (doc.data().sender == auth().currentUser.uid) {
+        if (doc.data().sender == firebase.auth().currentUser.uid) {
           sender = "asd";
         }
 

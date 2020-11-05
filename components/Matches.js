@@ -1,9 +1,9 @@
 import React from "react";
 import { Text, View, FlatList, ImageBackground, Image } from "react-native";
 import { Avatar, ListItem, Overlay,ThemeProvider, ButtonGroup } from "react-native-elements";
-import firestore from "@react-native-firebase/firestore";
-import firebase from "react-native-firebase";
-import auth from "@react-native-firebase/auth";
+import firebase from 'firebase';
+// import firestore from "@react-native-firebase/firestore";
+// import auth from "@react-native-firebase/auth";
 import styles from "../styles";
 import Logo from "./Logo";
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
@@ -50,7 +50,7 @@ export default function Matches({ navigation, route }) {
 
   // FIXME, tämä päivittyy "automaattisesti"
   function getMyMatches_From_MyMatches() {
-    let ref = firestore().collection("users").doc(global.myUserData.myUserID).collection("MyMatches");
+    let ref = firebase.firestore().collection("users").doc(global.myUserData.myUserID).collection("MyMatches");
     ref.onSnapshot((querySnapshot) => {
       // snapshot == capture sen hetkisestä rakenteesta
       let matchit = []; // voidaan asettaa halutut tiedot taulukkoon
@@ -68,9 +68,9 @@ export default function Matches({ navigation, route }) {
       //hakee messages/matches collectionista itemit
       let num = 1;
       let temparray = [];
-      var query = await firestore()
+      var query = await firebase.firestore()
         .collection("matches")
-        .where("users", "array-contains", auth().currentUser.uid)
+        .where("users", "array-contains", firebase.auth().currentUser.uid)
         .get()
         .then(async function (querySnapshot) {
           querySnapshot.forEach(async function (doc) {

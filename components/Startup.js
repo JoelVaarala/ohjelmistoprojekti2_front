@@ -2,13 +2,6 @@
 import React from "react";
 import { View, AsyncStorage, Text } from "react-native";
 import { Input, Button } from "react-native-elements";
-import auth from "@react-native-firebase/auth";
-//import firebase from
-//import "./Globaalit";
-import firebase from "react-native-firebase";
-import firestore from "@react-native-firebase/firestore";
-import * as Location from "expo-location";
-import functions from "@react-native-firebase/functions";
 import styles from "../styles";
 import {AuthContext} from './AuthContext';
 
