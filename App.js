@@ -15,15 +15,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Button, View } from "react-native";
-
-import firebase from 'react-native-firebase';
+import firebase from 'firebase';
 import ViewLikers from './components/ViewLikers.js';
 import { Icon } from 'react-native-elements';
 import { Provider } from 'react-redux';
 import { store } from './redux/index';
 import FlashMessage from 'react-native-flash-message';
 import * as Location from "expo-location";
-import auth from "@react-native-firebase/auth";
 import "./components/Globaalit";
 import { AuthContext } from './components/AuthContext'
 
@@ -46,7 +44,7 @@ export default function App() {
     console.log('use effect');
     // await firebase.initializeApp(global.firebaseConfig)
     console.log(firebase.apps[0]._nativeInitialized);
-    
+
     // setNavigaationVaihto({ ladataan: false, kirjautunut: false })
     loginOnStartup();
   }, []);
@@ -59,8 +57,8 @@ export default function App() {
         await login(kayttaja, salasana);
         AsyncStorage.setItem(kayttajaKey, kayttaja);
         AsyncStorage.setItem(salasanaKey, salasana);
-        console.log('Logging in loppui')
         setNavigaationVaihto({ ladataan: false, kirjautunut: true });
+        console.log('Logging in loppui')
       },
       signOut: async () => {
         console.log('Logging out alkaa');
@@ -75,7 +73,7 @@ export default function App() {
 
   const loginOnStartup = async () => {
     let kayttaja = await AsyncStorage.getItem(kayttajaKey);
-    let salasana  =  await AsyncStorage.getItem(salasanaKey);
+    let salasana = await AsyncStorage.getItem(salasanaKey);
     console.log('AsyncStorage -> käyttäjä: ' + kayttaja + ', salasana: ' + salasana)
     if (kayttaja != null && salasana != null) {
       login(kayttaja, salasana);
@@ -84,15 +82,15 @@ export default function App() {
       setNavigaationVaihto({ ladataan: false, kirjautunut: false });
     }
   }
-  
+
   const login = async (kayttaja, salasana) => {
-    await auth()
+    await firebase.auth()
       .signInWithEmailAndPassword(kayttaja, salasana)
       .then(() => {
         console.log("User logged in");
         // console.log(auth().currentUser)
-        global.myUserData.uid = auth().currentUser.uid;
-        auth()
+        global.myUserData.uid = firebase.auth().currentUser.uid;
+        firebase.auth()
           .currentUser.getIdToken(/* forceRefresh */ true)
           .then(function (idToken) {
             global.myUserData.idToken = idToken;
@@ -116,9 +114,14 @@ export default function App() {
 
         console.error(error);
       });
-      await UpdateLocation();
-    //auth().
-    // console.log(url);
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+    }
+    let location = await (await Location.getCurrentPositionAsync({})).coords;
+    let firebaseUpdate = await UpdateFirebase(location);
+    console.log(firebaseUpdate);
+    // await UpdateLocation();
   };
 
   async function UpdateLocation() {
@@ -128,7 +131,8 @@ export default function App() {
         setErrorMsg("Permission to access location was denied");
       }
       let location = await (await Location.getCurrentPositionAsync({})).coords;
-      await UpdateFirebase(location);
+      let locationUpdate = await UpdateFirebase(location);
+      console.log(locationUpdate);
     })();
   }
 
@@ -156,7 +160,11 @@ export default function App() {
       .then((data) => {
         console.log("Updated location");
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err)
+        return 'Lokaation päivittäminen epäonnistui'
+      });
+      return 'Lokaation päivittäminen onnistui'
     //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
   }
 
@@ -183,7 +191,7 @@ export default function App() {
         <ListStack.Screen name="Chat" component={Chat}
           options={{
             headerRight: () => (
-              <View style={{flex : 1 , flexDirection: 'row', justifyContent : 'flex-end', paddingRight : 120, width : 1050}}>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', paddingRight: 120, width: 1050 }}>
 
                 <Button
                   onPress={() => alert('This is a button!')}

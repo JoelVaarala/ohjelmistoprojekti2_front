@@ -3,9 +3,10 @@ import { Text, View, Image, ScrollView } from "react-native";
 import { Avatar, ListItem, Overlay, Button, ThemeProvider, ButtonGroup } from "react-native-elements";
 
 import Carousel2 from "./Carousel";
-import firestore from "@react-native-firebase/firestore";
+import firebase from 'firebase';
+// import firestore from "@react-native-firebase/firestore";
+// import auth from "@react-native-firebase/auth";
 import styles from "../styles";
-import auth from "@react-native-firebase/auth";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Profile({ navigation, route }, props) {
@@ -57,7 +58,7 @@ export default function Profile({ navigation, route }, props) {
     //console.log('useEffect chat.js saatu id : ' , props)
 
     haeTiedot();
-    console.log('käyttäj id ', auth().currentUser.uid)
+    console.log('käyttäj id ', firebase.auth().currentUser.uid)
     console.log('Profile.js useEffect (route.params.match) = ', route.params.match)
     console.log('Profile.js useEfect (route.params.chet) = ', route.params.chet)
   }, []);
@@ -66,7 +67,7 @@ export default function Profile({ navigation, route }, props) {
 
   async function haeTiedot() {
 
-    const find = await firestore().collection("matches").doc(doc);
+    const find = await firebase.firestore().collection("matches").doc(doc);
     find.onSnapshot((query) => {
       let matchType = query.data().matchType;
       setType(matchType);
@@ -75,7 +76,7 @@ export default function Profile({ navigation, route }, props) {
         console.log('user löytyi')
         query.data().users.forEach(element => {
           console.log('forEach ', element)
-          if (element != auth().currentUser.uid) {
+          if (element != firebase.auth().currentUser.uid) {
             user = element;
           }
         });
@@ -90,7 +91,7 @@ export default function Profile({ navigation, route }, props) {
   }
 
   async function haeUser(user) {
-    const ref = await firestore().collection("users").doc(user);
+    const ref = await firebase.firestore().collection("users").doc(user);
     ref.onSnapshot((qr) => {
       // tiedot viedään userStateen
       let name_f = qr.data().displayName;
@@ -103,7 +104,7 @@ export default function Profile({ navigation, route }, props) {
   }
 
   async function haeEvent() {
-    const ref = await firestore().collection("events").doc(route.params.chet);
+    const ref = await firebase.firestore().collection("events").doc(route.params.chet);
     ref.onSnapshot((qr) => {
       // tiedot viedään userStateen
       let name_f = qr.data().displayName;

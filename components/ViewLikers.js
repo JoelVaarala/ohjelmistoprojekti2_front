@@ -2,7 +2,8 @@ import React from "react";
 import { SafeAreaView, View, FlatList, StatusBar, Image, Text, Picker } from "react-native";
 import { Avatar, ListItem, Overlay, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
-import firestore from "@react-native-firebase/firestore";
+import firebase from 'firebase';
+// import firestore from "@react-native-firebase/firestore";
 import styles from "../styles";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
@@ -26,11 +27,11 @@ export default function ViewLikers({ navigation, route }) {
   }, [selectedEvent]);
 
   async function HaeHakijat() {
-    var peopleWhoLikedMe = await firestore().collection("events").doc(selectedEvent).collection("swipes").doc("usersThatLikedMe").get();
+    var peopleWhoLikedMe = await firebase.firestore().collection("events").doc(selectedEvent).collection("swipes").doc("usersThatLikedMe").get();
     var lol = peopleWhoLikedMe.data().swipes;
-    var peopleInQueue = await firestore().collection("events").doc(selectedEvent).collection("swipes").doc("mySwipes").get();
+    var peopleInQueue = await firebase.firestore().collection("events").doc(selectedEvent).collection("swipes").doc("mySwipes").get();
     peopleInQueue = peopleInQueue.data().swipes;
-    var usersAlreadyInEvent = await firestore().collection("matches").doc(selectedEvent).get();
+    var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(selectedEvent).get();
     usersAlreadyInEvent = usersAlreadyInEvent.data().users;
     console.log(usersAlreadyInEvent);
     //console.log(peopleInQueue)
@@ -52,9 +53,9 @@ export default function ViewLikers({ navigation, route }) {
     var lopulliset = [];
     if (temppia.length !== 0) {
       console.log("Enemmän ku 0");
-      var query = await firestore()
+      var query = await firebase.firestore()
         .collection("users")
-        .where(firestore.FieldPath.documentId(), "in", temppia)
+        .where(firebase.firestore.FieldPath.documentId(), "in", temppia)
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
@@ -79,7 +80,7 @@ export default function ViewLikers({ navigation, route }) {
     console.log("id: " + global.myUserData.uid);
     let eventtiLista = [];
     //tän listan itemit menee dropdowniin, dropdownia kun päivittää niin hakee eventit listaan.
-    var docRef = await firestore()
+    var docRef = await firebase.firestore()
       .collection("users")
       .doc(global.myUserData.uid)
       .collection("myOwnedEvents")
@@ -98,7 +99,7 @@ export default function ViewLikers({ navigation, route }) {
 
     return;
     //Käytetään placeholderina, voidaan
-    var query = await firestore()
+    var query = await firebase.firestore()
       .collection("events")
       .where("eventOwners", "array-contains", global.myUserData.uid)
       .get()

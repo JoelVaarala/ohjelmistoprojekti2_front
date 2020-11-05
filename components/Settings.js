@@ -4,8 +4,9 @@ import { Input, Slider,  ButtonGroup,ThemeProvider } from "react-native-elements
 import RangeSlider from "rn-range-slider";
 import CheckBox from "@react-native-community/checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
+import firebase from 'firebase';
+// import auth from "@react-native-firebase/auth";
+// import firestore from "@react-native-firebase/firestore";
 import styles from "../styles";
 import {AuthContext} from './AuthContext';
 
@@ -81,7 +82,7 @@ export default function Settings() {
   }, []);
 
   const HaeTiedot = async () => {
-    let ref = firestore().collection("users").doc(auth().currentUser.uid).collection("filters").doc("myFilters");
+    let ref = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).collection("filters").doc("myFilters");
     const doc = await ref.get();
     if (!doc.exists) {
       console.log("document not found");
@@ -173,7 +174,7 @@ setSelectedIndex({ ...selectedIndex, main: values });
       Alert.alert("Tiedot tallennettiin");
   }
   function HaeSettingsValues() {
-    let ref = firestore().collection("users").doc(auth().currentUser.uid);
+    let ref = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid);
     ref.onSnapshot((querySnapshot) => {
       let sukupuutto = querySnapshot.data().gender;
       console.log(sukupuutto);
