@@ -228,10 +228,12 @@ export default function Settings() {
                   onChangeText={(tag) => setTag(tag)}
                   value={tag}
                   onEndEditing={addTag}
-                  style={styles.tagTextInput}
+                  style={[styles.tagTextInput, styles.marginTopTen]}
                 ></TextInput>
               ) : (
-                <Button color={buttonColor} title="+" onPress={() => setShouldShow(!shouldShow)} />
+                <View style={styles.marginTopTen}>
+                  <Button color={buttonColor} title="+" onPress={() => setShouldShow(!shouldShow)} />
+                </View>
               )}
             </View>
           </View>
