@@ -289,7 +289,7 @@ export default function App() {
                 }}
               >
                 <Tab.Screen name="Matches" component={MatchStack} />
-                {/* <Tab.Screen name="Swipes" component={SwipeStack} /> */}
+                <Tab.Screen name="Swipes" component={SwipeStack} />
                 <Tab.Screen name="My Likes" component={ViewLikers} />
                 <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
                 <Tab.Screen name="Login" component={LoginStack} />
