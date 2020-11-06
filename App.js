@@ -40,10 +40,10 @@ export default function App() {
   const salasanaKey = 'salasana';
 
   //Tämä hoitaa kirjautumisen ja initializen appii, kutsutaan vain kerran ja tässä.
-  React.useEffect(async () => {
+  React.useEffect(() => {
     console.log('use effect');
     // await firebase.initializeApp(global.firebaseConfig)
-    console.log(firebase.apps[0]._nativeInitialized);
+    // console.log(firebase.apps[0]._nativeInitialized);
 
     // setNavigaationVaihto({ ladataan: false, kirjautunut: false })
     loginOnStartup();
@@ -76,7 +76,7 @@ export default function App() {
     let salasana = await AsyncStorage.getItem(salasanaKey);
     console.log('AsyncStorage -> käyttäjä: ' + kayttaja + ', salasana: ' + salasana)
     if (kayttaja != null && salasana != null) {
-      login(kayttaja, salasana);
+      await login(kayttaja, salasana);
       setNavigaationVaihto({ ladataan: false, kirjautunut: true });
     } else {
       setNavigaationVaihto({ ladataan: false, kirjautunut: false });
@@ -97,6 +97,7 @@ export default function App() {
           })
           .catch(function (error) {
             // Handle error
+            return;
           });
         // UpdateLocation();
         //Debugin takia tässä, poistettu 28.9.2020
@@ -113,14 +114,17 @@ export default function App() {
         }
 
         console.error(error);
+        return;
       });
+      // return;
     let { status } = await Location.requestPermissionsAsync();
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
+    } else {
+      let location = await (await Location.getCurrentPositionAsync({})).coords;
+      let firebaseUpdate = await UpdateFirebase(location);
+      console.log(firebaseUpdate);
     }
-    let location = await (await Location.getCurrentPositionAsync({})).coords;
-    let firebaseUpdate = await UpdateFirebase(location);
-    console.log(firebaseUpdate);
     // await UpdateLocation();
   };
 
@@ -285,7 +289,7 @@ export default function App() {
                 }}
               >
                 <Tab.Screen name="Matches" component={MatchStack} />
-                <Tab.Screen name="Swipes" component={SwipeStack} />
+                {/* <Tab.Screen name="Swipes" component={SwipeStack} /> */}
                 <Tab.Screen name="My Likes" component={ViewLikers} />
                 <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
                 <Tab.Screen name="Login" component={LoginStack} />

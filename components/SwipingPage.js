@@ -7,8 +7,12 @@ import styles from "../styles";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function SwipingPage({ navigation, route }) {
+  const [swipettavatFilter, setSwipettavatFilter] = React.useState([]);
   const [swipettavat, setSwipettavat] = React.useState([]);
   const [nykyinenSwipettava, setNykyinenSwipettava] = React.useState("");
+  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [0, 1, 2] });
+  const buttons = ["Users", "Events", "Both"];
+  const subButtons = ["Open", "Public", "Private"];
 
   //ratkaistava vielä se että swipettavat ei päivity swipecardsiin.
 
@@ -21,6 +25,10 @@ export default function SwipingPage({ navigation, route }) {
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
+
+  React.useEffect(() => {
+    filterSwipet();
+  }, [selectedIndex]);
 
   async function HaeSwipettaviaBackista() {
     let { status } = await Location.requestPermissionsAsync();
@@ -54,6 +62,7 @@ export default function SwipingPage({ navigation, route }) {
         //console.log(data)
         console.log(data.result)
         setSwipettavat(data.result)
+        setSwipettavatFilter(data.result)
         {data.result[0] && data.result[0].uid ? 
           setNykyinenSwipettava(data.result[0].uid)
           : 
@@ -67,7 +76,8 @@ export default function SwipingPage({ navigation, route }) {
 
   function LuoSwipecardi() {
     //Tällä saadaan päiviettyä nää shitit oikeasti statesta.
-    return <SwipeCards vaihtoehdot={swipettavat} />;
+    // return <SwipeCards vaihtoehdot={swipettavat} />;
+    return <SwipeCards vaihtoehdot={swipettavatFilter} />;
   }
 
   //Nämä ovat ButtonGroupille
@@ -76,9 +86,36 @@ export default function SwipingPage({ navigation, route }) {
     console.log(name + ": " + value);
   }
 
-  const buttons = ["Users", "Events", "Both"];
-  const subButtons = ["Open", "Public", "Private"];
-  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [1] });
+  function filterSwipet() {
+    let swipelista = []
+    let eventSubs = ["open", "public", "private"];
+    let eventSublista = [];
+    //muutetaan selectedIndex.sub listan indexit vastaaviksi stringeiksi
+    for (let i = 0; selectedIndex.sub.length > i; i++) {
+      eventSublista.push(eventSubs[selectedIndex.sub[i]])
+    }
+    console.log(eventSublista);
+
+    if (selectedIndex.main == 0) {
+      swipelista = swipettavat.filter(item => item.isEvent === false);
+      console.log('users lista');
+      console.log(swipelista);
+      
+    } else if (selectedIndex.main == 1) {
+      //todo
+      swipelista = swipettavat.filter(item => item.isEvent === true).filter(item => eventSublista.includes(item.eventType));
+      console.log('events lista');
+      console.log(swipelista);
+
+    } else if (selectedIndex.main == 2) {
+      let userit = swipettavat.filter(item => item.isEvent === false);
+      let eventit = swipettavat.filter(item => item.isEvent === true).filter(item => eventSublista.includes(item.eventType));
+      swipelista = userit.concat(eventit);
+      console.log('Both lista');
+      console.log(swipelista);
+    }
+    setSwipettavatFilter(swipelista)
+  }
 
   return (
     <View style={[styles.container, styles.containerCenter, styles.background]}>
