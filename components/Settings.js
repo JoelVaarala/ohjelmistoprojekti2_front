@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Alert, ScrollView, SafeAreaView, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from "react-native";
-import { Input, Slider,  ButtonGroup,ThemeProvider } from "react-native-elements";
+import { Input, Slider, ButtonGroup, ThemeProvider } from "react-native-elements";
 import RangeSlider from "rn-range-slider";
 import CheckBox from "@react-native-community/checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import firebase from 'firebase';
+import firebase from "firebase";
 // import auth from "@react-native-firebase/auth";
 // import firestore from "@react-native-firebase/firestore";
 import styles from "../styles";
-import {AuthContext} from './AuthContext';
+import { AuthContext } from "./AuthContext";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Settings() {
@@ -16,13 +16,12 @@ export default function Settings() {
   const [tag, setTag] = useState("");
   const [tagList, setTagList] = useState([]);
   const { signOut } = React.useContext(AuthContext);
-  const [shouldShow, setShouldShow] = useState(false)
-
+  const [shouldShow, setShouldShow] = useState(false);
 
   const addTag = () => {
     setTagList([...tagList, tag]);
     setTag("");
-    setShouldShow(!shouldShow)
+    setShouldShow(!shouldShow);
   };
 
   const deleteItemById = (index) => {
@@ -31,7 +30,6 @@ export default function Settings() {
       { text: "OK", onPress: () => setTagList(tagList.filter((itemi, indexi) => indexi !== index)) },
     ]);
   };
-
 
   //sliderit
   const [lowAge, setLowAge] = useState(14);
@@ -44,13 +42,12 @@ export default function Settings() {
   const [events, setEvents] = useState(false);
   const [people, setPeople] = useState(false);
 
-
   //buttongroup
   const buttons = ["Men", "Women", "Other"];
-  const [selectedIndex, setSelectedIndex] = React.useState({main: [0]});
+  const [selectedIndex, setSelectedIndex] = React.useState({ main: [0] });
 
   function updateIndex(name, value) {
-    setSelectedIndex({ ...selectedIndex, [name]: value });    
+    setSelectedIndex({ ...selectedIndex, [name]: value });
   }
 
   console.log(selectedIndex);
@@ -94,7 +91,8 @@ export default function Settings() {
       setLowAge(doc.data().minAge);
       setHighAge(doc.data().maxAge);
 
-      {/*
+      {
+        /*
       let looking = doc.data().lookingFor;
       let events = looking.indexOf("events") > -1;
       let people = looking.indexOf("users") > -1;
@@ -104,57 +102,57 @@ export default function Settings() {
       if (people == true) {
         setPeople(true);
       }
-    */}
+    */
+      }
       let genders = doc.data().genders;
       let male = genders.indexOf("male") > -1;
       let female = genders.indexOf("female") > -1;
       let other = genders.indexOf("other") > -1;
-      let values = []
+      let values = [];
       if (male == true) {
-       // setMale(true);
-       values.push(0)
+        // setMale(true);
+        values.push(0);
       }
       if (female == true) {
-        values.push(1)
-       // setFemale(true);
+        values.push(1);
+        // setFemale(true);
       }
       if (other == true) {
-        values.push(2)
-     //   setOther(true);
+        values.push(2);
+        //   setOther(true);
       }
-console.log(values)
-setSelectedIndex({ ...selectedIndex, main: values });
+      console.log(values);
+      setSelectedIndex({ ...selectedIndex, main: values });
     }
   };
 
   function TallennaData() {
-
-    let genders = []
+    let genders = [];
     if (selectedIndex.main.includes(0)) {
-   //   setGenders(["male"])
-      genders.push("male")
+      //   setGenders(["male"])
+      genders.push("male");
     }
     if (selectedIndex.main.includes(1)) {
-  //    setGenders([...genders, "female"])
-      genders.push("female")
+      //    setGenders([...genders, "female"])
+      genders.push("female");
     }
     if (selectedIndex.main.includes(2)) {
-    //  setGenders([...genders, "other"])
-      genders.push("other")
+      //  setGenders([...genders, "other"])
+      genders.push("other");
     }
-    console.log(genders)
+    console.log(genders);
 
     let body = {
       idToken: global.myUserData.idToken,
       uid: global.myUserData.uid,
       data: {
         minAge: lowAge,
-          maxAge: highAge,
-          lookingFor: ["events", "users"],
-          genders: genders,
-          distance: distance,
-          eventsInXHours: 7,
-          tags: tagList,
+        maxAge: highAge,
+        lookingFor: ["events", "users"],
+        genders: genders,
+        distance: distance,
+        eventsInXHours: 7,
+        tags: tagList,
       },
     };
 
@@ -171,7 +169,7 @@ setSelectedIndex({ ...selectedIndex, main: values });
         // console.log(data)
       })
       .catch((err) => console.error(err));
-      Alert.alert("Tiedot tallennettiin");
+    Alert.alert("Tiedot tallennettiin");
   }
   function HaeSettingsValues() {
     let ref = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid);
@@ -181,7 +179,8 @@ setSelectedIndex({ ...selectedIndex, main: values });
       // setStates here as shown above
     });
   }
- {/*
+  {
+    /*
   function TallennaData() {
     let body = {
       data: {
@@ -213,29 +212,34 @@ setSelectedIndex({ ...selectedIndex, main: values });
       })
       .catch((err) => console.error(err));
   } 
-*/}
+*/
+  }
 
   return (
     <SafeAreaView style={[styles.flexOne, styles.background]}>
       <ScrollView>
         <View style={styles.omatContainerit}>
-       
           <View>
-          <Text style={styles.title}>Your tags :</Text>
+            <Text style={styles.title}>Your tags :</Text>
             <View>
-              {shouldShow ? 
-                <TextInput placeholder='Add a tag' onChangeText={(tag) => setTag(tag)} value={tag} onEndEditing={addTag} style={styles.tagTextInput}>
-
-                </TextInput>
-               : 
-                <Button title='+' onPress={() => setShouldShow(!shouldShow)} />}
-             
+              {shouldShow ? (
+                <TextInput
+                  placeholder="Add a tag"
+                  onChangeText={(tag) => setTag(tag)}
+                  value={tag}
+                  onEndEditing={addTag}
+                  style={[styles.tagTextInput, styles.marginTopTen]}
+                ></TextInput>
+              ) : (
+                <View style={styles.marginTopTen}>
+                  <Button color={buttonColor} title="+" onPress={() => setShouldShow(!shouldShow)} />
+                </View>
+              )}
             </View>
-         
           </View>
-          <View style={[styles.flexOne, styles.marginLeftTwenty]}>
+          <View style={styles.flexOne}>
             <FlatList
-              contentContainerStyle={styles.paddingTopTen}
+              contentContainerStyle={[styles.paddingTopTen, styles.paddingRightTwenty]}
               horizontal={false}
               numColumns={3}
               data={tagList}
@@ -289,19 +293,19 @@ setSelectedIndex({ ...selectedIndex, main: values });
           </View>
         </View>
 
-          <Text style={styles.title}>Gender:</Text>
-          <View>
+        <Text style={styles.title}>Gender:</Text>
+        <View>
           <ThemeProvider theme={swipesPageButtonGroupColor}>
-        <ButtonGroup
-          onPress={(value) => updateIndex("main", value)}
-          selectMultiple={true}
-          selectedIndexes={selectedIndex.main}
-          buttons={buttons}
-          containerStyle={[styles.background, styles.heightForty]}
-        />
-      </ThemeProvider>
-      </View>
-           {/* <Text style={styles.checkboxText}>Men</Text>
+            <ButtonGroup
+              onPress={(value) => updateIndex("main", value)}
+              selectMultiple={true}
+              selectedIndexes={selectedIndex.main}
+              buttons={buttons}
+              containerStyle={[styles.background, styles.heightForty]}
+            />
+          </ThemeProvider>
+        </View>
+        {/* <Text style={styles.checkboxText}>Men</Text>
             <CheckBox tintColors={checkBoxColor()} disabled={false} value={male} onValueChange={(newValue) => setMale(newValue)} />
           </View>
           <View>
@@ -311,8 +315,6 @@ setSelectedIndex({ ...selectedIndex, main: values });
           <View>
             <Text style={styles.checkboxText}>Other</Text>
         <CheckBox tintColors={checkBoxColor()} disabled={false} value={other} onValueChange={(newValue) => setOther(newValue)} /> */}
-         
-      
 
         <View style={styles.omatContainerit}>
           {/* FIXME Tähän tulee aikaslideri josta valitaan tuntien tai päivien päästä */}
@@ -335,7 +337,7 @@ setSelectedIndex({ ...selectedIndex, main: values });
           <Button color={buttonColor} onPress={TallennaData} title="Save" />
         </View>
         <View style={styles.saveButton}>
-          <Button color="black" onPress={() => signOut()} title="Sign out" />
+          <Button color={signOutButton} onPress={() => signOut()} title="Sign out" />
         </View>
       </ScrollView>
     </SafeAreaView>

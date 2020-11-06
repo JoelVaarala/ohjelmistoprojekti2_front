@@ -11,6 +11,7 @@ const tagBoxBackgroundColor = "black";
 const tagBoxBorderColor = "orange";
 const addEventTextboxUnderline = "grey";
 const matchesBackgroundColor = "#F2F2F2"; //HEX Vaalean harmaa väri
+const signOutButtonColor = "orange";
 
 global.myTheme = {
   dark: true,
@@ -28,6 +29,8 @@ global.navIconColor = (focused) => (focused ? textColor : "gray"); //NavBar icon
 global.checkBoxColor = () => ({ true: "orange" }); //checkboxin väri
 
 global.buttonColor = "orange"; //musta taustavärien buttonien värit
+
+global.signOutButton = "#ff8c00"; //tummempi oranssi
 
 global.rangerSliderColor = "#FFA500"; // HEX color = orange
 
@@ -345,7 +348,7 @@ export default StyleSheet.create({
   tagTextInput: {
     height: 40,
     width: 200,
-    backgroundColor: inputTextColor,
+    backgroundColor: textAreaBackground,
     color: inputTextColor,
     borderRadius: 6,
   },
