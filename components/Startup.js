@@ -3,7 +3,7 @@ import React from "react";
 import { View, AsyncStorage, Text } from "react-native";
 import { Input, Button } from "react-native-elements";
 import styles from "../styles";
-import {AuthContext} from './AuthContext';
+import { AuthContext } from './AuthContext';
 
 
 export default function Startup({ navigation }) {
@@ -130,7 +130,13 @@ export default function Startup({ navigation }) {
         title="Register user"
         containerStyle={styles.paddingHorizontalTen}
       />
-      <Button color="black" onPress={() => signOut()} title="Sign out" />
+
+      <Button
+        buttonStyle={styles.backgroundTheme}
+        onPress={() => signOut()}
+        title="Sign out"
+        containerStyle={styles.paddingHorizontalTen}
+      />
     </View>
   );
 }
