@@ -337,7 +337,7 @@ export default function Settings() {
           <Button color={buttonColor} onPress={TallennaData} title="Save" />
         </View>
         <View style={styles.saveButton}>
-          <Button color={signOutButton} onPress={() => signOut()} title="Sign out" />
+          <Button color={buttonColor} onPress={() => signOut()} title="Sign out" />
         </View>
       </ScrollView>
     </SafeAreaView>
