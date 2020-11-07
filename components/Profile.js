@@ -3,7 +3,7 @@ import { Text, View, Image, ScrollView } from "react-native";
 import { Avatar, ListItem, Overlay, Button, ThemeProvider, ButtonGroup } from "react-native-elements";
 
 import Carousel2 from "./Carousel";
-import firebase from 'firebase';
+import firebase from "firebase";
 // import firestore from "@react-native-firebase/firestore";
 // import auth from "@react-native-firebase/auth";
 import styles from "../styles";
@@ -19,21 +19,19 @@ export default function Profile({ navigation, route }, props) {
     name: "nimi",
     bio: "bio",
   });
-  const [type, setType] = React.useState('');
+  const [type, setType] = React.useState("");
   const [pics, setPics] = React.useState([]);
-  const [eventInfo, setEventInfo] = React.useState({ participiants: [{ images: ['https://randomuser.me/api/portraits/med/women/1.jpg'] }] })
+  const [eventInfo, setEventInfo] = React.useState({ participiants: [{ images: ["https://randomuser.me/api/portraits/med/women/1.jpg"] }] });
   // true -> display user __ false -> display event
   const [view, setView] = React.useState(true);
   const buttons = ["Osallistujat", "Jonossa"];
 
   const [selectedIndex, setSelectedIndex] = React.useState({ main: 2 });
 
-
   function updateIndex(name, value) {
     setSelectedIndex({ ...selectedIndex, [name]: value });
     console.log(name + ": " + value);
   }
-
 
   const theme = {
     colors: {
@@ -47,7 +45,6 @@ export default function Profile({ navigation, route }, props) {
       //console.log("Listener")
       //console.log(firebase.auth().currentUser)
       //setPics();
-
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -58,36 +55,34 @@ export default function Profile({ navigation, route }, props) {
     //console.log('useEffect chat.js saatu id : ' , props)
 
     haeTiedot();
-    console.log('käyttäj id ', firebase.auth().currentUser.uid)
-    console.log('Profile.js useEffect (route.params.match) = ', route.params.match)
-    console.log('Profile.js useEfect (route.params.chet) = ', route.params.chet)
+    console.log("käyttäj id ", firebase.auth().currentUser.uid);
+    console.log("Profile.js useEffect (route.params.match) = ", route.params.match);
+    console.log("Profile.js useEfect (route.params.chet) = ", route.params.chet);
   }, []);
 
   //haetaan infot firebasesta
 
   async function haeTiedot() {
-
     const find = await firebase.firestore().collection("matches").doc(doc);
     find.onSnapshot((query) => {
       let matchType = query.data().matchType;
       setType(matchType);
-      let user = '';
+      let user = "";
       if (matchType == "user") {
-        console.log('user löytyi')
-        query.data().users.forEach(element => {
-          console.log('forEach ', element)
+        console.log("user löytyi");
+        query.data().users.forEach((element) => {
+          console.log("forEach ", element);
           if (element != firebase.auth().currentUser.uid) {
             user = element;
           }
         });
 
         haeUser(user);
-      }
-      else if (matchType == "event") {
-        console.log('event löytyi')
+      } else if (matchType == "event") {
+        console.log("event löytyi");
         haeEvent();
       }
-    })
+    });
   }
 
   async function haeUser(user) {
@@ -110,7 +105,7 @@ export default function Profile({ navigation, route }, props) {
       let name_f = qr.data().displayName;
       let bio_f = qr.data().bio;
       setEvent({ name: name_f, bio: bio_f });
-      setView(false)
+      setView(false);
       console.log("id from haeEvent : ", qr.id);
     });
   }
@@ -152,11 +147,8 @@ export default function Profile({ navigation, route }, props) {
 
   // ScrollView returnnin ympärille mahd mahd
   const renderView = () => {
-    return (
-      <Text>moi</Text>
-    );
-  }
-
+    return <Text>moi</Text>;
+  };
 
   //ainoastaan eventin omistaja näkee buttonin jolla voi kickata osallistujan
   function Jooh() {
@@ -166,19 +158,14 @@ export default function Profile({ navigation, route }, props) {
           <Avatar source={{ uri: l.images[0] }} />
           <ListItem.Content>
             <View>
-              <ListItem.Title>
-                {l.displayName} Nimi
-              </ListItem.Title>
+              <ListItem.Title>{l.displayName} Nimi</ListItem.Title>
 
               <ListItem.Subtitle>ikä</ListItem.Subtitle>
             </View>
           </ListItem.Content>
           <View style={styles.viewLikersItemContent}>
-
-
             <Button //tää on kicki button
               type="outline"
-
               raised={true}
               onPress={() => Accept(false, l.uid)}
               icon={{
@@ -193,34 +180,33 @@ export default function Profile({ navigation, route }, props) {
     }
   }
 
-
-
   return (
     <View style={[styles.alignItemsCenter, styles.background]}>
-      {view ?
+      {view ? (
         <View style={[styles.alignItemsCenter, styles.flexThree]}>
           <Carousel2
             kuvat={pics}
             style={
               styles.flexOne
-            //styles.carouselImageSize
+              //styles.carouselImageSize
             }
           />
-        </View> : <View>{/* Tähän eventille kuva systeemit, kun eventin tiedoista niitä alkaa löytymään*/}</View>}
+        </View>
+      ) : (
+        <View>{/* Tähän eventille kuva systeemit, kun eventin tiedoista niitä alkaa löytymään*/}</View>
+      )}
 
       <View style={styles.flexThree}>
-        {view ?
+        {view ? (
           <View>
             <Text style={styles.userTextStyle}>
               {user.name}, {user.age}
             </Text>
-            <Text style={styles.userBioStyle}>{user.bio}</Text>
+            <Text style={styles.tagTextInput}>{user.bio}</Text>
           </View>
-          :
+        ) : (
           <View>
-            <Text style={styles.userTextStyle}>
-              {event.name}
-            </Text>
+            <Text style={styles.userTextStyle}>{event.name}</Text>
             <Text style={styles.userBioStyle}>{event.bio}</Text>
             <ThemeProvider theme={theme}>
               {/* <ButtonGroup
@@ -229,22 +215,19 @@ export default function Profile({ navigation, route }, props) {
           buttons={buttons}
           containerStyle={[styles.background, styles.heightForty]}
         /> */}
-                <ButtonGroup
-                  onPress={(value) => updateIndex("main", value)}
-                  selectedIndex={selectedIndex.main}
-                  buttons={buttons}
-                  containerStyle={[styles.background, styles.heightForty]}
-                />
+              <ButtonGroup
+                onPress={(value) => updateIndex("main", value)}
+                selectedIndex={selectedIndex.main}
+                buttons={buttons}
+                containerStyle={[styles.background, styles.heightForty]}
+              />
             </ThemeProvider>
             <Jooh></Jooh>
           </View>
-        }
-
+        )}
       </View>
 
       {/* <ScrollView>{view ? (<Text>true</Text>) : (<Text>false</Text>)} </ScrollView> */}
-
     </View>
-
   );
 }
