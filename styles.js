@@ -11,7 +11,7 @@ const tagBoxBackgroundColor = "black";
 const tagBoxBorderColor = "orange";
 const addEventTextboxUnderline = "grey";
 const matchesBackgroundColor = "#F2F2F2"; //HEX Vaalean harmaa väri
-const buttonColor = "orange";
+const signOutButtonColor = "orange";
 
 global.myTheme = {
   dark: true,
@@ -20,16 +20,17 @@ global.myTheme = {
     background: logInBackgroundColor, //log in sivulla näkyvä taustaväri
     card: backgroundTheme, //NavIconien ympärillä oleva tausta
     text: textColor, //Screenien otsikon väri
-    notification: "rgb(255, 69, 58)", // punainen väri
+    notification: "rgb(255, 69, 58)", // punainen väri, en tiedä missä esiintyy
   },
 };
 
 global.navIconColor = (focused) => (focused ? textColor : "gray"); //NavBar iconien aktiivi ja passiivi värit
-global.navBarTintColor = textColor;
 
-global.checkBoxColor = () => ({ true: buttonColor }); //checkboxin väri
+global.checkBoxColor = () => ({ true: "orange" }); //checkboxin väri
 
-global.buttonColor = buttonColor; //musta taustavärien buttonien värit
+global.buttonColor = "orange"; //musta taustavärien buttonien värit
+
+global.signOutButton = "#ff8c00"; //tummempi oranssi
 
 global.rangerSliderColor = "#FFA500"; // HEX color = orange
 
@@ -38,7 +39,7 @@ global.viewLikersIconButton2 = "red";
 
 global.swipesPageButtonGroupColor = {
   colors: {
-    primary: buttonColor,
+    primary: "orange",
   },
 };
 
@@ -66,7 +67,7 @@ export default StyleSheet.create({
   },
   myProfileUserText: {
     fontSize: 20,
-    color: textColor,
+    color: "black",
   },
   checkboxText: {
     fontSize: 14,

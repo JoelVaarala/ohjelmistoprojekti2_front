@@ -96,7 +96,7 @@ export default function EditProfile() {
     <View style={[styles.flexOne, styles.background]}>
       <View style={[styles.container, styles.containerCenter, styles.marginTopThirty]}>
         <View style={styles.flexDirectionRow}>
-          <Text style={[styles.editProfileText, styles.myProfileUserText]}>
+          <Text style={[styles.editProfileText, { color: "white" }]}>
             {userTiedot.name}, {userTiedot.age}
           </Text>
         </View>
