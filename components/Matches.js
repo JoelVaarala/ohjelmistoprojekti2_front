@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, FlatList, ImageBackground, Image } from "react-native";
-import { Avatar, ListItem, Overlay,ThemeProvider, ButtonGroup } from "react-native-elements";
-import firebase from 'firebase';
+import { Avatar, ListItem, Overlay, ThemeProvider, ButtonGroup } from "react-native-elements";
+import firebase from "firebase";
 // import firestore from "@react-native-firebase/firestore";
 // import auth from "@react-native-firebase/auth";
 import styles from "../styles";
@@ -19,8 +19,6 @@ export default function Matches({ navigation, route }) {
     setSelectedIndex({ ...selectedIndex, [name]: value });
     console.log(name + ": " + value);
   }
-
-
 
   const theme = {
     colors: {
@@ -68,7 +66,8 @@ export default function Matches({ navigation, route }) {
       //hakee messages/matches collectionista itemit
       let num = 1;
       let temparray = [];
-      var query = await firebase.firestore()
+      var query = await firebase
+        .firestore()
         .collection("matches")
         .where("users", "array-contains", firebase.auth().currentUser.uid)
         .get()
@@ -81,20 +80,17 @@ export default function Matches({ navigation, route }) {
             let chatname = "";
             num = num + 1;
             // asd.users.re
-            if(asd.matchtype == "event")
-            {
+            if (asd.matchtype == "event") {
               chatname = asd.displayNames[0];
-            }
-            else {
-              asd.displayNames.forEach(element => {
-                if(element !=  global.uid)
-                  chatname = element
+            } else {
+              asd.displayNames.forEach((element) => {
+                if (element != global.uid) chatname = element;
               });
             }
             //temparray.push(doc.data())
             temparray.push({
               matchid: doc.id,
-              bio : asd.bio,
+              bio: asd.bio,
               name: chatname,
               matchType: asd.matchType,
               avatar_url: `https://randomuser.me/api/portraits/med/women/${num}.jpg`,
@@ -109,8 +105,6 @@ export default function Matches({ navigation, route }) {
     }
   };
 
-
-
   //Tämän pitäisi myös pistää linkki chatkomponenttiin johon passataan parametrinä keskustelkun id
   const renderItem = ({ item }) => (
     <ListItem
@@ -123,35 +117,35 @@ export default function Matches({ navigation, route }) {
     >
       <Avatar rounded source={{ uri: item.avatar_url }} />
       <ListItem.Content style={styles.opacityOne}>
-              <ListItem.Title style={[styles.matchesName, styles.fontRoboto]}> {item.name}</ListItem.Title>
-              <ListItem.Subtitle style={styles.textGreyRoboto}> {item.matchType}</ListItem.Subtitle>
-              {/* <ListItem.Subtitle style={styles.textGreyRoboto}> Latest message</ListItem.Subtitle> */}
-              {/* <ListItem.Subtitle style={styles.textGreyRoboto}> {item.bio}</ListItem.Subtitle> */}
-            </ListItem.Content>
+        <ListItem.Title style={[styles.matchesName, styles.fontRoboto]}> {item.name}</ListItem.Title>
+        <ListItem.Subtitle style={styles.textGreyRoboto}> {item.matchType}</ListItem.Subtitle>
+        {/* <ListItem.Subtitle style={styles.textGreyRoboto}> Latest message</ListItem.Subtitle> */}
+        {/* <ListItem.Subtitle style={styles.textGreyRoboto}> {item.bio}</ListItem.Subtitle> */}
+      </ListItem.Content>
     </ListItem>
   );
 
   return (
     <View style={[styles.flexOne, styles.background]}>
       <View>
-      <ThemeProvider theme={theme}>
-        {/* <ButtonGroup
+        <ThemeProvider theme={myTheme}>
+          {/* <ButtonGroup
           onPress={(value) => updateIndex("main", value)}
           selectedIndex={selectedIndex.main}
           buttons={buttons}
           containerStyle={[styles.background, styles.heightForty]}
         /> */}
-        {selectedIndex.main != 0 ? (
-          <ButtonGroup
-            onPress={(value) => updateIndex("sub", value)}
-            selectMultiple={true}
-            selectedIndexes={selectedIndex.sub}
-            buttons={subButtons}
-            containerStyle={[styles.background, styles.heightForty]}
-            style={styles.paddingBottomFifty}
-          />
-        ) : null}
-      </ThemeProvider>
+          {selectedIndex.main != 0 ? (
+            <ButtonGroup
+              onPress={(value) => updateIndex("sub", value)}
+              selectMultiple={true}
+              selectedIndexes={selectedIndex.sub}
+              buttons={subButtons}
+              containerStyle={[styles.background, styles.heightForty]}
+              style={styles.paddingBottomFifty}
+            />
+          ) : null}
+        </ThemeProvider>
         <FlatList horizontal={false} data={myMatches} renderItem={renderItem}></FlatList>
         {/* <Text style={[styles.title, styles.fontRoboto, styles.marginLeftTen]}>Messages</Text> */}
         {/* {list.map((l, i) => (
