@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Component } from "react";
-import { Text, View, TextInput, Button, FlatList, ScrollView, Alert, Modal, TouchableHighlight } from "react-native";
-import { Icon, Input } from "react-native-elements";
+import { Text, View, TextInput, FlatList, ScrollView, Alert, Modal, TouchableHighlight } from "react-native";
+import { Icon, Input, Button } from "react-native-elements";
 import DatePicker from "react-native-date-picker";
 import Redux from "redux";
 import { connect } from "react-redux";
@@ -8,6 +8,7 @@ import { store, addEvent } from "../redux/index";
 import styles from "../styles";
 import { showMessage } from "react-native-flash-message";
 import MapView, { Marker } from "react-native-maps";
+import * as Location from 'expo-location';
 
 function Add_Eventti({ navigation, route }, props) {
   // Statet tapahtuman tiedoille
@@ -19,9 +20,9 @@ function Add_Eventti({ navigation, route }, props) {
   // State renderöi "kyselyn"(default) tai "preview" (ln:88)
   const [view, setView] = React.useState(true);
 
-  const [value, setValue] = React.useState("sijainti");
+  const [value, setValue] = React.useState("loading location...");
   const [newValue, setNewValue] = React.useState("");
-  const [modalVisible, setModalVisible] = useState(false);
+  //const [modalVisible, setModalVisible] = useState(false);
   const [region, setRegion] = React.useState({
     latitude: global.myUserData.filters.myLocation.latitude,
     longitude: global.myUserData.filters.myLocation.longitude,
@@ -35,7 +36,8 @@ function Add_Eventti({ navigation, route }, props) {
   });
 
   React.useEffect(() => {
-    fetchAddress();
+    getLocation();
+    console.log(region)
   }, []);
 
   // Lisätään tägit taulukkoon
@@ -43,29 +45,64 @@ function Add_Eventti({ navigation, route }, props) {
     setTags([tag, ...tags]);
     setTag("");
   };
-
+  const [reg, setReg] = React.useState();
+  const getLocation= async()   => {
+    //Checkpermission
+    let   { status} = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+        Alert.alert('No permission to accesslocation');
+    }
+    else {
+        let location= await Location.getCurrentPositionAsync({});
+        // setLocation(location);
+        // console.log(location.coords.latitude)
+        
+        setRegion({
+            latitude: location.coords.latitude, 
+            longitude: location.coords.longitude, 
+            latitudeDelta: 0.0322, 
+            longitudeDelta: 0.0221
+        });
+        fetchAddress(location.coords.latitude, location.coords.longitude);
+    }
+   
+};
   // Lähetetään reducerin kautta storeen eventin tiedot ja nollataan statet
   // Lopuksi myös vaihdetaan view -> false, jolloin preview screen aktivoituu
-  const goToPreview = () => {
+  // const goToPreview = () => {
     // store.dispatch(addName(eventName))
     //tags.forEach(el =>console.log(el))
-    store.dispatch(addEvent({ eventName, description, date, location, tags }));
+    // VIRHE OLI TÄMÄ LOCATION MUUTTUJA ____ MIKSI??
+    //store.dispatch(addEvent({ eventName, description, date, locationaq, tags }));
     // console.log('tässä store : ', store.getState())
     // console.log(Array.isArray(store.getState().EventReducer[0].tags))
-    setEventName("");
-    setDescription("");
-    setDate(new Date());
-    setTags([]);
-    setView(false);
-  };
+    //setEventName("");
+    //setDescription("");
+  //   setDate(new Date());
+  //   setTags([]);
+  //   setView(false);
+  // };
+  const goToSelect = () => {
+    setView(true)
+  }
+  const logTiedot = () => {
+    console.log('tiedot :::::::::::::::::::::::::::::::::::::::::::::: ')
+    console.log('Nimi = ',eventName);
+    console.log('Desc = ', description);
+    console.log('Date = ',date);
+    console.log('Tags = ',tags);
+    console.log('NewValue = ',newValue)
+    console.log('value = ', value)
+    console.log('location', region)
+  }
 
   // Luodun eventin lähetys
   // TODO : paikkatiedot korjaus, mahd valinta public
   const sendEvent = () => {
-    let start_s = store.getState().EventReducer[0].date;
-    let event_s = store.getState().EventReducer[0].eventName;
-    let bio_s = store.getState().EventReducer[0].description;
-    let tagit_s = store.getState().EventReducer[0].tags;
+    // let start_s = store.getState().EventReducer[0].date;
+    // let event_s = store.getState().EventReducer[0].eventName;
+    // let bio_s = store.getState().EventReducer[0].description;
+    // let tagit_s = store.getState().EventReducer[0].tags;
     let url = global.url + "event";
     // console.log('Tagi array', store.getState().EventReducer[0].tags)
     // console.log(startTime, "start")
@@ -75,19 +112,19 @@ function Add_Eventti({ navigation, route }, props) {
     // console.log(tagit, ' tagit')
 
     let bodi = {
-      idToken: global.myUserData.idToken,
+      idToken: global.myUserData.idToken, // HOX, this needs to be changed to actual current user instead of global
       uid: global.myUserData.uid,
       data: {
         eventType: "public",
-        eventStart: start_s,
+        eventStart: date,
         eventEnd: "",
-        displayName: event_s,
-        bio: bio_s,
+        displayName: eventName,
+        bio: description,
         position: {
           latitude: region.latitude,
           longitude: region.longitude,
         },
-        tags: tagit_s,
+        tags: tags,
         images: [],
       },
     };
@@ -128,7 +165,7 @@ function Add_Eventti({ navigation, route }, props) {
   const showSuccess = () => {
     showMessage({
       message: "Eventin lisäys onnistui",
-      description: "wp gg",
+      description: "party time excellent",
       type: "default",
       duration: 1850,
       backgroundColor: "green",
@@ -137,17 +174,18 @@ function Add_Eventti({ navigation, route }, props) {
     });
   };
 
-  const fetchAddress = () => {
+  const fetchAddress = (la, lo) => {
     let key = global.key;
-    let long = region.longitude;
-    let lat = region.latitude;
-
+    let long = lo;
+    let lat = la;
+    console.log('TÄMÄ ', la)
     const url = `http://www.mapquestapi.com/geocoding/v1/reverse?key=${key}&location=${lat},${long}&includeRoadMetadata=true&includeNearestIntersection=true`;
-
+    console.log(url)
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setValue(data.results[0].locations[0].adminArea5 + ", " + data.results[0].locations[0].street);
+        // value above is string version and below example for location object for more values
         setPlace({
           street: data.results[0].locations[0].street,
           city: data.results[0].locations[0].adminArea5,
@@ -190,8 +228,8 @@ function Add_Eventti({ navigation, route }, props) {
               style={styles.addEventTextbox}
               onChangeText={(text) => setEventName(text)}
               value={eventName}
-              //onEndEditing={() => store.dispatch(addName(eventName))}
-              //_tällä lähetteisi eventName kun näppäimistö suljetaan
+            //onEndEditing={() => store.dispatch(addName(eventName))}
+            //_tällä lähetteisi eventName kun näppäimistö suljetaan
             />
 
             <Text style={[styles.title, styles.marginTopTen]}>Event description : </Text>
@@ -209,10 +247,10 @@ function Add_Eventti({ navigation, route }, props) {
             />
           </View>
 
-          <Text style={[styles.title, styles.marginTopTen]}>Event location : {value}</Text>
-
+          <Text style={[styles.title, styles.marginTopTen]}>Event location :</Text>
+          <Text style={[styles.title, styles.marginTopTen]}> - {value /*place.street + ', ' +  place.city */}</Text>
           <View style={styles.viewFirst}>
-            <Modal
+           {/* <Modal
               animationType="slide"
               transparent={true}
               visible={modalVisible}
@@ -251,12 +289,13 @@ function Add_Eventti({ navigation, route }, props) {
                   </View>
                 </View>
               </View>
-            </Modal>
+            </Modal> */}
             <Button
+            buttonStyle={{backgroundColor: 'orange',  alignSelf: 'center'}} titleStyle={{color: 'black'}}
               onPress={() => {
-                setModalVisible(true);
+                 setView(false); // view true, remove modal call  // vanha : setModalVisible(true);
               }}
-              title="OPEN MAP"
+              title="Select another"
             />
           </View>
 
@@ -290,10 +329,45 @@ function Add_Eventti({ navigation, route }, props) {
             title="testimessage"
             color="#841584"
             /> */}
-            <Button onPress={goToPreview} title="preview" />
+            <Button buttonStyle={{backgroundColor: 'orange', alignSelf: 'center'}} titleStyle={{color: 'black'}} onPress={ sendEvent/* sendEvent logTiedot*/} title="Save event" />
           </View>
         </View>
-      ) : (
+      ) :
+
+
+        (<View >
+           <Text style={{marginTop: 50}}>current : {value}</Text>
+            <MapView style={styles.mapView} region={region}>
+            
+              <Marker
+                coordinate={{
+                  latitude: region.latitude,
+                  longitude: region.longitude,
+                }}
+                title={value}
+              />
+            </MapView>
+           
+            <View style={{marginTop: '100%'}}>
+            
+           
+           
+          </View>
+          <View style={{backgroundColor: 'black', marginTop: '10%'}}>
+          <TextInput style={styles.addEventTextbox} 
+                      onChangeText={(text) => setNewValue(text)}
+                      value={newValue}
+                      onEndEditing={fetchCoordinates}
+                      placeholder={value}
+                      placeholderTextColor="grey"
+                      />
+          <Text></Text>
+          <Button buttonStyle={{backgroundColor: 'orange', width: '50%', alignSelf: 'center'}} titleStyle={{color: 'black'}} title="confirm address" onPress={goToSelect} />
+          </View>
+        </View>)
+
+
+      /*(
         <View style={styles.marginLeftTen}>
           <Text style={[styles.title, styles.marginTopTen]}>Your event review :</Text>
           <View style={styles.marginTopTen}>
@@ -316,11 +390,12 @@ function Add_Eventti({ navigation, route }, props) {
             <Button onPress={sendEvent} title="Confirm event" />
           </View>
         </View>
-      )}
+            ) */}
     </ScrollView>
   );
 }
 
+// hox! Reducer not currently being used due changes in structure
 const mapStateToProps = (state) => ({
   EventReducer: state.EventReducer,
 });
