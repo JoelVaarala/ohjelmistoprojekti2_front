@@ -17,6 +17,7 @@ export default function Settings() {
   const [tagList, setTagList] = useState([]);
   const { signOut } = React.useContext(AuthContext);
   const [shouldShow, setShouldShow] = useState(false);
+  const [showHoursOrDays, setShowHoursOrDays] = useState(false);
 
   const addTag = () => {
     setTagList([...tagList, tag]);
@@ -35,6 +36,7 @@ export default function Settings() {
   const [lowAge, setLowAge] = useState(14);
   const [highAge, setHighAge] = useState(100);
   const [distance, setDistance] = useState(1);
+  const [time, setTime] = useState(1);
   //checkboxit
   const [female, setFemale] = useState(false);
   const [male, setMale] = useState(false);
@@ -127,6 +129,15 @@ export default function Settings() {
   };
 
   function TallennaData() {
+
+    // muutetaan päivät tunneiksi jos "days" on valittuna
+    let timelimit;
+    if (showHoursOrDays == false) {
+      timelimit = time * 24;
+    }
+    else
+      timelimit = time
+
     let genders = [];
     if (selectedIndex.main.includes(0)) {
       //   setGenders(["male"])
@@ -151,7 +162,7 @@ export default function Settings() {
         lookingFor: ["events", "users"],
         genders: genders,
         distance: distance,
-        eventsInXHours: 7,
+        eventsInXHours: timelimit,
         tags: tagList,
       },
     };
@@ -231,10 +242,10 @@ export default function Settings() {
                   style={[styles.tagTextInput, styles.marginTopTen]}
                 ></TextInput>
               ) : (
-                <View style={styles.marginTopTen}>
-                  <Button color={buttonColor} title="+" onPress={() => setShouldShow(!shouldShow)} />
-                </View>
-              )}
+                  <View style={styles.marginTopTen}>
+                    <Button color={buttonColor} title="+" onPress={() => setShouldShow(!shouldShow)} />
+                  </View>
+                )}
             </View>
           </View>
           <View style={styles.flexOne}>
@@ -317,8 +328,46 @@ export default function Settings() {
         <CheckBox tintColors={checkBoxColor()} disabled={false} value={other} onValueChange={(newValue) => setOther(newValue)} /> */}
 
         <View style={styles.omatContainerit}>
-          {/* FIXME Tähän tulee aikaslideri josta valitaan tuntien tai päivien päästä */}
-          {/* <View>
+          <Text style={styles.title}> Time limit:</Text>
+          {showHoursOrDays ? (
+            <View style={styles.paddingTopFifty}>
+              <Button color={buttonColor} title="Change to select days" onPress={() => setShowHoursOrDays(!showHoursOrDays)} />
+              <RangeSlider
+                style={styles.rangerSliderSize}
+                gravity={"center"}
+                rangeEnabled={false}
+                min={1}
+                max={23}
+                step={1}
+                selectionColor={rangerSliderColor}
+                blankColor={rangerSliderColor}
+                onValueChanged={(time, fromUser) => {
+                  setTime(time);
+                }}
+              />
+              <Text style={styles.title}> Time limit is {time} hours</Text>
+            </View>
+          ) : (
+              <View style={styles.paddingTopFifty}>
+                <Button color={buttonColor} title="Change to select hours" onPress={() => setShowHoursOrDays(!showHoursOrDays)} />
+                <RangeSlider
+                  style={styles.rangerSliderSize}
+                  gravity={"center"}
+                  rangeEnabled={false}
+                  min={1}
+                  max={7}
+                  step={1}
+                  selectionColor={rangerSliderColor}
+                  blankColor={rangerSliderColor}
+                  onValueChanged={(time, fromUser) => {
+                    setTime(time);
+                  }}
+                />
+                <Text style={styles.title}>Time limit is {time} days </Text>
+              </View>)}
+        </View>
+        {/* FIXME Tähän tulee aikaslideri josta valitaan tuntien tai päivien päästä */}
+        {/* <View>
             <Text>Tästä päivästä päivään {formatDate(date)} </Text>
             <Button onPress={showDatepicker} title="Valitse haettavat päivät" />
           </View>
@@ -332,7 +381,6 @@ export default function Settings() {
               onChange={onChange}
             />
           )} */}
-        </View>
         <View style={styles.saveButton}>
           <Button color={buttonColor} onPress={TallennaData} title="Save" />
         </View>
