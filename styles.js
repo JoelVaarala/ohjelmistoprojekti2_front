@@ -11,6 +11,7 @@ const tagBoxBackgroundColor = "black";
 const tagBoxBorderColor = "orange";
 const addEventTextboxUnderline = "grey";
 const matchesBackgroundColor = "#F2F2F2"; //HEX Vaalean harmaa väri
+const buttonColor = "orange";
 
 global.myTheme = {
   dark: true,
@@ -19,15 +20,16 @@ global.myTheme = {
     background: logInBackgroundColor, //log in sivulla näkyvä taustaväri
     card: backgroundTheme, //NavIconien ympärillä oleva tausta
     text: textColor, //Screenien otsikon väri
-    notification: "rgb(255, 69, 58)", // punainen väri, en tiedä missä esiintyy
+    notification: "rgb(255, 69, 58)", // punainen väri
   },
 };
 
 global.navIconColor = (focused) => (focused ? textColor : "gray"); //NavBar iconien aktiivi ja passiivi värit
+global.navBarTintColor = textColor;
 
-global.checkBoxColor = () => ({ true: "orange" }); //checkboxin väri
+global.checkBoxColor = () => ({ true: buttonColor }); //checkboxin väri
 
-global.buttonColor = "orange"; //musta taustavärien buttonien värit
+global.buttonColor = buttonColor; //musta taustavärien buttonien värit
 
 global.rangerSliderColor = "#FFA500"; // HEX color = orange
 
@@ -36,7 +38,7 @@ global.viewLikersIconButton2 = "red";
 
 global.swipesPageButtonGroupColor = {
   colors: {
-    primary: "orange",
+    primary: buttonColor,
   },
 };
 
@@ -64,7 +66,7 @@ export default StyleSheet.create({
   },
   myProfileUserText: {
     fontSize: 20,
-    color: "black",
+    color: textColor,
   },
   checkboxText: {
     fontSize: 14,
@@ -345,7 +347,7 @@ export default StyleSheet.create({
   tagTextInput: {
     height: 40,
     width: 200,
-    backgroundColor: inputTextColor,
+    backgroundColor: textAreaBackground,
     color: inputTextColor,
     borderRadius: 6,
   },
@@ -443,16 +445,14 @@ registerRadioGroup: {
   },
   // Event modal
   mapView: {
+    flex: 1,
     position: "absolute",
-    borderRadius: 20,
-    borderWidth: 2,
-    margin: 20,
     top: 0,
-    left: 8,
+    left: 0,
     right: 0,
     bottom: 0,
-    width: "110%",
-    height: "80%",
+    width: '100%',
+    height: '100%',
   },
   viewFirst: { flex: 1, justifyContent: "center", alignItems: "center", marginTop: 22 },
   viewSecond: {

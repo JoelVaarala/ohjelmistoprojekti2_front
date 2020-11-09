@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Button, FlatList, Text, View, TextInput } from "react-native";
 import { Icon, Input } from "react-native-elements";
-import firebase from 'firebase';
+import firebase from "firebase";
 // import auth from "@react-native-firebase/auth";
 // import firestore from "@react-native-firebase/firestore";
 import styles from "../styles";
@@ -11,7 +11,7 @@ export default function EditProfile() {
   //tagit
   const [tag, setTag] = useState("");
   const [tagList, setTagList] = useState([]);
-  const [shouldShow, setShouldShow] = useState(false)
+  const [shouldShow, setShouldShow] = useState(false);
   const [userTiedot, setUserTiedot] = useState({
     age: 0,
     bio: "",
@@ -82,7 +82,7 @@ export default function EditProfile() {
   const addTag = () => {
     setTagList([...tagList, tag]);
     setTag("");
-    setShouldShow(!shouldShow)
+    setShouldShow(!shouldShow);
   };
 
   const deleteItemById = (index) => {
@@ -96,7 +96,7 @@ export default function EditProfile() {
     <View style={[styles.flexOne, styles.background]}>
       <View style={[styles.container, styles.containerCenter, styles.marginTopThirty]}>
         <View style={styles.flexDirectionRow}>
-          <Text style={[styles.editProfileText, {color:'white'}]}>
+          <Text style={[styles.editProfileText, styles.myProfileUserText]}>
             {userTiedot.name}, {userTiedot.age}
           </Text>
         </View>
@@ -122,19 +122,23 @@ export default function EditProfile() {
         <TextInput {styles.editProfileTextArea} placeholder='Asuinpaikka' />
       </View> */}
       <View style={styles.omatContainerit}>
-          <View>
+        <View>
           <Text style={styles.title}>Your tags :</Text>
-            <View>
-              {shouldShow ? 
-                <TextInput placeholder='Add a tag' onChangeText={(tag) => setTag(tag)} value={tag} onEndEditing={addTag} style={styles.tagTextInput}>
-
-                </TextInput>
-               : 
-                <Button title='+' onPress={() => setShouldShow(!shouldShow)} />}
-             
-            </View>
-          </View>
           <View>
+            {shouldShow ? (
+              <TextInput
+                placeholder="Add a tag"
+                onChangeText={(tag) => setTag(tag)}
+                value={tag}
+                onEndEditing={addTag}
+                style={styles.tagTextInput}
+              ></TextInput>
+            ) : (
+              <Button color={buttonColor} title="+" onPress={() => setShouldShow(!shouldShow)} />
+            )}
+          </View>
+        </View>
+        <View>
           <View style={[styles.flexOne, styles.marginLeftTwenty]}>
             <FlatList
               contentContainerStyle={styles.paddingTopTen}
