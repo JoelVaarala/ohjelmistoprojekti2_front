@@ -60,15 +60,12 @@ export default function SwipingPage({ navigation, route }) {
       .then((data) => {
         console.log("Find results:");
         //console.log(data)
-        console.log(data.result)
-        setSwipettavat(data.result)
-        setSwipettavatFilter(data.result)
-        {data.result[0] && data.result[0].uid ? 
-          setNykyinenSwipettava(data.result[0].uid)
-          : 
-          setNykyinenSwipettava('')
+        console.log(data.result);
+        setSwipettavat(data.result);
+        setSwipettavatFilter(data.result);
+        {
+          data.result[0] && data.result[0].uid ? setNykyinenSwipettava(data.result[0].uid) : setNykyinenSwipettava("");
         }
-      
       })
       .catch((err) => console.error(err));
     //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
@@ -87,34 +84,32 @@ export default function SwipingPage({ navigation, route }) {
   }
 
   function filterSwipet() {
-    let swipelista = []
+    let swipelista = [];
     let eventSubs = ["open", "public", "private"];
     let eventSublista = [];
     //muutetaan selectedIndex.sub listan indexit vastaaviksi stringeiksi
     for (let i = 0; selectedIndex.sub.length > i; i++) {
-      eventSublista.push(eventSubs[selectedIndex.sub[i]])
+      eventSublista.push(eventSubs[selectedIndex.sub[i]]);
     }
     console.log(eventSublista);
 
     if (selectedIndex.main == 0) {
-      swipelista = swipettavat.filter(item => item.isEvent === false);
-      console.log('users lista');
+      swipelista = swipettavat.filter((item) => item.isEvent === false);
+      console.log("users lista");
       console.log(swipelista);
-      
     } else if (selectedIndex.main == 1) {
       //todo
-      swipelista = swipettavat.filter(item => item.isEvent === true).filter(item => eventSublista.includes(item.eventType));
-      console.log('events lista');
+      swipelista = swipettavat.filter((item) => item.isEvent === true).filter((item) => eventSublista.includes(item.eventType));
+      console.log("events lista");
       console.log(swipelista);
-
     } else if (selectedIndex.main == 2) {
-      let userit = swipettavat.filter(item => item.isEvent === false);
-      let eventit = swipettavat.filter(item => item.isEvent === true).filter(item => eventSublista.includes(item.eventType));
+      let userit = swipettavat.filter((item) => item.isEvent === false);
+      let eventit = swipettavat.filter((item) => item.isEvent === true).filter((item) => eventSublista.includes(item.eventType));
       swipelista = userit.concat(eventit);
-      console.log('Both lista');
+      console.log("Both lista");
       console.log(swipelista);
     }
-    setSwipettavatFilter(swipelista)
+    setSwipettavatFilter(swipelista);
   }
 
   return (
@@ -144,20 +139,13 @@ export default function SwipingPage({ navigation, route }) {
       </View>
       <View style={[styles.container, styles.flexDirectionRow, styles.justifyContentSpaceBetween, styles.alignItemsFlexEnd]}>
         <View style={styles.iconsPadding}>
-          <Icon size={27} reverse name="cancel" />
-        </View>
-        <View style={styles.iconsPadding}>
-           {/* ONGELMA: näyttää edellisen swipettävän profiilin jos sivu ei ole ehtinyt päivittyä, ensin kokeiltu {match : swipettavat[0].uid} */}
-       
-           { nykyinenSwipettava != '' ? 
-        <Icon size={27} reverse name="info" onPress={() => navigation.navigate('Matchprofile', {match : nykyinenSwipettava})} /> 
-        :
-        <Icon size={27} reverse name="info" /> 
-      }
-      
-        </View>
-        <View style={styles.iconsPadding}>
-          <Icon size={27} reverse name="favorite" />
+          {/* ONGELMA: näyttää edellisen swipettävän profiilin jos sivu ei ole ehtinyt päivittyä, ensin kokeiltu {match : swipettavat[0].uid} */}
+
+          {nykyinenSwipettava != "" ? (
+            <Icon size={27} reverse name="info" onPress={() => navigation.navigate("Matchprofile", { match: nykyinenSwipettava })} />
+          ) : (
+            <Icon size={27} reverse name="info" />
+          )}
         </View>
       </View>
     </View>
