@@ -17,11 +17,12 @@ function Add_Eventti({ navigation, route }, props) {
   const [date, setDate] = useState(new Date());
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState();
+  
   // State renderöi "kyselyn"(default) tai "preview" (ln:88)
   const [view, setView] = React.useState(true);
-
   const [value, setValue] = React.useState("loading location...");
   const [newValue, setNewValue] = React.useState("");
+
   //const [modalVisible, setModalVisible] = useState(false);
   const [region, setRegion] = React.useState({
     latitude: global.myUserData.filters.myLocation.latitude,
@@ -29,6 +30,7 @@ function Add_Eventti({ navigation, route }, props) {
     latitudeDelta: 0.0322,
     longitudeDelta: 0.0221,
   });
+
   const [place, setPlace] = React.useState({
     street: "",
     city: "",
@@ -37,7 +39,7 @@ function Add_Eventti({ navigation, route }, props) {
 
   React.useEffect(() => {
     getLocation();
-    console.log(region)
+    //console.log(region)
   }, []);
 
   // Lisätään tägit taulukkoon
@@ -45,7 +47,7 @@ function Add_Eventti({ navigation, route }, props) {
     setTags([tag, ...tags]);
     setTag("");
   };
-  const [reg, setReg] = React.useState();
+
   const getLocation= async()   => {
     //Checkpermission
     let   { status} = await Location.requestPermissionsAsync();
@@ -72,8 +74,7 @@ function Add_Eventti({ navigation, route }, props) {
   // const goToPreview = () => {
     // store.dispatch(addName(eventName))
     //tags.forEach(el =>console.log(el))
-    // VIRHE OLI TÄMÄ LOCATION MUUTTUJA ____ MIKSI??
-    //store.dispatch(addEvent({ eventName, description, date, locationaq, tags }));
+    //store.dispatch(addEvent({ eventName, description, date, location, tags }));
     // console.log('tässä store : ', store.getState())
     // console.log(Array.isArray(store.getState().EventReducer[0].tags))
     //setEventName("");
@@ -85,31 +86,14 @@ function Add_Eventti({ navigation, route }, props) {
   const goToSelect = () => {
     setView(true)
   }
-  const logTiedot = () => {
-    console.log('tiedot :::::::::::::::::::::::::::::::::::::::::::::: ')
-    console.log('Nimi = ',eventName);
-    console.log('Desc = ', description);
-    console.log('Date = ',date);
-    console.log('Tags = ',tags);
-    console.log('NewValue = ',newValue)
-    console.log('value = ', value)
-    console.log('location', region)
-  }
 
   // Luodun eventin lähetys
-  // TODO : paikkatiedot korjaus, mahd valinta public
   const sendEvent = () => {
     // let start_s = store.getState().EventReducer[0].date;
     // let event_s = store.getState().EventReducer[0].eventName;
     // let bio_s = store.getState().EventReducer[0].description;
     // let tagit_s = store.getState().EventReducer[0].tags;
     let url = global.url + "event";
-    // console.log('Tagi array', store.getState().EventReducer[0].tags)
-    // console.log(startTime, "start")
-    // console.log(displayName, " dp name")
-    // console.log(bio, " tää on bio")
-    // console.log(auth().currentUser.uid, ' current user')
-    // console.log(tagit, ' tagit')
 
     let bodi = {
       idToken: global.myUserData.idToken, // HOX, this needs to be changed to actual current user instead of global
@@ -129,6 +113,8 @@ function Add_Eventti({ navigation, route }, props) {
       },
     };
 
+    // Here we can add validation cases, now incase this fails user will be prompted with orange flash message for invalid fields
+    if(eventName.length > 2 && date != null && description != ""){
     fetch(url, {
       method: "POST",
       headers: {
@@ -138,21 +124,35 @@ function Add_Eventti({ navigation, route }, props) {
     })
       .then((response) => response.json())
       .then((res) => {
-        console.log(res, "LÄHETYS ONNISTUI");
+        console.log(res, "POST success");
         showSuccess();
         navigation.navigate("Profile");
       })
       .catch((err) => {
-        console.error(err, "LÄHETYS EPÄONNISTUI");
+        console.error(err, "POST failed");
         showFail();
       });
+    }else{
+      // Construct message of known issues and pass it as parameter for indicator message
+      let message = ["Invalid fields : "]
+
+       if(bodi.data.displayName=="")
+         message.push(" Name ")  
+       if(bodi.data.bio=="")
+          message.push(" Description ")
+       if(bodi.data.eventStart==null)
+          message.push(" Date ")
+       
+      showInvalid(message);
+    }
   };
+    
 
   // flash message for failed event creation
   const showFail = () => {
     showMessage({
-      message: "Eventin lisäys epäonnistui",
-      description: "better luck next time",
+      message: "Adding event failed",
+      description: " try again :( ",
       type: "default",
       duration: 1850,
       backgroundColor: "red",
@@ -161,16 +161,27 @@ function Add_Eventti({ navigation, route }, props) {
     });
   };
 
+   // flash message for invalid user input
+   const showInvalid = (msg) => {
+    showMessage({
+      message: "Fail",
+      description: msg,
+      type: "default",
+      duration: 1850,
+      backgroundColor: "orange",
+      color: "black",
+    });
+  };
+
   // flash message for successful event creation
   const showSuccess = () => {
     showMessage({
-      message: "Eventin lisäys onnistui",
+      message: "Event has been added successfully",
       description: "party time excellent",
       type: "default",
       duration: 1850,
       backgroundColor: "green",
       color: "white",
-      // you can also add onPRess -function
     });
   };
 
