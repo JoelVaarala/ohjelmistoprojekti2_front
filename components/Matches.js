@@ -83,6 +83,7 @@ export default function Matches({ navigation, route }) {
             if (asd.matchtype == "event") {
               chatname = asd.displayNames[0];
             } else {
+              //täällä tulee aina väärä nimi matchille, mikäs tämän tarkoitus on?
               asd.displayNames.forEach((element) => {
                 if (element != global.uid) chatname = element;
               });
