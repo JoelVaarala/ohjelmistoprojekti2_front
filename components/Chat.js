@@ -120,41 +120,12 @@ export default function Chat(props) {
     LahetaViestiFirebaseen(messages[0].text);
   }, []);
 
-  // Matchin poisto funkari
-  const removeMatch = () => {
-    console.log("matchin poisto", props.route.params.chatti);
-
-    let url = global.url + "removeMatch";
-    let bodi = {
-      idToken: "Dummyyy", // FIX ME
-      uid: global.myUserData.uid,
-      data: {
-        match: props.route.params.chatti,
-      },
-    };
-
-    console.log(bodi);
-    console.log(JSON.stringify(bodi));
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodi),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        console.log(".then res ->", res);
-      })
-      .catch((err) => console.error(err));
-  };
   
   // avatar kuvaa painamalla pääsee katsomaan henkilön profiilia
   function avatarOpensProfile(props2) {
     // console.log('props2 : ',props2)
     // console.log('props : ',props)
-    console.log('vvvvv', props.route.params.chatti)
+    console.log('route.params.chatti : ', props.route.params.chatti)
     console.log('Chatistä lähtevät props2 ', props2);
     props.navigation.navigate("MatchProfile", { match: props2._id , chet: props.route.params.chatti});
   }
@@ -162,7 +133,6 @@ export default function Chat(props) {
   return (
     <View style={[styles.flexOne, styles.background]}>
       <View style={styles.chatStyle}>
-        <Icon size={20} reverse name="info" onPress={() => removeMatch()} /*tällä napilla voidaan myöhemmin poistaa match*/ />
         <GoToAvatar navigation={props.navigation} />
         
       </View>
