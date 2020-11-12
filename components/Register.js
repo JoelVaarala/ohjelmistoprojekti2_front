@@ -77,7 +77,7 @@ export default function Register() {
       .then((response) => response.json())
       .then((res) => {
         if (res.result === 'rekisteörinti onnistui') {
-          navigation.goBack();
+          // navigation.goBack();
           signIn(kayttajaTiedot.email, kayttajaTiedot.password);
         } else if (res.result === 'rekisteörinti epäonnistui:Error: The email address is improperly formatted.'){
           Alert.alert('Sähköpostin formatointi pielessä.');

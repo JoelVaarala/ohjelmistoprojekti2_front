@@ -29,6 +29,9 @@ const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 firebase.initializeApp(global.firebaseConfig);
+// tällä pääsee eroon Setting a timer warningista, mihin ei ole ratkaisua react nativen puolella tällä hetkellä https://github.com/facebook/react-native/issues/12981
+YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
+// YellowBox.ignoreWarnings(['']);
 
 export default function App() {
   // kirjautunut: false -> true, bypass jolla jättää login pagen välistä
@@ -41,10 +44,6 @@ export default function App() {
     console.log("use effect");
     loginOnStartup();
   }, []);
-
-  // tällä pääsee eroon Setting a timer warningista, mihin ei ole ratkaisua react nativen puolella tällä hetkellä https://github.com/facebook/react-native/issues/12981
-  YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
-  // YellowBox.ignoreWarnings(['']);
 
   //Tämä contexti hallinnoi sisäänkirjautumisflowta
   const authContext = React.useMemo(
@@ -163,7 +162,10 @@ export default function App() {
     );
   };
 
-  const MatchStack = () => {
+  const MatchStack = ({ navigation, route }) => {
+    console.log('tämä on routen asdasd:')
+    console.log(route.state);
+    navigation.setOptions({ tabBarVisible: route.state ? (route.state.routes.length > 0 ? false : true) : true });
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Matches" component={Matches} />
@@ -184,14 +186,14 @@ export default function App() {
     );
   };
 
-  const LoginStack = () => {
-    return (
-      <ListStack.Navigator>
-        <ListStack.Screen name="Login" component={Startup} />
-        <ListStack.Screen name="Rekisteröidy" component={Register} options={{ headerShown: false }} />
-      </ListStack.Navigator>
-    );
-  };
+  // const LoginStack = () => {
+  //   return (
+  //     <ListStack.Navigator>
+  //       <ListStack.Screen name="Login" component={Startup} />
+  //       <ListStack.Screen name="Rekisteröidy" component={Register} options={{ headerShown: false }} />
+  //     </ListStack.Navigator>
+  //   );
+  // };
 
   const SwipeStack = () => {
     return (
@@ -201,6 +203,7 @@ export default function App() {
       </ListStack.Navigator>
     );
   };
+
 
   const Sisalto = () => {
     return (
@@ -250,7 +253,7 @@ export default function App() {
             ) : (
                 <Stack.Navigator>
                   <ListStack.Screen name="Login" component={Startup} />
-                  <ListStack.Screen name="Rekisteröidy" component={Register} />
+                  <ListStack.Screen name="Rekisteröidy" component={Register} options={{ headerShown: false }} />
                 </Stack.Navigator>
               )}
           </NavigationContainer>
