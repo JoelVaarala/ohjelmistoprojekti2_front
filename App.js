@@ -1,6 +1,6 @@
 import "react-native-gesture-handler"; //Tää pitää olla päälimmäisenä koska syyt?
 import React from "react";
-import { Text, AsyncStorage } from "react-native";
+import { Alert, YellowBox, Text, AsyncStorage } from "react-native";
 import MyProfile from "./components/MyProfile";
 import SwipingPage from "./components/SwipingPage";
 import Matches from "./components/Matches";
@@ -30,8 +30,6 @@ const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 firebase.initializeApp(global.firebaseConfig);
 
-// export const AuthContext = React.createContext();
-
 export default function App() {
   // kirjautunut: false -> true, bypass jolla jättää login pagen välistä
   const [navigaationVaihto, setNavigaationVaihto] = React.useState({ ladataan: true, kirjautunut: false });
@@ -41,30 +39,39 @@ export default function App() {
   //Tämä hoitaa kirjautumisen ja initializen appii, kutsutaan vain kerran ja tässä.
   React.useEffect(() => {
     console.log("use effect");
-    // await firebase.initializeApp(global.firebaseConfig)
-    // console.log(firebase.apps[0]._nativeInitialized);
-
-    // setNavigaationVaihto({ ladataan: false, kirjautunut: false })
     loginOnStartup();
   }, []);
 
-  //Tämä contexti hallinnoi sisäänkirjautumis flowta
+  // tällä pääsee eroon Setting a timer warningista, mihin ei ole ratkaisua react nativen puolella tällä hetkellä https://github.com/facebook/react-native/issues/12981
+  YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
+  // YellowBox.ignoreWarnings(['']);
+
+  //Tämä contexti hallinnoi sisäänkirjautumisflowta
   const authContext = React.useMemo(
     () => ({
       signIn: async (kayttaja, salasana) => {
         console.log("Logging in alkaa");
-        await login(kayttaja, salasana);
-        AsyncStorage.setItem(kayttajaKey, kayttaja);
-        AsyncStorage.setItem(salasanaKey, salasana);
-        setNavigaationVaihto({ ladataan: false, kirjautunut: true });
-        console.log("Logging in loppui");
+        setNavigaationVaihto({ ladataan: true, kirjautunut: false });
+        let loginni = await login(kayttaja, salasana);
+        if (loginni === 'auth/user-not-found' || loginni === 'auth/wrong-password') {
+          Alert.alert('väärä sähköposti tai salasana');
+          setNavigaationVaihto({ ladataan: false, kirjautunut: false });
+        } else if (loginni === 'meni läpi') {
+          AsyncStorage.setItem(kayttajaKey, kayttaja);
+          AsyncStorage.setItem(salasanaKey, salasana);
+          setNavigaationVaihto({ ladataan: false, kirjautunut: true });
+          console.log("Logging in loppui");
+          // console.log(firebase.auth().currentUser)
+        }
       },
       signOut: async () => {
         console.log("Logging out alkaa");
+        firebase.auth().signOut();
         await AsyncStorage.removeItem(kayttajaKey);
         await AsyncStorage.removeItem(salasanaKey);
         setNavigaationVaihto({ ladataan: false, kirjautunut: false });
         console.log("Logging out loppuu");
+        // console.log(firebase.auth().currentUser)
       },
     }),
     []
@@ -75,59 +82,33 @@ export default function App() {
     let salasana = await AsyncStorage.getItem(salasanaKey);
     console.log("AsyncStorage -> käyttäjä: " + kayttaja + ", salasana: " + salasana);
     if (kayttaja != null && salasana != null) {
-      await login(kayttaja, salasana);
-      setNavigaationVaihto({ ladataan: false, kirjautunut: true });
+      authContext.signIn(kayttaja, salasana);
     } else {
       setNavigaationVaihto({ ladataan: false, kirjautunut: false });
     }
   };
 
   const login = async (kayttaja, salasana) => {
-    await firebase
-      .auth()
-      .signInWithEmailAndPassword(kayttaja, salasana)
-      .then(() => {
-        console.log("User logged in");
-        // console.log(auth().currentUser)
-        global.myUserData.uid = firebase.auth().currentUser.uid;
-        firebase
-          .auth()
-          .currentUser.getIdToken(/* forceRefresh */ true)
-          .then(function (idToken) {
-            global.myUserData.idToken = idToken;
-          })
-          .catch(function (error) {
-            // Handle error
-            return;
-          });
-        // UpdateLocation();
-        //Debugin takia tässä, poistettu 28.9.2020
-        //LahetaViestiFirebaseen();
-      })
-
-      .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          console.log("That email address is already in use!");
-        }
-
-        if (error.code === "auth/invalid-email") {
-          console.log("That email address is invalid!");
-        }
-
-        console.error(error);
-        return;
+    let error;
+    let userprom = await firebase.auth().signInWithEmailAndPassword(kayttaja, salasana)
+      .catch(function (err) {
+        error = err.code;
+        console.log(error);
+        console.log(err);
       });
-    // return;
-    let { status } = await Location.requestPermissionsAsync();
-    if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
-    } else {
-      let location = await (await Location.getCurrentPositionAsync({})).coords;
-      let firebaseUpdate = await UpdateFirebase(location);
-      console.log(firebaseUpdate);
+    // console.log(userprom)
+    if (error) {
+      return error;
     }
-    // await UpdateLocation();
-  };
+    UpdateLocation();
+
+    // console.log(userprom.user.uid)
+    global.myUserData.uid = userprom.user.uid;
+    let idTokeni = await firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+    // console.log(idTokeni)
+    global.myUserData.idToken = idTokeni;
+    return 'meni läpi';
+  }
 
   async function UpdateLocation() {
     (async () => {
@@ -136,13 +117,12 @@ export default function App() {
         setErrorMsg("Permission to access location was denied");
       }
       let location = await (await Location.getCurrentPositionAsync({})).coords;
-      let locationUpdate = await UpdateFirebase(location);
-      console.log(locationUpdate);
+      UpdateFirebase(location);
     })();
   }
 
   //tää menee endpointin kautta.
-  async function UpdateFirebase(newloc) {
+  function UpdateFirebase(newloc) {
     let bodii = {
       uid: global.myUserData.uid,
       idToken: global.myUserData.idToken,
@@ -151,8 +131,6 @@ export default function App() {
         longitude: newloc.longitude,
       },
     };
-
-    // return;
     fetch(global.url + "updateLocation", {
       method: "POST",
       headers: {
@@ -161,16 +139,12 @@ export default function App() {
       body: JSON.stringify(bodii),
     })
       .then((response) => response.json())
-      // .then(response => console.log(response))
-      .then((data) => {
+      .then(_ => {
         console.log("Updated location");
       })
       .catch((err) => {
         console.error(err);
-        return "Lokaation päivittäminen epäonnistui";
       });
-    return "Lokaation päivittäminen onnistui";
-    //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
   }
 
   //Substacki tällä tai sitten luodaa vaa erillsiet sivut joissa on takaisin nappula että toi toolbari piilottuu
@@ -272,14 +246,13 @@ export default function App() {
                 <Tab.Screen name="Swipes" component={SwipeStack} />
                 <Tab.Screen name="My Likes" component={ViewLikers} />
                 <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
-                <Tab.Screen name="Login" component={LoginStack} />
               </Tab.Navigator>
             ) : (
-              <Stack.Navigator>
-                <ListStack.Screen name="Login" component={Startup} />
-                <ListStack.Screen name="Rekisteröidy" component={Register} />
-              </Stack.Navigator>
-            )}
+                <Stack.Navigator>
+                  <ListStack.Screen name="Login" component={Startup} />
+                  <ListStack.Screen name="Rekisteröidy" component={Register} />
+                </Stack.Navigator>
+              )}
           </NavigationContainer>
           {/* position of flash can also be set bottom, left, right*/}
           <FlashMessage position="top" />
@@ -288,9 +261,15 @@ export default function App() {
     );
   };
 
-  if (navigaationVaihto.ladataan) {
-    return <Text>Loading screeni tähän</Text>;
-  } else {
-    return <Sisalto />;
-  }
+  // if (navigaationVaihto.ladataan) {
+  //   return <Text>Loading screeni tähän</Text>;
+  // } else {
+  //   return <Sisalto />;
+  // }
+
+  return (
+    <>
+      {navigaationVaihto.ladataan ? (<Text>Loading screeni tähän</Text>) : (<Sisalto />)}
+    </>
+  )
 }
