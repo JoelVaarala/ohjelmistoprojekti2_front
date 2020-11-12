@@ -2,17 +2,40 @@ import React, { useState } from "react";
 import { Text, View, Button } from "react-native";
 import { Icon, Avatar } from "react-native-elements";
 import ImagePicker from "react-native-image-picker";
+import firebase from "firebase";
 import styles from "../styles";
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
-const MyProfile = ({ navigation }) => {
-  console.log("navigation: ");
-  console.log(navigation);
-  const [state, setState] = useState({
-    picPath: "https://cdn.pixabay.com/photo/2015/03/03/20/42/man-657869_960_720.jpg",
-    name: "Michael",
-    age: 26,
+export default function MyProfile({ navigation, route }) {
+ 
+  const [userTiedot, setUserTiedot] = useState({
+    age: 0,
+    bio: "",
+    name: "",
+    pic: "",
   });
+  
+  React.useEffect(() => {
+    // console.log('useeffecti', tagList)
+    HaeTiedot();
+  }, []);
+
+  const HaeTiedot = async () => {
+    const ref = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid);
+    const doc = await ref.get();
+    if (!doc.exists) {
+      console.log("document not found");
+    } else {
+      console.log("success HERE HERE ::::", doc.data());
+      setUserTiedot({
+        age: doc.data().age,
+        bio: doc.data().bio,
+        name: doc.data().displayName,
+        pic: doc.data().images[0]
+      });
+      console.log(doc.data())
+    }
+  };
 
   const addImage = () => {
     const options = {
@@ -34,13 +57,17 @@ const MyProfile = ({ navigation }) => {
     });
   };
 
-  const { name, age, picPath } = state;
   return (
     <View style={[styles.flexOne, styles.background]}>
       <View style={styles.myProfileAvatarContainer}>
-        <Avatar onPress={() => navigation.navigate("FullProfile")} size="xlarge" rounded source={{ uri: picPath }} />
+        {userTiedot.pic ?
+        <Avatar size="xlarge" rounded source={{ uri: userTiedot.pic }} />
+        :
+        //jos käyttäjällä ei ole kuvia, niin tulee tämä default pic
+        <Avatar size="xlarge" rounded source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" }} />
+        }
         <Text style={styles.myProfileUserText}>
-          {name}, {age}
+          {userTiedot.name}, {userTiedot.age}
         </Text>
       </View>
       <View style={styles.iconSpacing}>
@@ -60,5 +87,3 @@ const MyProfile = ({ navigation }) => {
     </View>
   );
 };
-
-export default MyProfile;
