@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Alert, Button, FlatList, Text, View, TextInput } from "react-native";
 import { Icon, Input } from "react-native-elements";
 import firebase from "firebase";
+import SortableList2 from "./SortableList"
 // import auth from "@react-native-firebase/auth";
 // import firestore from "@react-native-firebase/firestore";
 import styles from "../styles";
@@ -12,12 +13,14 @@ export default function EditProfile() {
   const [tag, setTag] = useState("");
   const [tagList, setTagList] = useState([]);
   const [shouldShow, setShouldShow] = useState(false);
+  const [pics, setPics] = React.useState([]);
+//const [images, setImages] = useState({});
   const [userTiedot, setUserTiedot] = useState({
     age: 0,
     bio: "",
     name: "",
   });
-
+ 
   React.useEffect(() => {
     // console.log('useeffecti', tagList)
     HaeTiedot();
@@ -69,6 +72,8 @@ export default function EditProfile() {
     if (!doc.exists) {
       console.log("document not found");
     } else {
+      setPics(doc.data().images);
+      console.log("KUVAT", pics)
       console.log("success HERE HERE ::::", doc.data());
       setUserTiedot({
         age: doc.data().age,
@@ -76,8 +81,19 @@ export default function EditProfile() {
         name: doc.data().displayName,
       });
       setTagList(doc.data().tags);
+    
+    //  const UUSI = Object.assign({}, pics)
+    // console.log("KDKDKDKKDK", UUSI)
+    // setImages(UUSI)
+    // console.log("ölölölölö",images)
     }
   };
+
+  function CreateSortableList() {
+    //Tällä saadaan päiviettyä nää shitit oikeasti statesta.
+    // return <SwipeCards vaihtoehdot={swipettavat} />;
+    return <SortableList2 kuvat={pics} order={Object.keys(pics)}/>;
+  }
 
   const addTag = () => {
     setTagList([...tagList, tag]);
@@ -95,14 +111,16 @@ export default function EditProfile() {
   return (
     <View style={[styles.flexOne, styles.background]}>
       <View style={[styles.container, styles.containerCenter, styles.marginTopThirty]}>
-        <View style={styles.flexDirectionRow}>
           <Text style={[styles.editProfileText, styles.myProfileUserText]}>
             {userTiedot.name}, {userTiedot.age}
           </Text>
         </View>
-        <Icon reverse name="image" />
-        <Text style={styles.title}>Add a picture</Text>
-      </View>
+        <View style={{paddingTop: 100, justifyContent: 'center', alignItems: 'center', flex: 5}}>
+      <CreateSortableList/>
+     {/* <Icon reverse name="image" />
+      <Text style={styles.title}>Add a picture</Text> */}
+    </View>
+      
       <View style={(styles.flexOne, styles.paddingTopFifty)}>
         <Text style={[styles.containerCenter, styles.title, styles]}>Bio :</Text>
         <View style={styles.editProfileBioTextArea}>
