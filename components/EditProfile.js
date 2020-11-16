@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Button, FlatList, Text, View, TextInput } from "react-native";
+import { Alert, Button, FlatList, Text, View, TextInput, ScrollView } from "react-native";
 import { Icon, Input } from "react-native-elements";
 import firebase from "firebase";
 import SortableList2 from "./SortableList"
@@ -26,6 +26,11 @@ export default function EditProfile() {
     HaeTiedot();
   }, []);
 
+  React.useEffect(() => {
+    // console.log('useeffecti', tagList)
+    TallennaData();
+  }, [tagList, userTiedot.bio]);
+
   function TallennaData() {
     let body = {
       data: {
@@ -48,7 +53,6 @@ export default function EditProfile() {
         // console.log(data)
       })
       .catch((err) => console.error(err));
-    Alert.alert("Tiedot tallennettiin");
   }
 
   // function HaeKayttajanTiedot_autoupdate() {
@@ -109,19 +113,20 @@ export default function EditProfile() {
   };
 
   return (
+    <ScrollView>
     <View style={[styles.flexOne, styles.background]}>
       <View style={[styles.container, styles.containerCenter, styles.marginTopThirty]}>
           <Text style={[styles.editProfileText, styles.myProfileUserText]}>
             {userTiedot.name}, {userTiedot.age}
           </Text>
         </View>
-        <View style={{paddingTop: 100, justifyContent: 'center', alignItems: 'center', flex: 5}}>
+        <View style={{paddingTop: 10, justifyContent: 'center', alignItems: 'center', flex: 4}}>
       <CreateSortableList/>
      {/* <Icon reverse name="image" />
       <Text style={styles.title}>Add a picture</Text> */}
     </View>
       
-      <View style={(styles.flexOne, styles.paddingTopFifty)}>
+      <View style={(styles.flexOne)}>
         <Text style={[styles.containerCenter, styles.title, styles]}>Bio :</Text>
         <View style={styles.editProfileBioTextArea}>
           <TextInput
@@ -173,9 +178,7 @@ export default function EditProfile() {
           </View>
         </View>
       </View>
-      <View style={styles.saveButton}>
-        <Button color={buttonColor} onPress={TallennaData} title="Save" />
-      </View>
     </View>
+    </ScrollView>
   );
 }
