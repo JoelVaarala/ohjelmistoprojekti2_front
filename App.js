@@ -116,13 +116,19 @@ export default function App() {
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
       }
-      let location = await (await Location.getCurrentPositionAsync({})).coords;
+      let location = await (await Location.getCurrentPositionAsync({})).coords; 
+      global.myUserData.filters.myLocation = 
+      {
+        latitude: location.latitude,
+        longitude: location.longitude
+      }
       UpdateFirebase(location);
     })();
   }
 
   //tää menee endpointin kautta.
   function UpdateFirebase(newloc) {
+    
     let bodii = {
       uid: global.myUserData.uid,
       idToken: global.myUserData.idToken,
