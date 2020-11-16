@@ -80,6 +80,11 @@ export default function Settings() {
     HaeTiedot();
   }, []);
 
+  React.useEffect(() => {
+    // console.log('useeffecti', tagList)
+    TallennaData();
+  }, [lowAge, highAge, distance, selectedIndex, showHoursOrDays, time, tagList]);
+
   const HaeTiedot = async () => {
     let ref = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).collection("filters").doc("myFilters");
     const doc = await ref.get();
@@ -180,7 +185,6 @@ export default function Settings() {
         // console.log(data)
       })
       .catch((err) => console.error(err));
-    Alert.alert("Tiedot tallennettiin");
   }
   function HaeSettingsValues() {
     let ref = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid);
@@ -286,7 +290,7 @@ export default function Settings() {
             <RangeSlider
               style={styles.rangerSliderSize}
               gravity={"center"}
-              min={14}
+              min={18}
               max={100}
               step={1}
               valueType="number"
@@ -381,9 +385,6 @@ export default function Settings() {
               onChange={onChange}
             />
           )} */}
-        <View style={styles.saveButton}>
-          <Button color={buttonColor} onPress={TallennaData} title="Save" />
-        </View>
         <View style={styles.saveButton}>
           <Button color={buttonColor} onPress={() => signOut()} title="Sign out" />
         </View>
