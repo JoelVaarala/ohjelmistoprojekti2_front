@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { Alert, ScrollView, SafeAreaView, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from "react-native";
-import { Input, Slider, ButtonGroup, ThemeProvider } from "react-native-elements";
-import RangeSlider from "rn-range-slider";
-import CheckBox from "@react-native-community/checkbox";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import firebase from "firebase";
+import React, { useState } from 'react';
+import { Alert, ScrollView, SafeAreaView, Platform, Text, View, TextInput, FlatList, StatusBar } from 'react-native';
+import { Input, Slider, ButtonGroup, ThemeProvider, Button } from 'react-native-elements';
+import RangeSlider from 'rn-range-slider';
+import CheckBox from '@react-native-community/checkbox';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import firebase from 'firebase';
 // import auth from "@react-native-firebase/auth";
 // import firestore from "@react-native-firebase/firestore";
-import styles from "../styles";
-import { AuthContext } from "./AuthContext";
+import styles from '../styles';
+import { AuthContext } from './AuthContext';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Settings() {
   //tagit
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState('');
   const [tagList, setTagList] = useState([]);
   const { signOut } = React.useContext(AuthContext);
   const [shouldShow, setShouldShow] = useState(false);
@@ -21,14 +21,14 @@ export default function Settings() {
 
   const addTag = () => {
     setTagList([...tagList, tag]);
-    setTag("");
+    setTag('');
     setShouldShow(!shouldShow);
   };
 
   const deleteItemById = (index) => {
-    Alert.alert("Poista tagi", "Haluatko varmasti poistaa tagin?", [
-      { text: "Peruuta", onPress: () => console.log("Käyttäjä peruutti"), style: "cancel" },
-      { text: "OK", onPress: () => setTagList(tagList.filter((itemi, indexi) => indexi !== index)) },
+    Alert.alert('Poista tagi', 'Haluatko varmasti poistaa tagin?', [
+      { text: 'Peruuta', onPress: () => console.log('Käyttäjä peruutti'), style: 'cancel' },
+      { text: 'OK', onPress: () => setTagList(tagList.filter((itemi, indexi) => indexi !== index)) }
     ]);
   };
 
@@ -45,7 +45,7 @@ export default function Settings() {
   const [people, setPeople] = useState(false);
 
   //buttongroup
-  const buttons = ["Men", "Women", "Other"];
+  const buttons = ['Men', 'Women', 'Other'];
   const [selectedIndex, setSelectedIndex] = React.useState({ main: [0] });
 
   function updateIndex(name, value) {
@@ -55,12 +55,12 @@ export default function Settings() {
   console.log(selectedIndex);
   //datetimepicker
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
+  const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
+    setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
 
@@ -70,7 +70,7 @@ export default function Settings() {
   };
 
   const showDatepicker = () => {
-    showMode("date");
+    showMode('date');
   };
 
   const formatDate = (date) => {
@@ -86,12 +86,17 @@ export default function Settings() {
   }, [lowAge, highAge, distance, selectedIndex, showHoursOrDays, time, tagList]);
 
   const HaeTiedot = async () => {
-    let ref = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).collection("filters").doc("myFilters");
+    let ref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('filters')
+      .doc('myFilters');
     const doc = await ref.get();
     if (!doc.exists) {
-      console.log("document not found");
+      console.log('document not found');
     } else {
-      console.log("success HERE HERE ::::", doc.data());
+      console.log('success HERE HERE ::::', doc.data());
 
       setTagList(doc.data().tags);
       setDistance(doc.data().distance);
@@ -112,9 +117,9 @@ export default function Settings() {
     */
       }
       let genders = doc.data().genders;
-      let male = genders.indexOf("male") > -1;
-      let female = genders.indexOf("female") > -1;
-      let other = genders.indexOf("other") > -1;
+      let male = genders.indexOf('male') > -1;
+      let female = genders.indexOf('female') > -1;
+      let other = genders.indexOf('other') > -1;
       let values = [];
       if (male == true) {
         // setMale(true);
@@ -134,27 +139,24 @@ export default function Settings() {
   };
 
   function TallennaData() {
-
     // muutetaan päivät tunneiksi jos "days" on valittuna
     let timelimit;
     if (showHoursOrDays == false) {
       timelimit = time * 24;
-    }
-    else
-      timelimit = time
+    } else timelimit = time;
 
     let genders = [];
     if (selectedIndex.main.includes(0)) {
       //   setGenders(["male"])
-      genders.push("male");
+      genders.push('male');
     }
     if (selectedIndex.main.includes(1)) {
       //    setGenders([...genders, "female"])
-      genders.push("female");
+      genders.push('female');
     }
     if (selectedIndex.main.includes(2)) {
       //  setGenders([...genders, "other"])
-      genders.push("other");
+      genders.push('other');
     }
     console.log(genders);
 
@@ -164,21 +166,21 @@ export default function Settings() {
       data: {
         minAge: lowAge,
         maxAge: highAge,
-        lookingFor: ["events", "users"],
+        lookingFor: ['events', 'users'],
         genders: genders,
         distance: distance,
         eventsInXHours: timelimit,
-        tags: tagList,
-      },
+        tags: tagList
+      }
     };
 
     console.log(body);
-    fetch(global.url + "filtersUpdate", {
-      method: "POST",
+    fetch(global.url + 'filtersUpdate', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(body)
     })
       .then((response) => response.json())
       .then((data) => {
@@ -187,7 +189,7 @@ export default function Settings() {
       .catch((err) => console.error(err));
   }
   function HaeSettingsValues() {
-    let ref = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid);
+    let ref = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid);
     ref.onSnapshot((querySnapshot) => {
       let sukupuutto = querySnapshot.data().gender;
       console.log(sukupuutto);
@@ -246,10 +248,15 @@ export default function Settings() {
                   style={[styles.tagTextInput, styles.marginTopTen]}
                 ></TextInput>
               ) : (
-                  <View style={styles.marginTopTen}>
-                    <Button color={buttonColor} title="+" onPress={() => setShouldShow(!shouldShow)} />
-                  </View>
-                )}
+                <View style={styles.marginTopTen}>
+                  <Button
+                    buttonStyle={{ backgroundColor: buttonColor }}
+                    titleStyle={{ color: buttonTitleColor }}
+                    title="+"
+                    onPress={() => setShouldShow(!shouldShow)}
+                  />
+                </View>
+              )}
             </View>
           </View>
           <View style={styles.flexOne}>
@@ -272,7 +279,7 @@ export default function Settings() {
             <Text style={styles.title}>Distance:</Text>
             <RangeSlider
               style={styles.rangerSliderSize}
-              gravity={"center"}
+              gravity={'center'}
               rangeEnabled={false}
               min={1}
               max={100}
@@ -289,7 +296,7 @@ export default function Settings() {
             <Text style={styles.title}> Ages:</Text>
             <RangeSlider
               style={styles.rangerSliderSize}
-              gravity={"center"}
+              gravity={'center'}
               min={18}
               max={100}
               step={1}
@@ -312,11 +319,14 @@ export default function Settings() {
         <View>
           <ThemeProvider theme={swipesPageButtonGroupColor}>
             <ButtonGroup
-              onPress={(value) => updateIndex("main", value)}
+              onPress={(value) => updateIndex('main', value)}
               selectMultiple={true}
               selectedIndexes={selectedIndex.main}
               buttons={buttons}
-              containerStyle={[styles.background, styles.heightForty]}
+              containerStyle={[styles.background, styles.buttonGroupBorderColor]}
+              innerBorderStyle={styles.buttonGroupInnerlineColor}
+              textStyle={styles.title}
+              selectedTextStyle={styles.buttonTitleColor}
             />
           </ThemeProvider>
         </View>
@@ -335,10 +345,15 @@ export default function Settings() {
           <Text style={styles.title}> Time limit:</Text>
           {showHoursOrDays ? (
             <View style={styles.paddingTopFifty}>
-              <Button color={buttonColor} title="Change to select days" onPress={() => setShowHoursOrDays(!showHoursOrDays)} />
+              <Button
+                buttonStyle={{ backgroundColor: buttonColor }}
+                titleStyle={{ color: buttonTitleColor }}
+                title="Change to select days"
+                onPress={() => setShowHoursOrDays(!showHoursOrDays)}
+              />
               <RangeSlider
                 style={styles.rangerSliderSize}
-                gravity={"center"}
+                gravity={'center'}
                 rangeEnabled={false}
                 min={1}
                 max={23}
@@ -352,23 +367,29 @@ export default function Settings() {
               <Text style={styles.title}> Time limit is {time} hours</Text>
             </View>
           ) : (
-              <View style={styles.paddingTopFifty}>
-                <Button color={buttonColor} title="Change to select hours" onPress={() => setShowHoursOrDays(!showHoursOrDays)} />
-                <RangeSlider
-                  style={styles.rangerSliderSize}
-                  gravity={"center"}
-                  rangeEnabled={false}
-                  min={1}
-                  max={7}
-                  step={1}
-                  selectionColor={rangerSliderColor}
-                  blankColor={rangerSliderColor}
-                  onValueChanged={(time, fromUser) => {
-                    setTime(time);
-                  }}
-                />
-                <Text style={styles.title}>Time limit is {time} days </Text>
-              </View>)}
+            <View style={styles.paddingTopFifty}>
+              <Button
+                buttonStyle={{ backgroundColor: buttonColor }}
+                titleStyle={{ color: buttonTitleColor }}
+                title="Change to select hours"
+                onPress={() => setShowHoursOrDays(!showHoursOrDays)}
+              />
+              <RangeSlider
+                style={styles.rangerSliderSize}
+                gravity={'center'}
+                rangeEnabled={false}
+                min={1}
+                max={7}
+                step={1}
+                selectionColor={rangerSliderColor}
+                blankColor={rangerSliderColor}
+                onValueChanged={(time, fromUser) => {
+                  setTime(time);
+                }}
+              />
+              <Text style={styles.title}>Time limit is {time} days </Text>
+            </View>
+          )}
         </View>
         {/* FIXME Tähän tulee aikaslideri josta valitaan tuntien tai päivien päästä */}
         {/* <View>
@@ -386,7 +407,12 @@ export default function Settings() {
             />
           )} */}
         <View style={styles.saveButton}>
-          <Button color={buttonColor} onPress={() => signOut()} title="Sign out" />
+          <Button
+            buttonStyle={{ backgroundColor: buttonColor }}
+            titleStyle={{ color: buttonTitleColor }}
+            onPress={() => signOut()}
+            title="Sign out"
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
