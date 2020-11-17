@@ -1,11 +1,10 @@
-import React from "react";
-import { Text, View, FlatList, ImageBackground, Image } from "react-native";
-import { Avatar, ListItem, Overlay, ThemeProvider, ButtonGroup } from "react-native-elements";
-import firebase from "firebase";
+import React from 'react';
+import { Text, View, FlatList, ImageBackground, Image } from 'react-native';
+import { Avatar, ListItem, Overlay, ThemeProvider, ButtonGroup } from 'react-native-elements';
+import firebase from 'firebase';
 // import firestore from "@react-native-firebase/firestore";
 // import auth from "@react-native-firebase/auth";
-import styles from "../styles";
-import Logo from "./Logo";
+import styles from '../styles';
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Matches({ navigation, route }) {
   const [myMatches, setMyMatches] = React.useState([]);
@@ -13,21 +12,21 @@ export default function Matches({ navigation, route }) {
   const [overlay, setOverlay] = React.useState(true);
   const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [1] });
   // const buttons = ["Users", "Events", "Both"];
-  const subButtons = ["Users", "Events", "My Events"];
+  const subButtons = ['Users', 'Events', 'My Events'];
 
   function updateIndex(name, value) {
     setSelectedIndex({ ...selectedIndex, [name]: value });
-    console.log(name + ": " + value);
+    console.log(name + ': ' + value);
   }
 
   const theme = {
     colors: {
-      primary: "black",
-    },
+      primary: 'black'
+    }
   };
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       //console.log("Listener")
       //console.log(firebase.auth().currentUser)
       getMyMatches();
@@ -40,7 +39,7 @@ export default function Matches({ navigation, route }) {
   React.useEffect(() => {
     //Pitäs
     getMyMatches();
-    console.log("matches use effect");
+    console.log('matches use effect');
     //Haetaan kaikki käyttäjän mätsit ja sortataan kahteen listaan sen perusteella onko näillä chattihistoriassa mitään.
     //jos on niin näytetään vertikaalisessa osiossa, jos ei niin horisontaalisessa.
     //tagi filtteri tälle sivulle myös?
@@ -48,11 +47,11 @@ export default function Matches({ navigation, route }) {
 
   // FIXME, tämä päivittyy "automaattisesti"
   function getMyMatches_From_MyMatches() {
-    let ref = firebase.firestore().collection("users").doc(global.myUserData.myUserID).collection("MyMatches");
+    let ref = firebase.firestore().collection('users').doc(global.myUserData.myUserID).collection('MyMatches');
     ref.onSnapshot((querySnapshot) => {
       // snapshot == capture sen hetkisestä rakenteesta
       let matchit = []; // voidaan asettaa halutut tiedot taulukkoon
-      console.log("number of matches : ", querySnapshot.size); // logi -> tuleeko collectionista "osumia"
+      console.log('number of matches : ', querySnapshot.size); // logi -> tuleeko collectionista "osumia"
       querySnapshot.forEach((doc) => {
         // dokkari kerrallaan läpi, jotta voidaan poimia matchien "id:t"
         matchit.push(doc.data()); // TODO: specify what data myMatch dokkarista haetaan.
@@ -68,19 +67,19 @@ export default function Matches({ navigation, route }) {
       let temparray = [];
       var query = await firebase
         .firestore()
-        .collection("matches")
-        .where("users", "array-contains", firebase.auth().currentUser.uid)
+        .collection('matches')
+        .where('users', 'array-contains', firebase.auth().currentUser.uid)
         .get()
         .then(async function (querySnapshot) {
           querySnapshot.forEach(async function (doc) {
-            console.log("MyMatch", doc.id);
+            console.log('MyMatch', doc.id);
             var asd = await doc.data();
             console.log(asd);
             asd.uid = doc.id;
-            let chatname = "";
+            let chatname = '';
             num = num + 1;
             // asd.users.re
-            if (asd.matchtype == "event") {
+            if (asd.matchtype == 'event') {
               chatname = asd.displayNames[0];
             } else {
               //täällä tulee aina väärä nimi matchille, mikäs tämän tarkoitus on?
@@ -94,7 +93,7 @@ export default function Matches({ navigation, route }) {
               bio: asd.bio,
               name: chatname,
               matchType: asd.matchType,
-              avatar_url: `https://randomuser.me/api/portraits/med/women/${num}.jpg`,
+              avatar_url: `https://randomuser.me/api/portraits/med/women/${num}.jpg`
             });
             //lopulliset[length-1].uid = doc.id;
           });
@@ -110,8 +109,8 @@ export default function Matches({ navigation, route }) {
   const renderItem = ({ item }) => (
     <ListItem
       onPress={() => {
-        console.log("Pressed: " + item.matchid);
-        navigation.navigate("Chat", { chatti: item.matchid, photo: item.avatar_url });
+        console.log('Pressed: ' + item.matchid);
+        navigation.navigate('Chat', { chatti: item.matchid, photo: item.avatar_url });
       }}
       containerStyle={styles.matchesBackgroundColor}
       bottomDivider
@@ -138,11 +137,14 @@ export default function Matches({ navigation, route }) {
         /> */}
           {selectedIndex.main != 0 ? (
             <ButtonGroup
-              onPress={(value) => updateIndex("sub", value)}
+              onPress={(value) => updateIndex('sub', value)}
               selectMultiple={true}
               selectedIndexes={selectedIndex.sub}
               buttons={subButtons}
-              containerStyle={[styles.background, styles.heightForty]}
+              containerStyle={[styles.background, styles.buttonGroupBorderColor]}
+              innerBorderStyle={styles.buttonGroupInnerlineColor}
+              textStyle={styles.title}
+              selectedTextStyle={styles.buttonTitleColor}
               style={styles.paddingBottomFifty}
             />
           ) : null}
@@ -159,7 +161,6 @@ export default function Matches({ navigation, route }) {
           </ListItem>
         ))} */}
       </View>
-      {/* <Logo /> */}
     </View>
   );
 }
