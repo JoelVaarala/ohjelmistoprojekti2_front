@@ -169,9 +169,10 @@ export default function App() {
   };
 
   const MatchStack = ({ navigation, route }) => {
-    console.log('tämä on routen asdasd:')
-    console.log(route.state);
-    navigation.setOptions({ tabBarVisible: route.state ? (route.state.routes.length > 0 ? false : true) : true });
+    // console.log('tämä on routen asdasd:')
+    // console.log(route.state);
+    // console.log(route.state ? (route.state.routes.length > 0 ? false : true) : true)
+    // navigation.setOptions({ tabBarVisible: route.state ? (route.state.routes.length > 0 ? false : true) : true });
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Matches" component={Matches} />
