@@ -30,10 +30,18 @@ export default class Horizontal extends Component {
           data: this.props.kuvat,
           order: this.props.order,
         };
-        console.log("jdjd", this.state.order)
       }
 
+      
   render() {
+    let onChangeOrder = (nextOrder) => {
+      const order = nextOrder;
+      console.log("jeejee", nextOrder)
+      const images = this.props.kuvat
+      console.log("ÖÖÖÖÖÖÖÖÖÖ",images)
+      return order, images;
+    }
+
     return (
       <View style={styles.container}>
         <SortableList
@@ -43,6 +51,8 @@ export default class Horizontal extends Component {
           contentContainerStyle={styles.contentContainer}
           data={this.props.kuvat}
           order={this.props.order}
+          onChangeOrder={onChangeOrder}
+          onReleaseRow={TallennaData}
           renderRow={this._renderRow} />
       </View>
     );
@@ -51,7 +61,7 @@ export default class Horizontal extends Component {
   _renderRow = ({data, active}) => {
     console.log("jdjd", this.state.order)
     console.log("KUVAR", this.state.data)
-    return <Row data={data} active={active} />
+    return <Row data={data} active={active} /> 
   }
 }
 
@@ -190,7 +200,20 @@ const styles = StyleSheet.create({
   },
 });
 
-function TallennaData(pics) {
+function TallennaData(order, images) {
+  
+  //let tama = order;
+  console.log("TÄMÄ DATA HALUTAAN", Object.keys(images))
+//for (order in Object.values(props.kuvat)) {
+  console.log("ja TÄÄ", order)
+ //  var value = Object.values(props.kuvat)[order] }
+//   var newvalue = props.kuvat[value]
+//console.log(value, "fjfj", props.kuvat)
+let pictures = []
+
+
+
+{/*}
     let body = {
       data: {
         images: pics,
@@ -211,5 +234,5 @@ function TallennaData(pics) {
         // console.log(data)
       })
       .catch((err) => console.error(err));
-    Alert.alert("Tiedot tallennettiin");
+    Alert.alert("Tiedot tallennettiin"); */}
   }
