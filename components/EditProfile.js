@@ -50,7 +50,7 @@ export default function EditProfile() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data)
+         console.log(data)
       })
       .catch((err) => console.error(err));
   }
