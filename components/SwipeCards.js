@@ -50,7 +50,11 @@ class Card extends React.Component {
       { latitude: this.props.position.geopoint._latitude, longitude:  this.props.position.geopoint._longitude},
       { latitude: global.myUserData.filters.myLocation.latitude, longitude: global.myUserData.filters.myLocation.longitude } 
       )/1000);
+      // because distance is already rounded "less than km away" is displayed starting from even 1
+      if(distance>1)
       return distance;
+      else
+      return "less than";
   }
 
   separatedTags() {
