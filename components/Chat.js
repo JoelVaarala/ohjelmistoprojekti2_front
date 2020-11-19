@@ -94,8 +94,8 @@ export default function Chat(props) {
         // lisätään arrayhin halutut viesti datat
         keskustelunViestit.push({
           _id: keskustelunViestit.length + 1,
-          text: doc.data().message,
-          createdAt: new Date(doc.data().timestamp._seconds * 1000),
+          text:  doc.data().message,
+          createdAt: new Date(doc.data().timestamp.seconds * 1000),
           user: {
             _id: sender,
             name: "joku",
