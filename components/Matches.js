@@ -82,9 +82,10 @@ export default function Matches({ navigation, route }) {
             if (asd.matchtype == 'event') {
               chatname = asd.displayNames[0];
             } else {
-              //täällä tulee aina väärä nimi matchille, mikäs tämän tarkoitus on?
+              // väärä nimi matchille (otti taulusta sattumanvaraisen nimen joka oli eri kuin käyttäjän uid)
+              // fixed --> nyt vertaa element != nykyisen käyttäjän nimi
               asd.displayNames.forEach((element) => {
-                if (element != global.uid) chatname = element;
+                if (element != firebase.auth().currentUser.displayName) chatname = element;
               });
             }
             //temparray.push(doc.data())
