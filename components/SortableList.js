@@ -1,21 +1,5 @@
-/**
- * Sample React Native App
- * httpss://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
-import {
-  Animated,
-  Easing,
-  StyleSheet,
-  Text,
-  Image,
-  View,
-  Dimensions,
-  Platform,
-  PickerIOS,
-} from 'react-native';
+import { Animated, Easing, StyleSheet, Text, Image, View, Dimensions, Platform, PickerIOS, } from 'react-native';
 import { onChange } from 'react-native-reanimated';
 import SortableList from 'react-native-sortable-list';
 
@@ -23,17 +7,25 @@ const window = Dimensions.get('window');
 
 export default class Horizontal extends Component {
 
-    constructor(props) {
-        console.log(' LOOK HERE   ',props.kuvat)
-        super(props);
-        this.state = {
-          data: this.props.kuvat,
-          order: this.props.order,
-        };
-        console.log("jdjd", this.state.order)
-      }
+  constructor(props) {
+    console.log(' LOOK HERE   ', props.kuvat)
+    super(props);
+    this.state = {
+      data: this.props.kuvat,
+      order: this.props.order,
+    };
+  }
 
   render() {
+    let onChangeOrder = (nextOrder) => {
+      this.setState({ order: nextOrder })
+      const ordar = nextOrder;
+      // console.log("jeejee", nextOrder)
+      const images = this.props.kuvat
+      //  console.log("ÖÖÖÖÖÖÖÖÖÖ", images)
+      return images;
+    }
+
     return (
       <View style={styles.container}>
         <SortableList
@@ -42,15 +34,15 @@ export default class Horizontal extends Component {
           scrollEnabled={false}
           contentContainerStyle={styles.contentContainer}
           data={this.props.kuvat}
-          order={this.props.order}
+          // order={this.props.order}
+          onChangeOrder={onChangeOrder}
+          onReleaseRow={TallennaData(this.state.order, this.state.data)}
           renderRow={this._renderRow} />
       </View>
     );
   }
 
-  _renderRow = ({data, active}) => {
-    console.log("jdjd", this.state.order)
-    console.log("KUVAR", this.state.data)
+  _renderRow = ({ data, active }) => {
     return <Row data={data} active={active} />
   }
 }
@@ -94,26 +86,27 @@ class Row extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.active !== nextProps.active) {
-        Animated.timing(this._active, {
-            duration: 300,
-            easing: Easing.bounce,
-            toValue: Number(nextProps.active),
-        }).start();
+      Animated.timing(this._active, {
+        duration: 300,
+        easing: Easing.bounce,
+        toValue: Number(nextProps.active),
+      }).start();
     }
-}
+  }
 
-render() {
+
+  render() {
     const { data, active } = this.props;
 
     return (
-        <Animated.View style={[
-            styles.row,
-            this._style,
-        ]}>
-            <Image source={{ uri: data }} style={styles.image} />
-        </Animated.View>
+      <Animated.View style={[
+        styles.row,
+        this._style,
+      ]}>
+        <Image source={{ uri: data }} style={styles.image} />
+      </Animated.View>
     );
-}
+  }
 }
 
 const styles = StyleSheet.create({
@@ -168,7 +161,7 @@ const styles = StyleSheet.create({
       ios: {
         shadowColor: 'rgba(0,0,0,0.2)',
         shadowOpacity: 1,
-        shadowOffset: {height: 2, width: 2},
+        shadowOffset: { height: 2, width: 2 },
         shadowRadius: 2,
       },
 
@@ -181,7 +174,7 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height:'100%',
+    height: '100%',
   },
 
   text: {
@@ -190,26 +183,35 @@ const styles = StyleSheet.create({
   },
 });
 
-function TallennaData(pics) {
-    let body = {
-      data: {
-        images: pics,
-      },
-      uid: global.myUserData.uid,
-      idToken: global.myUserData.idToken,
-    };
 
-    fetch(global.url + "profileUpdate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log(data)
-      })
-      .catch((err) => console.error(err));
-    Alert.alert("Tiedot tallennettiin");
+function TallennaData(order, images) {
+
+  console.log(order)
+  console.log(images)
+  const pictures = []
+
+  for (let i = 0; i < images.length; i++) {
+    pictures.push(images[order[i]])
   }
+  let body = {
+    data: {
+      images: pictures,
+    },
+    uid: global.myUserData.uid,
+    idToken: global.myUserData.idToken,
+  };
+  console.log("LOGIII", body)
+
+  fetch(global.url + 'profileUpdate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // console.log("DATAa", data)
+    })
+    .catch((err) => console.error(err));
+}
