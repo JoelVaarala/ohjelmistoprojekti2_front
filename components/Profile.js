@@ -97,7 +97,7 @@ export default function Profile({ navigation, route }, props) {
       } else if (matchType == "event") {
         console.log("MatchType === event");
         setType("Event");
-        setOsallistujat(query.data().users);
+        //setOsallistujat(query.data().users);
         haeEvent();
         HaeHakijat();
         HaeOsallistujat();
@@ -191,11 +191,19 @@ export default function Profile({ navigation, route }, props) {
 
             var asd = doc.data();
             asd.uid = doc.id;
+            
             lopulliset.push(doc.data());
           });
         });
     }
+    osallistujat.forEach(element => {
+      if(element.images.length === 0)
+      {
+        element.images.append("https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg");
+      }
+    });
     console.log("lopullinen osallistujalista", lopulliset)
+    setOsallistujat(lopulliset);
 
   }
 
@@ -208,14 +216,15 @@ export default function Profile({ navigation, route }, props) {
   //ainoastaan eventin omistaja näkee buttonin jolla voi kickata osallistujan
   function Jooh() {
     {
-      return eventInfo.participiants.map((l, i) => (
+      console.log("jooh", osallistujat)
+      return osallistujat.map((l, i) => (
         <ListItem key={i} bottomDivider>
           <Avatar source={{ uri: l.images[0] }} />
           <ListItem.Content>
             <View>
-              <ListItem.Title>{l.displayName} Nimi</ListItem.Title>
+              <ListItem.Title>{l.displayName} </ListItem.Title>
 
-              <ListItem.Subtitle>ikä</ListItem.Subtitle>
+              <ListItem.Subtitle>{l.age}</ListItem.Subtitle>
             </View>
           </ListItem.Content>
           <View style={styles.viewLikersItemContent}>
