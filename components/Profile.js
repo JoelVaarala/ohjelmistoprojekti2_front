@@ -20,6 +20,10 @@ export default function Profile({ navigation, route }, props) {
     bio: "bio",
   });
 
+  const [osallistujat, setOsallistujat] = React.useState([]);
+
+  const [peoplesWhoWantToJoin, setPeoplesWhoWantToJoin] = React.useState([]);
+
   // type can be used to define if mathc is user vs event
   const [type, setType] = React.useState("");
 
@@ -93,7 +97,10 @@ export default function Profile({ navigation, route }, props) {
       } else if (matchType == "event") {
         console.log("MatchType === event");
         setType("Event");
+        setOsallistujat(query.data().users);
         haeEvent();
+        HaeHakijat();
+        HaeOsallistujat();
       }
     });
   }
@@ -117,45 +124,85 @@ export default function Profile({ navigation, route }, props) {
       // tiedot viedään userStateen
       let name_f = qr.data().displayName;
       let bio_f = qr.data().bio;
+      //let osallistujat_f = qr.data().
       setEvent({ name: name_f, bio: bio_f });
       setView(false);
       console.log("id from haeEvent : ", qr.id);
     });
   }
 
-  {
-    /*
-    React.useEffect(() => {
-          //console.log(firebase.auth().currentUser)
-          HaeKayttaja();
+  async function HaeHakijat() {
+    console.log("Haetaan hakijat")
+    var peopleWhoLikedMe = await firebase.firestore().collection("events").doc(route.params.chet).collection("swipes").doc("usersThatLikedMe").get();
+    var lol = peopleWhoLikedMe.data().swipes;
+    var peopleInQueue = await firebase.firestore().collection("events").doc(route.params.chet).collection("swipes").doc("mySwipes").get();
+    peopleInQueue = peopleInQueue.data().swipes;
+    var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.chet).get();
+    usersAlreadyInEvent = usersAlreadyInEvent.data().users;
+    console.log(usersAlreadyInEvent);
+    let temppia = [];
+    //miksei vaa
+    lol.forEach((element) => {
+      temppia.push(element.user);
+    });
+
+    console.log("jotakin",temppia);
+    temppia = temppia.filter(function (el) {
+      return !usersAlreadyInEvent.includes(el);
+    });
+    console.log(temppia);
+
+    var lopulliset = [];
+    if (temppia.length !== 0) {
+      console.log("Enemmän ku 0");
+      var query = await firebase.firestore()
+        .collection("users")
+        .where(firebase.firestore.FieldPath.documentId(), "in", temppia)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+
+            var asd = doc.data();
+            asd.uid = doc.id;
+            lopulliset.push(doc.data());
+          });
         });
+    }
+    console.log("Lopulliset hakijat", lopulliset);
+    setPeoplesWhoWantToJoin(lopulliset);
 
-        
+  }
 
-    function HaeKayttaja() {
-        let bodii =  {
-            "uid" : "qREmoPw72NRHB2JA6uBCKJyuWhY2",
-            "tags" : ["perunat"]
-        }
-    fetch(global.url + "profileUpdate", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(bodii)
-      })
-        .then(response => response.json())
-        // .then(response => console.log(response))
-        .then(data => {
-          setUser(
-            name = "nimi",
-            age = "ikä",
-            bio = "bio")
-          console.log(data.result)
-        })
-        .catch(err => console.error(err))
-      //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
-    } */
+  async function HaeOsallistujat()
+  {
+    var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.chet).get();
+    let osallistujalista = [];
+    osallistujalista = usersAlreadyInEvent.data().users;
+    console.log("osallistujalista", osallistujalista);
+    let lopulliset = [];
+    if (osallistujalista.length !== 0) {
+      console.log("Enemmän ku 0");
+      var query = await firebase.firestore()
+        .collection("users")
+        .where(firebase.firestore.FieldPath.documentId(), "in", osallistujalista)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+
+            var asd = doc.data();
+            asd.uid = doc.id;
+            lopulliset.push(doc.data());
+          });
+        });
+    }
+    console.log("lopullinen osallistujalista", lopulliset)
+
+  }
+
+
+  function Accept(accepted, uid)
+  {
+    console.log(accepted,uid)
   }
 
   //ainoastaan eventin omistaja näkee buttonin jolla voi kickata osallistujan
@@ -175,7 +222,17 @@ export default function Profile({ navigation, route }, props) {
             <Button //tää on kicki button
               type="outline"
               raised={true}
-              onPress={() => Accept(false, l.uid)}
+              onPress={() => Accept(true, l.uid)}
+              icon={{
+                name: "arrow-right",
+                size: 30,
+                color: "red",
+              }}
+            />
+                        <Button //tää on kicki button
+              type="outline"
+              raised={true}
+              onPress={() => Decline(false, l.uid)}
               icon={{
                 name: "arrow-right",
                 size: 30,
@@ -311,12 +368,7 @@ export default function Profile({ navigation, route }, props) {
               <Text style={styles.userTextStyle}>{event.name}</Text>
               <Text style={styles.userBioStyle}>{event.bio}</Text>
               <ThemeProvider theme={theme}>
-                {/* <ButtonGroup
-          onPress={(value) => updateIndex("main", value)}
-          selectedIndex={selectedIndex.main}
-          buttons={buttons}
-          containerStyle={[styles.background, styles.heightForty]}
-        /> */}
+
                 <ButtonGroup
                   onPress={(value) => updateIndex("main", value)}
                   selectedIndex={selectedIndex.main}
