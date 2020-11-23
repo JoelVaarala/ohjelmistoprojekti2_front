@@ -1,11 +1,10 @@
-import React from "react";
-import { Text, View, FlatList, ImageBackground, Image } from "react-native";
-import { Avatar, ListItem, Overlay,ThemeProvider, ButtonGroup } from "react-native-elements";
-import firestore from "@react-native-firebase/firestore";
-import firebase from "react-native-firebase";
-import auth from "@react-native-firebase/auth";
-import styles from "../styles";
-import Logo from "./Logo";
+import React from 'react';
+import { Text, View, FlatList, ImageBackground, Image } from 'react-native';
+import { Avatar, ListItem, Overlay, ThemeProvider, ButtonGroup } from 'react-native-elements';
+import firebase from 'firebase';
+// import firestore from "@react-native-firebase/firestore";
+// import auth from "@react-native-firebase/auth";
+import styles from '../styles';
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Matches({ navigation, route }) {
   const [myMatches, setMyMatches] = React.useState([]);
@@ -13,23 +12,21 @@ export default function Matches({ navigation, route }) {
   const [overlay, setOverlay] = React.useState(true);
   const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [1] });
   // const buttons = ["Users", "Events", "Both"];
-  const subButtons = ["Users", "Events", "My Events"];
+  const subButtons = ['Users', 'Events', 'My Events'];
 
   function updateIndex(name, value) {
     setSelectedIndex({ ...selectedIndex, [name]: value });
-    console.log(name + ": " + value);
+    console.log(name + ': ' + value);
   }
-
-
 
   const theme = {
     colors: {
-      primary: "black",
-    },
+      primary: 'black'
+    }
   };
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       //console.log("Listener")
       //console.log(firebase.auth().currentUser)
       getMyMatches();
@@ -42,7 +39,7 @@ export default function Matches({ navigation, route }) {
   React.useEffect(() => {
     //Pitäs
     getMyMatches();
-    console.log("matches use effect");
+    console.log('matches use effect');
     //Haetaan kaikki käyttäjän mätsit ja sortataan kahteen listaan sen perusteella onko näillä chattihistoriassa mitään.
     //jos on niin näytetään vertikaalisessa osiossa, jos ei niin horisontaalisessa.
     //tagi filtteri tälle sivulle myös?
@@ -50,11 +47,11 @@ export default function Matches({ navigation, route }) {
 
   // FIXME, tämä päivittyy "automaattisesti"
   function getMyMatches_From_MyMatches() {
-    let ref = firestore().collection("users").doc(global.myUserData.myUserID).collection("MyMatches");
+    let ref = firebase.firestore().collection('users').doc(global.myUserData.myUserID).collection('MyMatches');
     ref.onSnapshot((querySnapshot) => {
       // snapshot == capture sen hetkisestä rakenteesta
       let matchit = []; // voidaan asettaa halutut tiedot taulukkoon
-      console.log("number of matches : ", querySnapshot.size); // logi -> tuleeko collectionista "osumia"
+      console.log('number of matches : ', querySnapshot.size); // logi -> tuleeko collectionista "osumia"
       querySnapshot.forEach((doc) => {
         // dokkari kerrallaan läpi, jotta voidaan poimia matchien "id:t"
         matchit.push(doc.data()); // TODO: specify what data myMatch dokkarista haetaan.
@@ -68,36 +65,36 @@ export default function Matches({ navigation, route }) {
       //hakee messages/matches collectionista itemit
       let num = 1;
       let temparray = [];
-      var query = await firestore()
-        .collection("matches")
-        .where("users", "array-contains", auth().currentUser.uid)
+      var query = await firebase
+        .firestore()
+        .collection('matches')
+        .where('users', 'array-contains', firebase.auth().currentUser.uid)
         .get()
         .then(async function (querySnapshot) {
           querySnapshot.forEach(async function (doc) {
-            console.log("MyMatch", doc.id);
+            console.log('MyMatch', doc.id);
             var asd = await doc.data();
             console.log(asd);
             asd.uid = doc.id;
-            let chatname = "";
+            let chatname = '';
             num = num + 1;
             // asd.users.re
-            if(asd.matchtype == "event")
-            {
+            if (asd.matchtype == 'event') {
               chatname = asd.displayNames[0];
-            }
-            else {
-              asd.displayNames.forEach(element => {
-                if(element !=  global.uid)
-                  chatname = element
+            } else {
+              // väärä nimi matchille (otti taulusta sattumanvaraisen nimen joka oli eri kuin käyttäjän uid)
+              // fixed --> nyt vertaa element != nykyisen käyttäjän nimi
+              asd.displayNames.forEach((element) => {
+                if (element != firebase.auth().currentUser.displayName) chatname = element;
               });
             }
             //temparray.push(doc.data())
             temparray.push({
               matchid: doc.id,
-              bio : asd.bio,
+              bio: asd.bio,
               name: chatname,
               matchType: asd.matchType,
-              avatar_url: `https://randomuser.me/api/portraits/med/women/${num}.jpg`,
+              avatar_url: `https://randomuser.me/api/portraits/med/women/${num}.jpg`
             });
             //lopulliset[length-1].uid = doc.id;
           });
@@ -109,49 +106,50 @@ export default function Matches({ navigation, route }) {
     }
   };
 
-
-
   //Tämän pitäisi myös pistää linkki chatkomponenttiin johon passataan parametrinä keskustelkun id
   const renderItem = ({ item }) => (
     <ListItem
       onPress={() => {
-        console.log("Pressed: " + item.matchid);
-        navigation.navigate("Chat", { chatti: item.matchid, photo: item.avatar_url });
+        console.log('Pressed: ' + item.matchid);
+        navigation.navigate('Chat', { chatti: item.matchid, photo: item.avatar_url });
       }}
       containerStyle={styles.matchesBackgroundColor}
       bottomDivider
     >
       <Avatar rounded source={{ uri: item.avatar_url }} />
       <ListItem.Content style={styles.opacityOne}>
-              <ListItem.Title style={[styles.matchesName, styles.fontRoboto]}> {item.name}</ListItem.Title>
-              <ListItem.Subtitle style={styles.textGreyRoboto}> {item.matchType}</ListItem.Subtitle>
-              {/* <ListItem.Subtitle style={styles.textGreyRoboto}> Latest message</ListItem.Subtitle> */}
-              {/* <ListItem.Subtitle style={styles.textGreyRoboto}> {item.bio}</ListItem.Subtitle> */}
-            </ListItem.Content>
+        <ListItem.Title style={[styles.matchesName, styles.fontRoboto]}> {item.name}</ListItem.Title>
+        <ListItem.Subtitle style={styles.textGreyRoboto}> {item.matchType}</ListItem.Subtitle>
+        {/* <ListItem.Subtitle style={styles.textGreyRoboto}> Latest message</ListItem.Subtitle> */}
+        {/* <ListItem.Subtitle style={styles.textGreyRoboto}> {item.bio}</ListItem.Subtitle> */}
+      </ListItem.Content>
     </ListItem>
   );
 
   return (
     <View style={[styles.flexOne, styles.background]}>
       <View>
-      <ThemeProvider theme={theme}>
-        {/* <ButtonGroup
+        <ThemeProvider theme={myTheme}>
+          {/* <ButtonGroup
           onPress={(value) => updateIndex("main", value)}
           selectedIndex={selectedIndex.main}
           buttons={buttons}
           containerStyle={[styles.background, styles.heightForty]}
         /> */}
-        {selectedIndex.main != 0 ? (
-          <ButtonGroup
-            onPress={(value) => updateIndex("sub", value)}
-            selectMultiple={true}
-            selectedIndexes={selectedIndex.sub}
-            buttons={subButtons}
-            containerStyle={[styles.background, styles.heightForty]}
-            style={styles.paddingBottomFifty}
-          />
-        ) : null}
-      </ThemeProvider>
+          {selectedIndex.main != 0 ? (
+            <ButtonGroup
+              onPress={(value) => updateIndex('sub', value)}
+              selectMultiple={true}
+              selectedIndexes={selectedIndex.sub}
+              buttons={subButtons}
+              containerStyle={[styles.background, styles.buttonGroupBorderColor]}
+              innerBorderStyle={styles.buttonGroupInnerlineColor}
+              textStyle={styles.title}
+              selectedTextStyle={styles.buttonTitleColor}
+              style={styles.paddingBottomFifty}
+            />
+          ) : null}
+        </ThemeProvider>
         <FlatList horizontal={false} data={myMatches} renderItem={renderItem}></FlatList>
         {/* <Text style={[styles.title, styles.fontRoboto, styles.marginLeftTen]}>Messages</Text> */}
         {/* {list.map((l, i) => (
@@ -164,7 +162,6 @@ export default function Matches({ navigation, route }) {
           </ListItem>
         ))} */}
       </View>
-      {/* <Logo /> */}
     </View>
   );
 }

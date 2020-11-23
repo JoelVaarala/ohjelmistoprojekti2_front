@@ -3,8 +3,9 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Button, Text, View } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import Startup from "./Startup";
-import firestore from "@react-native-firebase/firestore";
-import auth from "@react-native-firebase/auth";
+import firebase from 'firebase';
+// import firestore from "@react-native-firebase/firestore";
+// import auth from "@react-native-firebase/auth";
 import { Icon, Avatar } from "react-native-elements";
 import styles from "../styles";
 
@@ -72,7 +73,7 @@ export default function Chat(props) {
 
   // --UPDATED METHOD TO GET MESSAGES REALTIME
   // ref for wanted doc, global.keskusteluDOC needs to be changed after to be matching specific chat
-  const ref = firestore().collection("matches").doc(props.route.params.chatti).collection("messages").orderBy("timestamp", "desc");
+  const ref = firebase.firestore().collection("matches").doc(props.route.params.chatti).collection("messages").orderBy("timestamp", "desc");
 
   function getConversationsRT() {
     // luodaan snapshot joka, "hakee" firestoren sisällön
@@ -86,15 +87,15 @@ export default function Chat(props) {
         console.log("Viestin sisältö : ", doc.data().message);
         // Alla selvitetään onko henkilö lähettäjä/vastaanottaja, jotta tiedetään kummalle puolelle näyttöä viestit renderöidään
         let sender = doc.data().sender;
-        if (doc.data().sender == auth().currentUser.uid) {
+        if (doc.data().sender == firebase.auth().currentUser.uid) {
           sender = "asd";
         }
 
         // lisätään arrayhin halutut viesti datat
         keskustelunViestit.push({
           _id: keskustelunViestit.length + 1,
-          text: doc.data().message,
-          createdAt: new Date(doc.data().timestamp._seconds * 1000),
+          text:  doc.data().message,
+          createdAt: new Date(doc.data().timestamp.seconds * 1000),
           user: {
             _id: sender,
             name: "joku",
@@ -119,41 +120,12 @@ export default function Chat(props) {
     LahetaViestiFirebaseen(messages[0].text);
   }, []);
 
-  // Matchin poisto funkari
-  const removeMatch = () => {
-    console.log("matchin poisto", props.route.params.chatti);
-
-    let url = global.url + "removeMatch";
-    let bodi = {
-      idToken: "Dummyyy", // FIX ME
-      uid: global.myUserData.uid,
-      data: {
-        match: props.route.params.chatti,
-      },
-    };
-
-    console.log(bodi);
-    console.log(JSON.stringify(bodi));
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodi),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        console.log(".then res ->", res);
-      })
-      .catch((err) => console.error(err));
-  };
   
   // avatar kuvaa painamalla pääsee katsomaan henkilön profiilia
   function avatarOpensProfile(props2) {
     // console.log('props2 : ',props2)
     // console.log('props : ',props)
-    console.log('vvvvv', props.route.params.chatti)
+    console.log('route.params.chatti : ', props.route.params.chatti)
     console.log('Chatistä lähtevät props2 ', props2);
     props.navigation.navigate("MatchProfile", { match: props2._id , chet: props.route.params.chatti});
   }
@@ -161,7 +133,6 @@ export default function Chat(props) {
   return (
     <View style={[styles.flexOne, styles.background]}>
       <View style={styles.chatStyle}>
-        <Icon size={20} reverse name="info" onPress={() => removeMatch()} /*tällä napilla voidaan myöhemmin poistaa match*/ />
         <GoToAvatar navigation={props.navigation} />
         
       </View>

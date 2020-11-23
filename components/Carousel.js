@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Text, View, SafeAreaView, Dimensions, Image } from "react-native";
 import Carousel from "react-native-snap-carousel";
-import firestore from "@react-native-firebase/firestore";
+//import firestore from "@react-native-firebase/firestore";
 import styles from "../styles";
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get("window");

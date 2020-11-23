@@ -1,28 +1,42 @@
-import React, { useState } from "react";
-import { ScrollView, SafeAreaView, Platform, Text, View, TextInput, Button, FlatList, StatusBar } from "react-native";
-import { Input, Slider } from "react-native-elements";
-import RangeSlider from "rn-range-slider";
-import CheckBox from "@react-native-community/checkbox";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
-import styles from "../styles";
+import React, { useState } from 'react';
+import { Alert, ScrollView, SafeAreaView, Platform, Text, View, TextInput, FlatList, StatusBar } from 'react-native';
+import { Input, Slider, ButtonGroup, ThemeProvider, Button } from 'react-native-elements';
+import RangeSlider from 'rn-range-slider';
+import CheckBox from '@react-native-community/checkbox';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import firebase from 'firebase';
+// import auth from "@react-native-firebase/auth";
+// import firestore from "@react-native-firebase/firestore";
+import styles from '../styles';
+import { AuthContext } from './AuthContext';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Settings() {
   //tagit
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState('');
   const [tagList, setTagList] = useState([]);
+  const { signOut } = React.useContext(AuthContext);
+  const [shouldShow, setShouldShow] = useState(false);
+  const [showHoursOrDays, setShowHoursOrDays] = useState(false);
 
   const addTag = () => {
     setTagList([...tagList, tag]);
-    setTag("");
+    setTag('');
+    setShouldShow(!shouldShow);
+  };
+
+  const deleteItemById = (index) => {
+    Alert.alert('Poista tagi', 'Haluatko varmasti poistaa tagin?', [
+      { text: 'Peruuta', onPress: () => console.log('Käyttäjä peruutti'), style: 'cancel' },
+      { text: 'OK', onPress: () => setTagList(tagList.filter((itemi, indexi) => indexi !== index)) }
+    ]);
   };
 
   //sliderit
   const [lowAge, setLowAge] = useState(14);
   const [highAge, setHighAge] = useState(100);
   const [distance, setDistance] = useState(1);
+  const [time, setTime] = useState(1);
   //checkboxit
   const [female, setFemale] = useState(false);
   const [male, setMale] = useState(false);
@@ -30,14 +44,23 @@ export default function Settings() {
   const [events, setEvents] = useState(false);
   const [people, setPeople] = useState(false);
 
+  //buttongroup
+  const buttons = ['Men', 'Women', 'Other'];
+  const [selectedIndex, setSelectedIndex] = React.useState({ main: [0] });
+
+  function updateIndex(name, value) {
+    setSelectedIndex({ ...selectedIndex, [name]: value });
+  }
+
+  console.log(selectedIndex);
   //datetimepicker
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
+  const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
+    setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
 
@@ -47,7 +70,7 @@ export default function Settings() {
   };
 
   const showDatepicker = () => {
-    showMode("date");
+    showMode('date');
   };
 
   const formatDate = (date) => {
@@ -57,18 +80,31 @@ export default function Settings() {
     HaeTiedot();
   }, []);
 
+  React.useEffect(() => {
+    // console.log('useeffecti', tagList)
+    TallennaData();
+  }, [lowAge, highAge, distance, selectedIndex, showHoursOrDays, time, tagList]);
+
   const HaeTiedot = async () => {
-    let ref = firestore().collection("users").doc(auth().currentUser.uid).collection("filters").doc("myFilters");
+    let ref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('filters')
+      .doc('myFilters');
     const doc = await ref.get();
     if (!doc.exists) {
-      console.log("document not found");
+      console.log('document not found');
     } else {
-      console.log("success HERE HERE ::::", doc.data());
+      console.log('success HERE HERE ::::', doc.data());
 
       setTagList(doc.data().tags);
       setDistance(doc.data().distance);
       setLowAge(doc.data().minAge);
       setHighAge(doc.data().maxAge);
+
+      {
+        /*
       let looking = doc.data().lookingFor;
       let events = looking.indexOf("events") > -1;
       let people = looking.indexOf("users") > -1;
@@ -78,45 +114,73 @@ export default function Settings() {
       if (people == true) {
         setPeople(true);
       }
+    */
+      }
       let genders = doc.data().genders;
-      let male = genders.indexOf("male") > -1;
-      let female = genders.indexOf("female") > -1;
-      let other = genders.indexOf("other") > -1;
+      let male = genders.indexOf('male') > -1;
+      let female = genders.indexOf('female') > -1;
+      let other = genders.indexOf('other') > -1;
+      let values = [];
       if (male == true) {
-        setMale(true);
+        // setMale(true);
+        values.push(0);
       }
       if (female == true) {
-        setFemale(true);
+        values.push(1);
+        // setFemale(true);
       }
       if (other == true) {
-        setOther(true);
+        values.push(2);
+        //   setOther(true);
       }
+      console.log(values);
+      setSelectedIndex({ ...selectedIndex, main: values });
     }
   };
 
   function TallennaData() {
+    // muutetaan päivät tunneiksi jos "days" on valittuna
+    let timelimit;
+    if (showHoursOrDays == false) {
+      timelimit = time * 24;
+    } else timelimit = time;
+
+    let genders = [];
+    if (selectedIndex.main.includes(0)) {
+      //   setGenders(["male"])
+      genders.push('male');
+    }
+    if (selectedIndex.main.includes(1)) {
+      //    setGenders([...genders, "female"])
+      genders.push('female');
+    }
+    if (selectedIndex.main.includes(2)) {
+      //  setGenders([...genders, "other"])
+      genders.push('other');
+    }
+    console.log(genders);
+
     let body = {
       idToken: global.myUserData.idToken,
       uid: global.myUserData.uid,
       data: {
-        minAge: minAge,
-        maxAge: maxAge,
-        lookingFOr: ["FIXME"],
-        displayName: event_s,
-        genders: ["FIXME"],
+        minAge: lowAge,
+        maxAge: highAge,
+        lookingFor: ['events', 'users'],
+        genders: genders,
         distance: distance,
-        eventsInXHours: 1,
-        tags: [],
-      },
+        eventsInXHours: timelimit,
+        tags: tagList
+      }
     };
 
     console.log(body);
-    fetch(global.url + "filtersUpdate", {
-      method: "POST",
+    fetch(global.url + 'filtersUpdate', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(body)
     })
       .then((response) => response.json())
       .then((data) => {
@@ -125,14 +189,15 @@ export default function Settings() {
       .catch((err) => console.error(err));
   }
   function HaeSettingsValues() {
-    let ref = firestore().collection("users").doc(auth().currentUser.uid);
+    let ref = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid);
     ref.onSnapshot((querySnapshot) => {
       let sukupuutto = querySnapshot.data().gender;
       console.log(sukupuutto);
       // setStates here as shown above
     });
   }
-
+  {
+    /*
   function TallennaData() {
     let body = {
       data: {
@@ -163,27 +228,49 @@ export default function Settings() {
         // console.log(data)
       })
       .catch((err) => console.error(err));
+  } 
+*/
   }
-
-  const checkBoxColor = () => ({ true: "#000" });
 
   return (
     <SafeAreaView style={[styles.flexOne, styles.background]}>
       <ScrollView>
         <View style={styles.omatContainerit}>
-          <View style={styles.background}>
-            <Text style={styles.title}>Add a tag:</Text>
-            <TextInput onChangeText={(tag) => setTag(tag)} value={tag} onEndEditing={addTag} style={styles.addTagInputBox}></TextInput>
-          </View>
           <View>
-            <Text style={styles.title}>Tags:</Text>
+            <Text style={styles.title}>Your tags :</Text>
+            <View>
+              {shouldShow ? (
+                <TextInput
+                  placeholder="Add a tag"
+                  onChangeText={(tag) => setTag(tag)}
+                  value={tag}
+                  onEndEditing={addTag}
+                  style={[styles.tagTextInput, styles.marginTopTen]}
+                ></TextInput>
+              ) : (
+                <View style={styles.marginTopTen}>
+                  <Button
+                    buttonStyle={{ backgroundColor: buttonColor }}
+                    titleStyle={{ color: buttonTitleColor }}
+                    title="+"
+                    onPress={() => setShouldShow(!shouldShow)}
+                  />
+                </View>
+              )}
+            </View>
+          </View>
+          <View style={styles.flexOne}>
             <FlatList
-              contentContainerStyle={styles.paddingTopTen}
+              contentContainerStyle={[styles.paddingTopTen, styles.paddingRightTwenty]}
               horizontal={false}
               numColumns={3}
               data={tagList}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => <Text style={styles.tagBox}>{item}</Text>}
+              renderItem={({ item, index }) => (
+                <Text onPress={() => deleteItemById(index)} style={styles.tagBox}>
+                  {item}
+                </Text>
+              )}
             />
           </View>
         </View>
@@ -191,14 +278,14 @@ export default function Settings() {
           <View>
             <Text style={styles.title}>Distance:</Text>
             <RangeSlider
-              style={styles.settingsRangerSlider}
-              gravity={"center"}
+              style={styles.rangerSliderSize}
+              gravity={'center'}
               rangeEnabled={false}
               min={1}
               max={100}
               step={1}
-              selectionColor="#000000"
-              blankColor="#000000"
+              selectionColor={rangerSliderColor}
+              blankColor={rangerSliderColor}
               onValueChanged={(distance, fromUser) => {
                 setDistance(distance);
               }}
@@ -208,32 +295,42 @@ export default function Settings() {
           <View style={styles.paddingTopFifty}>
             <Text style={styles.title}> Ages:</Text>
             <RangeSlider
-              style={styles.settingsRangerSlider}
-              gravity={"center"}
-              min={14}
+              style={styles.rangerSliderSize}
+              gravity={'center'}
+              min={18}
               max={100}
               step={1}
               valueType="number"
-              textsize={20}
               rangeLow={lowAge}
               rangeHigh={highAge}
-              selectionColor="#000000"
-              blankColor="#000000"
+              selectionColor={rangerSliderColor}
+              blankColor={rangerSliderColor}
               onValueChanged={(lowAge, highAge, fromUser) => {
                 setLowAge(lowAge), setHighAge(highAge);
               }}
             />
             <Text style={styles.title}>
-              {" "}
               {lowAge} - {highAge} ages
             </Text>
           </View>
         </View>
 
-        <View style={styles.omatContainerit}>
-          <Text style={styles.title}>Gender:</Text>
-          <View>
-            <Text style={styles.checkboxText}>Men</Text>
+        <Text style={styles.title}>Gender:</Text>
+        <View>
+          <ThemeProvider theme={swipesPageButtonGroupColor}>
+            <ButtonGroup
+              onPress={(value) => updateIndex('main', value)}
+              selectMultiple={true}
+              selectedIndexes={selectedIndex.main}
+              buttons={buttons}
+              containerStyle={[styles.background, styles.buttonGroupBorderColor]}
+              innerBorderStyle={styles.buttonGroupInnerlineColor}
+              textStyle={styles.title}
+              selectedTextStyle={styles.buttonTitleColor}
+            />
+          </ThemeProvider>
+        </View>
+        {/* <Text style={styles.checkboxText}>Men</Text>
             <CheckBox tintColors={checkBoxColor()} disabled={false} value={male} onValueChange={(newValue) => setMale(newValue)} />
           </View>
           <View>
@@ -242,24 +339,60 @@ export default function Settings() {
           </View>
           <View>
             <Text style={styles.checkboxText}>Other</Text>
-            <CheckBox tintColors={checkBoxColor()} disabled={false} value={other} onValueChange={(newValue) => setOther(newValue)} />
-          </View>
-        </View>
-        <View style={styles.omatContainerit}>
-          <Text style={styles.title}>Searching for: </Text>
-          <View>
-            <Text style={styles.checkboxText}>Events</Text>
-            <CheckBox tintColors={checkBoxColor()} disabled={false} value={events} onValueChange={(newValue) => setEvents(newValue)} />
-          </View>
-          <View>
-            <Text style={styles.checkboxText}>People</Text>
-            <CheckBox tintColors={checkBoxColor()} disabled={false} value={people} onValueChange={(newValue) => setPeople(newValue)} />
-          </View>
-        </View>
+        <CheckBox tintColors={checkBoxColor()} disabled={false} value={other} onValueChange={(newValue) => setOther(newValue)} /> */}
 
         <View style={styles.omatContainerit}>
-          {/* FIXME Tähän tulee aikaslideri josta valitaan tuntien tai päivien päästä */}
-          {/* <View>
+          <Text style={styles.title}> Time limit:</Text>
+          {showHoursOrDays ? (
+            <View style={styles.paddingTopFifty}>
+              <Button
+                buttonStyle={{ backgroundColor: buttonColor }}
+                titleStyle={{ color: buttonTitleColor }}
+                title="Change to select days"
+                onPress={() => setShowHoursOrDays(!showHoursOrDays)}
+              />
+              <RangeSlider
+                style={styles.rangerSliderSize}
+                gravity={'center'}
+                rangeEnabled={false}
+                min={1}
+                max={23}
+                step={1}
+                selectionColor={rangerSliderColor}
+                blankColor={rangerSliderColor}
+                onValueChanged={(time, fromUser) => {
+                  setTime(time);
+                }}
+              />
+              <Text style={styles.title}> Time limit is {time} hours</Text>
+            </View>
+          ) : (
+            <View style={styles.paddingTopFifty}>
+              <Button
+                buttonStyle={{ backgroundColor: buttonColor }}
+                titleStyle={{ color: buttonTitleColor }}
+                title="Change to select hours"
+                onPress={() => setShowHoursOrDays(!showHoursOrDays)}
+              />
+              <RangeSlider
+                style={styles.rangerSliderSize}
+                gravity={'center'}
+                rangeEnabled={false}
+                min={1}
+                max={7}
+                step={1}
+                selectionColor={rangerSliderColor}
+                blankColor={rangerSliderColor}
+                onValueChanged={(time, fromUser) => {
+                  setTime(time);
+                }}
+              />
+              <Text style={styles.title}>Time limit is {time} days </Text>
+            </View>
+          )}
+        </View>
+        {/* FIXME Tähän tulee aikaslideri josta valitaan tuntien tai päivien päästä */}
+        {/* <View>
             <Text>Tästä päivästä päivään {formatDate(date)} </Text>
             <Button onPress={showDatepicker} title="Valitse haettavat päivät" />
           </View>
@@ -273,9 +406,13 @@ export default function Settings() {
               onChange={onChange}
             />
           )} */}
-        </View>
         <View style={styles.saveButton}>
-          <Button color="black" onPress={TallennaData} title="Save" />
+          <Button
+            buttonStyle={{ backgroundColor: buttonColor }}
+            titleStyle={{ color: buttonTitleColor }}
+            onPress={() => signOut()}
+            title="Sign out"
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

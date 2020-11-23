@@ -1,16 +1,18 @@
 import React from "react";
-import { View, ScrollView } from "react-native";
+import { Alert, View, ScrollView } from "react-native";
 import { Input, Button, Text, ButtonGroup } from "react-native-elements";
 import DatePicker from "react-native-date-picker";
 import { Entypo } from "@expo/vector-icons";
 import styles from "../styles";
+import {AuthContext} from './AuthContext';
 
-export default function Register({ navigation }) {
-  const [kayttajaTiedot, setKayttajaTiedot] = React.useState({ email: "", password: "", age: "", displayName: "", gender: "" });
+export default function Register() {
+  const [kayttajaTiedot, setKayttajaTiedot] = React.useState({ email: "", password: "", age: 1, displayName: "", gender: "male" });
   const [naytasalasana, setNaytaSalasana] = React.useState(true);
   const [salasanaIcon, setSalasanaIcon] = React.useState("eye");
   const [date, setDate] = React.useState(Date.now());
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const { signIn } = React.useContext(AuthContext);
 
   //sukupuolen ButtonGorup valinnat
   const buttons = ["Man", "Woman", "Other"];
@@ -58,6 +60,12 @@ export default function Register({ navigation }) {
 
   //lähetetään rekisteröinti tiedot backiin, joka luo uuden käyttäjän ja tälle tarvittavat documentit yms.
   function registerUser() {
+    let validi = validointi();
+    if (!validi) {
+      console.log('ei mennyt läpi');
+      return;
+    }
+
     let url = global.url + "register";
     fetch(url, {
       method: "POST",
@@ -68,16 +76,39 @@ export default function Register({ navigation }) {
     })
       .then((response) => response.json())
       .then((res) => {
-        console.log(res.result);
+        if (res.result === 'rekisteörinti onnistui') {
+          // navigation.goBack();
+          signIn(kayttajaTiedot.email, kayttajaTiedot.password);
+        } else if (res.result === 'rekisteörinti epäonnistui:Error: The email address is improperly formatted.'){
+          Alert.alert('Sähköpostin formatointi pielessä.');
+        } else if (res.result === 'rekisteörinti epäonnistui:Error: The email address is already in use by another account.') {
+          Alert.alert('Sähköposti on jo käytössä');
+        } else {
+          console.log(res.result);
+        }
       })
-      .then((_) => {
-        // setKayttajaTiedot({ email: '', password: '', age: '', displayName: '', gender: '' });
-        // setDate(Date.now());
-        navigation.goBack();
-      })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        Alert.alert(err);
+        console.error(err)});
   }
 
+  function validointi() {
+    let minIka = new Date();
+    minIka = minIka.setFullYear(minIka.getFullYear() - 18);
+    let raja = Math.floor(minIka / 1000);
+    if (kayttajaTiedot.password.length < 6) {
+      Alert.alert('Salasana on liian lyhyt, salasanan tulee olla vähintään 6 merkkiä pitkä');
+      return false;
+    } else if (kayttajaTiedot.age > raja) {
+      Alert.alert('Olet alaikäinen, ikäraja on 18 vuotta');
+      return false;
+    } else if (kayttajaTiedot.displayName === '') {
+      Alert.alert('Nimi puuttuu')
+      return false;
+    }
+    console.log('kaikki ok')
+    return true;
+  }
   //TODO
   //labelStyle inputeissa ja itsetehdyt Text "lablet" samalla tyylillä tulevaisuudessa jostain StyleSheatista
   //muuta css hömpötystä
@@ -86,9 +117,7 @@ export default function Register({ navigation }) {
   //checki, onnistuiko rekisteröinti, jos onnistui -> loginpage ja kirjaudu automaattisesti
   return (
     <ScrollView style={(styles.flexOne, styles.paddingTop)}>
-      <Text h4 style={styles.alignSelfCenter}>
-        Luo käyttäjä
-      </Text>
+      <Text style={[styles.alignSelfCenter, styles.registerUserTitle]}>Register user</Text>
       <Input
         label="Email"
         placeholder="matti.matikainen@gmail.com"
@@ -112,7 +141,7 @@ export default function Register({ navigation }) {
 
       <View style={styles.marginLeftTen}>
         <Text //jos on joku parempi label systeemi, saa muuttaa tämän
-          style={styles.title}
+          style={styles.registerUserText}
         >
           Birthdate
         </Text>
@@ -122,7 +151,7 @@ export default function Register({ navigation }) {
 
       <View style={[styles.marginLeftTen, styles.paddingTopTen]}>
         <Text //jos on joku parempi label systeemi, saa muuttaa tämän
-          style={styles.title}
+          style={styles.registerUserText}
         >
           Gender
         </Text>
@@ -141,7 +170,7 @@ export default function Register({ navigation }) {
                 // circleStyle={ styles.registerRadioGroup // tällä voi muutella radiopylpyrän tyyliä }
                 /> */}
       </View>
-      <Button color="black" onPress={() => registerUser()} title="Register user" containerStyle={styles.registerUserButton} />
+      <Button onPress={() => registerUser()} title="Register user" containerStyle={styles.registerUserButton} />
     </ScrollView>
   );
 }
