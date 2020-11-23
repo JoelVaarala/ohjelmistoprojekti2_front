@@ -16,6 +16,10 @@ export default class Horizontal extends Component {
     };
   }
 
+  sendData = () => {
+    this.props.parentCallback(TallennaData(this.state.order, this.state.data))
+  }
+
   render() {
     let onChangeOrder = (nextOrder) => {
       this.setState({ order: nextOrder })
@@ -36,7 +40,7 @@ export default class Horizontal extends Component {
           data={this.props.kuvat}
           // order={this.props.order}
           onChangeOrder={onChangeOrder}
-          onReleaseRow={TallennaData(this.state.order, this.state.data)}
+          onReleaseRow={this.sendData}
           renderRow={this._renderRow} />
       </View>
     );
@@ -193,25 +197,5 @@ function TallennaData(order, images) {
   for (let i = 0; i < images.length; i++) {
     pictures.push(images[order[i]])
   }
-  let body = {
-    data: {
-      images: pictures,
-    },
-    uid: global.myUserData.uid,
-    idToken: global.myUserData.idToken,
-  };
-  console.log("LOGIII", body)
-
-  fetch(global.url + 'profileUpdate', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // console.log("DATAa", data)
-    })
-    .catch((err) => console.error(err));
+  return pictures;
 }
