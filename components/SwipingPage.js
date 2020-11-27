@@ -98,7 +98,6 @@ export default function SwipingPage({ navigation, route }) {
       console.log("users lista");
       console.log(swipelista);
     } else if (selectedIndex.main == 1) {
-      //todo
       swipelista = swipettavat.filter((item) => item.isEvent === true).filter((item) => eventSublista.includes(item.eventType));
       console.log("events lista");
       console.log(swipelista);

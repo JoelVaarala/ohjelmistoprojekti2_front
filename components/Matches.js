@@ -2,23 +2,44 @@ import React from "react";
 import { Text, View, FlatList, ImageBackground, Image } from "react-native";
 import { Avatar, ListItem, Overlay, ThemeProvider, ButtonGroup } from "react-native-elements";
 import firebase from "firebase";
-// import firestore from "@react-native-firebase/firestore";
-// import auth from "@react-native-firebase/auth";
 import styles from "../styles";
 import Logo from "./Logo";
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Matches({ navigation, route }) {
-  const [myMatches, setMyMatches] = React.useState([]);
-  //const myUserID = "qREmoPw72NRHB2JA6uBCKJyuWhY2";
-  const [overlay, setOverlay] = React.useState(true);
-  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [1] });
-  // const buttons = ["Users", "Events", "Both"];
-  const subButtons = ["Users", "Events", "My Events"];
 
-  function updateIndex(name, value) {
-    setSelectedIndex({ ...selectedIndex, [name]: value });
-    console.log(name + ": " + value);
+  const [myMatches, setMyMatches] = React.useState([]);
+  const [myMatchesFilter, setMyMatchesFilter] = React.useState([]);
+  const [myEvents, setMyEvents] = React.useState([]);
+  const [overlay, setOverlay] = React.useState(true);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const buttons = ["Users", "Events", "My Events"];
+
+  // function updateIndex(value) {
+  //   setSelectedIndex(value);
+  // }
+
+  function filterMatchit() {
+    let matchilista = [];
+
+    if (selectedIndex == 0) {
+      matchilista = myMatches.filter((item) => item.matchType === 'user');
+      console.log("users lista");
+      console.log(matchilista);
+    } else if (selectedIndex == 1) {
+      matchilista = myMatches.filter((item) => item.matchType === 'event');
+      console.log("events lista");
+      console.log(matchilista);
+    } else if (selectedIndex == 2) {
+      matchilista = myEvents;
+      console.log("myEvents lista");
+      console.log(matchilista);
+    }
+    setMyMatchesFilter(matchilista);
   }
+
+  React.useEffect(() => {
+    filterMatchit();
+  }, [selectedIndex, myMatches]);
 
   const theme = {
     colors: {
@@ -39,7 +60,7 @@ export default function Matches({ navigation, route }) {
 
   React.useEffect(() => {
     //Pitäs
-    getMyMatches();
+    // getMyMatches();
     console.log("matches use effect");
     //Haetaan kaikki käyttäjän mätsit ja sortataan kahteen listaan sen perusteella onko näillä chattihistoriassa mitään.
     //jos on niin näytetään vertikaalisessa osiossa, jos ei niin horisontaalisessa.
@@ -61,6 +82,9 @@ export default function Matches({ navigation, route }) {
   }
 
   const getMyMatches = async () => {
+
+    let currUser = await firebase.auth().currentUser.uid
+
     try {
       // this returns whole result of 'doc'
       //hakee messages/matches collectionista itemit
@@ -69,7 +93,7 @@ export default function Matches({ navigation, route }) {
       var query = await firebase
         .firestore()
         .collection("matches")
-        .where("users", "array-contains", firebase.auth().currentUser.uid)
+        .where("users", "array-contains", currUser)
         .get()
         .then(async function (querySnapshot) {
           querySnapshot.forEach(async function (doc) {
@@ -104,6 +128,42 @@ export default function Matches({ navigation, route }) {
     } catch (error) {
       console.log(error);
     }
+
+    try {
+
+      let temparrayMyevents = [];
+      var query2 = await firebase
+        .firestore()
+        .collection("events")
+        .where("eventOwners", "array-contains", currUser)
+        .get()
+        .then(async function (querySnapshot) {
+          querySnapshot.forEach(async function (doc) {
+            console.log("MyEvents", doc.id);
+            var asd = await doc.data();
+            console.log(asd);
+            asd.uid = doc.id;
+            let chatname = asd.displayName;
+            let image;
+            if (asd.images.length == 0) {
+              image = 'https://image.freepik.com/free-vector/hand-with-pen-mark-calendar_1325-126.jpg'
+            } else {
+              image = asd.images[0];
+            }
+            temparrayMyevents.push({
+              matchid: doc.id,
+              bio: asd.bio,
+              name: chatname,
+              matchType: 'My event',
+              avatar_url: image,
+            });
+          });
+        });
+
+      setMyEvents(temparrayMyevents);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //Tämän pitäisi myös pistää linkki chatkomponenttiin johon passataan parametrinä keskustelkun id
@@ -130,24 +190,15 @@ export default function Matches({ navigation, route }) {
     <View style={[styles.flexOne, styles.background]}>
       <View>
         <ThemeProvider theme={myTheme}>
-          {/* <ButtonGroup
-          onPress={(value) => updateIndex("main", value)}
-          selectedIndex={selectedIndex.main}
-          buttons={buttons}
-          containerStyle={[styles.background, styles.heightForty]}
-        /> */}
-          {selectedIndex.main != 0 ? (
             <ButtonGroup
-              onPress={(value) => updateIndex("sub", value)}
-              selectMultiple={true}
-              selectedIndexes={selectedIndex.sub}
-              buttons={subButtons}
+              onPress={(value) => setSelectedIndex(value)}
+              selectedIndex={selectedIndex}
+              buttons={buttons}
               containerStyle={[styles.background, styles.heightForty]}
               style={styles.paddingBottomFifty}
             />
-          ) : null}
         </ThemeProvider>
-        <FlatList horizontal={false} data={myMatches} renderItem={renderItem}></FlatList>
+        <FlatList horizontal={false} data={myMatchesFilter} renderItem={renderItem}></FlatList>
         {/* <Text style={[styles.title, styles.fontRoboto, styles.marginLeftTen]}>Messages</Text> */}
         {/* {list.map((l, i) => (
           <ListItem key={i} bottomDivider containerStyle={styles.matchesBackgroundColor}>

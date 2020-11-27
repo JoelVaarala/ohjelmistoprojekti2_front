@@ -13,6 +13,7 @@ import Startup from "./components/Startup";
 import Register from "./components/Register";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Button, View } from "react-native";
 import firebase from "firebase";
@@ -25,13 +26,14 @@ import * as Location from "expo-location";
 import "./components/Globaalit";
 import { AuthContext } from "./components/AuthContext";
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 firebase.initializeApp(global.firebaseConfig);
+
 // tällä pääsee eroon Setting a timer warningista, mihin ei ole ratkaisua react nativen puolella tällä hetkellä https://github.com/facebook/react-native/issues/12981
-YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
-// YellowBox.ignoreWarnings(['']);
+// YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
+YellowBox.ignoreWarnings(['']);
 
 export default function App() {
   // kirjautunut: false -> true, bypass jolla jättää login pagen välistä
@@ -147,7 +149,8 @@ export default function App() {
   }
 
   //Substacki tällä tai sitten luodaa vaa erillsiet sivut joissa on takaisin nappula että toi toolbari piilottuu
-  const ProfiiliSettingsStack = () => {
+  const ProfiiliSettingsStack = ({ navigation, route }) => {
+    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Profile" component={MyProfile} />
@@ -165,10 +168,11 @@ export default function App() {
   const MatchStack = ({ navigation, route }) => {
     // console.log('tämä on routen asdasd:')
     // console.log(route.state);
-    // console.log(route.state ? (route.state.routes.length > 0 ? false : true) : true)
-    // navigation.setOptions({ tabBarVisible: route.state ? (route.state.routes.length > 0 ? false : true) : true });
+    // console.log(route.state ? (route.state.index == 0 ? true : false) : true)
+    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
     return (
       <ListStack.Navigator>
+        {/* <ListStack.Screen name="Matches" component={Matches} options={{ headerShown: false }}/> */}
         <ListStack.Screen name="Matches" component={Matches} />
         <ListStack.Screen
           name="Chat"
@@ -196,7 +200,8 @@ export default function App() {
   //   );
   // };
 
-  const SwipeStack = () => {
+  const SwipeStack = ({ navigation, route }) => {
+    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Swipes" component={SwipingPage} />
@@ -241,6 +246,7 @@ export default function App() {
                   },
                 })}
                 tabBarOptions={{
+                  style: { position: 'absolute' },
                   activeTintColor: navBarTintColor,
                   showIcon: true,
                   showLabel: false,
