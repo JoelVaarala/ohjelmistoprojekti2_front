@@ -1,36 +1,38 @@
-import 'react-native-gesture-handler'; //Tää pitää olla päälimmäisenä koska syyt?
-import React from 'react';
-import { Alert, YellowBox, Text, AsyncStorage } from 'react-native';
-import MyProfile from './components/MyProfile';
-import SwipingPage from './components/SwipingPage';
-import Matches from './components/Matches';
-import Chat from './components/Chat';
-import Profile from './components/Profile';
-import EditProfile from './components/EditProfile';
-import Settings from './components/Settings';
-import Add_Event from './components/Add_Event';
-import Startup from './components/Startup';
-import Register from './components/Register';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { Button, View } from 'react-native';
-import firebase from 'firebase';
-import ViewLikers from './components/ViewLikers.js';
-import { Icon, Avatar } from 'react-native-elements';
-import { Provider } from 'react-redux';
-import { store } from './redux/index';
-import FlashMessage from 'react-native-flash-message';
-import * as Location from 'expo-location';
-import './components/Globaalit';
-import { AuthContext } from './components/AuthContext';
+import "react-native-gesture-handler"; //Tää pitää olla päälimmäisenä koska syyt?
+import React from "react";
+import { Alert, YellowBox, Text, AsyncStorage } from "react-native";
+import MyProfile from "./components/MyProfile";
+import SwipingPage from "./components/SwipingPage";
+import Matches from "./components/Matches";
+import Chat from "./components/Chat";
+import Profile from "./components/Profile";
+import EditProfile from "./components/EditProfile";
+import Settings from "./components/Settings";
+import Add_Event from "./components/Add_Event";
+import Startup from "./components/Startup";
+import Register from "./components/Register";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { Button, View } from "react-native";
+import firebase from "firebase";
+import ViewLikers from "./components/ViewLikers.js";
+import { Icon } from "react-native-elements";
+import { Provider } from "react-redux";
+import { store } from "./redux/index";
+import FlashMessage from "react-native-flash-message";
+import * as Location from "expo-location";
+import "./components/Globaalit";
+import { AuthContext } from "./components/AuthContext";
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 firebase.initializeApp(global.firebaseConfig);
+
 // tällä pääsee eroon Setting a timer warningista, mihin ei ole ratkaisua react nativen puolella tällä hetkellä https://github.com/facebook/react-native/issues/12981
-YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
+// YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
 // YellowBox.ignoreWarnings(['']);
 
 export default function App() {
@@ -152,7 +154,8 @@ export default function App() {
   }
 
   //Substacki tällä tai sitten luodaa vaa erillsiet sivut joissa on takaisin nappula että toi toolbari piilottuu
-  const ProfiiliSettingsStack = () => {
+  const ProfiiliSettingsStack = ({ navigation, route }) => {
+    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Profile" component={MyProfile} />
@@ -170,10 +173,11 @@ export default function App() {
   const MatchStack = ({ navigation, route }) => {
     // console.log('tämä on routen asdasd:')
     // console.log(route.state);
-    // console.log(route.state ? (route.state.routes.length > 0 ? false : true) : true)
-    // navigation.setOptions({ tabBarVisible: route.state ? (route.state.routes.length > 0 ? false : true) : true });
+    // console.log(route.state ? (route.state.index == 0 ? true : false) : true)
+    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
     return (
       <ListStack.Navigator>
+        {/* <ListStack.Screen name="Matches" component={Matches} options={{ headerShown: false }}/> */}
         <ListStack.Screen name="Matches" component={Matches} />
         <ListStack.Screen
           name="Chat"
@@ -210,7 +214,8 @@ export default function App() {
   //   );
   // };
 
-  const SwipeStack = () => {
+  const SwipeStack = ({ navigation, route }) => {
+    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Swipes" component={SwipingPage} />
@@ -254,6 +259,7 @@ export default function App() {
                   }
                 })}
                 tabBarOptions={{
+                  style: { position: 'absolute' },
                   activeTintColor: navBarTintColor,
                   showIcon: true,
                   showLabel: false
