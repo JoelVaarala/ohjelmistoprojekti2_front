@@ -3,7 +3,7 @@ import { Text, View, FlatList, ImageBackground, Image } from "react-native";
 import { Avatar, ListItem, Overlay, ThemeProvider, ButtonGroup } from "react-native-elements";
 import firebase from "firebase";
 import styles from "../styles";
-import Logo from "./Logo";
+
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Matches({ navigation, route }) {
 
@@ -13,10 +13,6 @@ export default function Matches({ navigation, route }) {
   const [overlay, setOverlay] = React.useState(true);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const buttons = ["Users", "Events", "My Events"];
-
-  // function updateIndex(value) {
-  //   setSelectedIndex(value);
-  // }
 
   function filterMatchit() {
     let matchilista = [];
@@ -43,12 +39,12 @@ export default function Matches({ navigation, route }) {
 
   const theme = {
     colors: {
-      primary: "black",
-    },
+      primary: 'black'
+    }
   };
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       //console.log("Listener")
       //console.log(firebase.auth().currentUser)
       getMyMatches();
@@ -62,6 +58,7 @@ export default function Matches({ navigation, route }) {
     //Pitäs
     // getMyMatches();
     console.log("matches use effect");
+
     //Haetaan kaikki käyttäjän mätsit ja sortataan kahteen listaan sen perusteella onko näillä chattihistoriassa mitään.
     //jos on niin näytetään vertikaalisessa osiossa, jos ei niin horisontaalisessa.
     //tagi filtteri tälle sivulle myös?
@@ -69,11 +66,11 @@ export default function Matches({ navigation, route }) {
 
   // FIXME, tämä päivittyy "automaattisesti"
   function getMyMatches_From_MyMatches() {
-    let ref = firebase.firestore().collection("users").doc(global.myUserData.myUserID).collection("MyMatches");
+    let ref = firebase.firestore().collection('users').doc(global.myUserData.myUserID).collection('MyMatches');
     ref.onSnapshot((querySnapshot) => {
       // snapshot == capture sen hetkisestä rakenteesta
       let matchit = []; // voidaan asettaa halutut tiedot taulukkoon
-      console.log("number of matches : ", querySnapshot.size); // logi -> tuleeko collectionista "osumia"
+      console.log('number of matches : ', querySnapshot.size); // logi -> tuleeko collectionista "osumia"
       querySnapshot.forEach((doc) => {
         // dokkari kerrallaan läpi, jotta voidaan poimia matchien "id:t"
         matchit.push(doc.data()); // TODO: specify what data myMatch dokkarista haetaan.
@@ -97,19 +94,20 @@ export default function Matches({ navigation, route }) {
         .get()
         .then(async function (querySnapshot) {
           querySnapshot.forEach(async function (doc) {
-            console.log("MyMatch", doc.id);
+            console.log('MyMatch', doc.id);
             var asd = await doc.data();
             console.log(asd);
             asd.uid = doc.id;
-            let chatname = "";
+            let chatname = '';
             num = num + 1;
             // asd.users.re
-            if (asd.matchtype == "event") {
+            if (asd.matchtype == 'event') {
               chatname = asd.displayNames[0];
             } else {
-              //täällä tulee aina väärä nimi matchille, mikäs tämän tarkoitus on?
+              // väärä nimi matchille (otti taulusta sattumanvaraisen nimen joka oli eri kuin käyttäjän uid)
+              // fixed --> nyt vertaa element != nykyisen käyttäjän nimi
               asd.displayNames.forEach((element) => {
-                if (element != global.uid) chatname = element;
+                if (element != firebase.auth().currentUser.displayName) chatname = element;
               });
             }
             //temparray.push(doc.data())
@@ -118,7 +116,7 @@ export default function Matches({ navigation, route }) {
               bio: asd.bio,
               name: chatname,
               matchType: asd.matchType,
-              avatar_url: `https://randomuser.me/api/portraits/med/women/${num}.jpg`,
+              avatar_url: `https://randomuser.me/api/portraits/med/women/${num}.jpg`
             });
             //lopulliset[length-1].uid = doc.id;
           });
@@ -170,8 +168,8 @@ export default function Matches({ navigation, route }) {
   const renderItem = ({ item }) => (
     <ListItem
       onPress={() => {
-        console.log("Pressed: " + item.matchid);
-        navigation.navigate("Chat", { chatti: item.matchid, photo: item.avatar_url });
+        console.log('Pressed: ' + item.matchid);
+        navigation.navigate('Chat', { chatti: item.matchid, photo: item.avatar_url });
       }}
       containerStyle={styles.matchesBackgroundColor}
       bottomDivider
@@ -210,7 +208,6 @@ export default function Matches({ navigation, route }) {
           </ListItem>
         ))} */}
       </View>
-      {/* <Logo /> */}
     </View>
   );
 }
