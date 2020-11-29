@@ -34,7 +34,7 @@ export default function Profile({ navigation, route }, props) {
   const [view, setView] = React.useState(true);
   const buttons = ["Osallistujat", "Jonossa"];
 
-  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2 });
+  const [selectedIndex, setSelectedIndex] = React.useState({ main: 0 });
 
   function updateIndex(name, value) {
     setSelectedIndex({ ...selectedIndex, [name]: value });
@@ -213,11 +213,26 @@ export default function Profile({ navigation, route }, props) {
     console.log(accepted,uid)
   }
 
-  //ainoastaan eventin omistaja näkee buttonin jolla voi kickata osallistujan
-  function Jooh() {
+  function Kick(uid)
+  {
+     //unmatchataan
+  }
+
+
+  function LaiskaValinta()
+  {
+    if(selectedIndex.main === 0)
     {
-      console.log("jooh", osallistujat)
-      return osallistujat.map((l, i) => (
+      return Osallistuajt()
+    } 
+    return Hakijat();
+  }
+
+  //ainoastaan eventin omistaja näkee buttonin jolla voi kickata osallistujan
+  function Hakijat() {
+    {
+      //console.log("jooh", osallistujat)
+      return peoplesWhoWantToJoin.map((l, i) => (
         <ListItem key={i} bottomDivider>
           <Avatar source={{ uri: l.images[0] }} />
           <ListItem.Content>
@@ -241,13 +256,44 @@ export default function Profile({ navigation, route }, props) {
                         <Button //tää on kicki button
               type="outline"
               raised={true}
-              onPress={() => Decline(false, l.uid)}
+              onPress={() => Accept(false, l.uid)}
               icon={{
                 name: "arrow-right",
                 size: 30,
                 color: "red",
               }}
             />
+          </View>
+        </ListItem>
+      ));
+    }
+  }
+
+  function Osallistuajt() {
+    {
+      //console.log("jooh", osallistujat)
+      return osallistujat.map((l, i) => (
+        <ListItem key={i} bottomDivider>
+          <Avatar source={{ uri: l.images[0] }} />
+          <ListItem.Content>
+            <View>
+              <ListItem.Title>{l.displayName} </ListItem.Title>
+
+              <ListItem.Subtitle>{l.age}</ListItem.Subtitle>
+            </View>
+          </ListItem.Content>
+          <View style={styles.viewLikersItemContent}>
+            <Button //tää on kicki button
+              type="outline"
+              raised={true}
+              onPress={() => Kick(l.uid)}
+              icon={{
+                name: "arrow-right",
+                size: 30,
+                color: "red",
+              }}
+            />
+
           </View>
         </ListItem>
       ));
@@ -385,7 +431,7 @@ export default function Profile({ navigation, route }, props) {
                   containerStyle={[styles.background, styles.heightForty]}
                 />
               </ThemeProvider>
-              <Jooh></Jooh>
+              <LaiskaValinta></LaiskaValinta>
             </View>
           )}
       </View>
