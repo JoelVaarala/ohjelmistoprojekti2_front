@@ -136,11 +136,11 @@ export default function Profile({ navigation, route }, props) {
 
   async function HaeHakijat() {
     console.log("Haetaan hakijat")
-    var peopleWhoLikedMe = await firebase.firestore().collection("events").doc(route.params.chet).collection("swipes").doc("usersThatLikedMe").get();
+    var peopleWhoLikedMe = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("usersThatLikedMe").get();
     var lol = peopleWhoLikedMe.data().swipes;
-    var peopleInQueue = await firebase.firestore().collection("events").doc(route.params.chet).collection("swipes").doc("mySwipes").get();
+    var peopleInQueue = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("mySwipes").get();
     peopleInQueue = peopleInQueue.data().swipes;
-    var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.chet).get();
+    var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
     usersAlreadyInEvent = usersAlreadyInEvent.data().users;
     console.log(usersAlreadyInEvent);
     let temppia = [];
@@ -178,7 +178,8 @@ export default function Profile({ navigation, route }, props) {
 
   async function HaeOsallistujat()
   {
-    var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.chet).get();
+    console.log("Route",route.params.chet);
+    var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
     let osallistujalista = [];
     osallistujalista = usersAlreadyInEvent.data().users;
     console.log("osallistujalista", osallistujalista);
