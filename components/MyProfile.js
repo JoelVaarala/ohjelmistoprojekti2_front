@@ -15,9 +15,11 @@ export default function MyProfile({ navigation, route }) {
   });
 
   React.useEffect(() => {
-    // console.log('useeffecti', tagList)
-    HaeTiedot();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      HaeTiedot();
+    });
+    return unsubscribe;
+  }, [navigation])
 
   const HaeTiedot = async () => {
     const ref = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid);
