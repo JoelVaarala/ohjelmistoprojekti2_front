@@ -4,6 +4,7 @@ import { Alert, YellowBox, Text, AsyncStorage } from "react-native";
 import MyProfile from "./components/MyProfile";
 import SwipingPage from "./components/SwipingPage";
 import Matches from "./components/Matches";
+import { Avatar } from 'react-native-elements';
 import Chat from "./components/Chat";
 import Profile from "./components/Profile";
 import EditProfile from "./components/EditProfile";

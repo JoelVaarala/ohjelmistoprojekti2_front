@@ -9,9 +9,10 @@ import firebase from 'firebase';
 // import firestore from "@react-native-firebase/firestore";
 import styles from '../styles';
 import { AuthContext } from './AuthContext';
+import { useFocusEffect } from '@react-navigation/native'
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
-export default function Settings() {
+export default function Settings({ navigation, route }) {
   //tagit
   const [tag, setTag] = useState('');
   const [tagList, setTagList] = useState([]);
@@ -80,10 +81,14 @@ export default function Settings() {
     HaeTiedot();
   }, []);
 
-  React.useEffect(() => {
-    // console.log('useeffecti', tagList)
-    TallennaData();
-  }, [lowAge, highAge, distance, selectedIndex, showHoursOrDays, time, tagList]);
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        TallennaData();
+      }
+    })
+  )
+
 
   const HaeTiedot = async () => {
     let ref = firebase

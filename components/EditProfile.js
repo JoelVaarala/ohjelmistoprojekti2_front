@@ -1,14 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import React, {  useState } from 'react';
 import { Alert, FlatList, Text, View, TextInput, ScrollView } from 'react-native';
-import { Icon, Input, Button } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import firebase from 'firebase';
 import SortableList2 from './SortableList';
 // import auth from "@react-native-firebase/auth";
 // import firestore from "@react-native-firebase/firestore";
 import styles from '../styles';
+import { useFocusEffect } from '@react-navigation/native'
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
-export default function EditProfile() {
+export default function EditProfile({ navigation, route }) {
   //tagit
   const [tag, setTag] = useState('');
   const [tagList, setTagList] = useState([]);
@@ -21,33 +22,38 @@ export default function EditProfile() {
     name: ''
   });
 
-  callback = (childData) => {
+  //tallentaa kuvien muutokset SortableList-komponentissa
+  const callback = (childData) => {
     let images = childData
-    setPics(images)
+      setPics(images)
     console.log("CHILDDATA", images)
   }
 
   React.useEffect(() => {
-    // console.log('useeffecti', tagList)
+    console.log('useeffecti', userTiedot.bio)
     HaeTiedot();
   }, []);
 
-  React.useEffect(() => {
-    // console.log('useeffecti', tagList)
-    TallennaData();
-  }, [tagList, userTiedot.bio, pics]);
-
+useFocusEffect(
+  React.useCallback(() => {
+    return () => {
+      TallennaData();
+    }
+  })
+)
   function TallennaData() {
-    let body = {
-      data: {
-        tags: tagList,
-        bio: userTiedot.bio,
-        images: pics
-      },
-      uid: global.myUserData.uid,
-      idToken: global.myUserData.idToken
-    };
 
+   
+    let body = {
+      idToken: global.myUserData.idToken,
+      uid: global.myUserData.uid,
+      data: {
+        bio: userTiedot.bio,
+        tags: tagList,
+        images: pics,
+      },
+    };
+    console.log(body);
     fetch(global.url + 'profileUpdate', {
       method: 'POST',
       headers: {
@@ -57,7 +63,6 @@ export default function EditProfile() {
     })
       .then((response) => response.json())
       .then((data) => {
-         console.log("TÄMÄ LÄHTEE", data)
       })
       .catch((err) => console.error(err));
   }
@@ -137,12 +142,15 @@ export default function EditProfile() {
           <Text style={[styles.containerCenter, styles.title, styles]}>Bio :</Text>
           <View style={styles.editProfileBioTextArea}>
             <TextInput
-              value={userTiedot.bio}
+              defaultValue={userTiedot.bio}
               style={styles.editProfileTextArea}
               multiline={true}
               numberOfLines={3}
+              blurOnSubmit={true}
               maxLength={500}
-              onChangeText={(text) => setUserTiedot({ ...userTiedot, bio: text })}
+              onEndEditing={(e) => {
+                setUserTiedot({ ...userTiedot, bio: e.nativeEvent.text })
+              }}
             />
           </View>
         </View>
@@ -164,14 +172,14 @@ export default function EditProfile() {
                   style={styles.tagTextInput}
                 ></TextInput>
               ) : (
-                <Button
-                  buttonStyle={{ backgroundColor: buttonColor }}
-                  titleStyle={{ color: buttonTitleColor }}
-                  color={buttonColor}
-                  title="+"
-                  onPress={() => setShouldShow(!shouldShow)}
-                />
-              )}
+                  <Button
+                    buttonStyle={{ backgroundColor: buttonColor }}
+                    titleStyle={{ color: buttonTitleColor }}
+                    color={buttonColor}
+                    title="+"
+                    onPress={() => setShouldShow(!shouldShow)}
+                  />
+                )}
             </View>
           </View>
           <View>
