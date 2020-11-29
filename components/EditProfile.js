@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Alert, FlatList, Text, View, TextInput, ScrollView } from 'react-native';
 import { Icon, Input, Button } from 'react-native-elements';
 import firebase from 'firebase';
@@ -21,6 +21,12 @@ export default function EditProfile() {
     name: ''
   });
 
+  callback = (childData) => {
+    let images = childData
+    setPics(images)
+    console.log("CHILDDATA", images)
+  }
+
   React.useEffect(() => {
     // console.log('useeffecti', tagList)
     HaeTiedot();
@@ -29,13 +35,14 @@ export default function EditProfile() {
   React.useEffect(() => {
     // console.log('useeffecti', tagList)
     TallennaData();
-  }, [tagList, userTiedot.bio]);
+  }, [tagList, userTiedot.bio, pics]);
 
   function TallennaData() {
     let body = {
       data: {
         tags: tagList,
-        bio: userTiedot.bio
+        bio: userTiedot.bio,
+        images: pics
       },
       uid: global.myUserData.uid,
       idToken: global.myUserData.idToken
@@ -50,7 +57,7 @@ export default function EditProfile() {
     })
       .then((response) => response.json())
       .then((data) => {
-         console.log(data)
+         console.log("TÄMÄ LÄHTEE", data)
       })
       .catch((err) => console.error(err));
   }
@@ -96,7 +103,7 @@ export default function EditProfile() {
   function CreateSortableList() {
     //Tällä saadaan päiviettyä nää shitit oikeasti statesta.
     // return <SwipeCards vaihtoehdot={swipettavat} />;
-    return <SortableList2 kuvat={pics} order={Object.keys(pics)} />;
+    return <SortableList2 kuvat={pics} order={Object.keys(pics)} parentCallback={callback} />;
   }
 
   const addTag = () => {

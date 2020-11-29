@@ -13,6 +13,7 @@ import Startup from "./components/Startup";
 import Register from "./components/Register";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Button, View } from "react-native";
 import firebase from "firebase";
@@ -25,23 +26,23 @@ import * as Location from "expo-location";
 import "./components/Globaalit";
 import { AuthContext } from "./components/AuthContext";
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 firebase.initializeApp(global.firebaseConfig);
+
 // tällä pääsee eroon Setting a timer warningista, mihin ei ole ratkaisua react nativen puolella tällä hetkellä https://github.com/facebook/react-native/issues/12981
-YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
+// YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
 // YellowBox.ignoreWarnings(['']);
 
 export default function App() {
   // kirjautunut: false -> true, bypass jolla jättää login pagen välistä
   const [navigaationVaihto, setNavigaationVaihto] = React.useState({ ladataan: true, kirjautunut: false });
-  const kayttajaKey = "kayttaja";
-  const salasanaKey = "salasana";
-
+  const kayttajaKey = 'kayttaja';
+  const salasanaKey = 'salasana';
   //Tämä hoitaa kirjautumisen ja initializen appii, kutsutaan vain kerran ja tässä.
   React.useEffect(() => {
-    console.log("use effect");
+    console.log('use effect');
     loginOnStartup();
   }, []);
 
@@ -49,7 +50,7 @@ export default function App() {
   const authContext = React.useMemo(
     () => ({
       signIn: async (kayttaja, salasana) => {
-        console.log("Logging in alkaa");
+        console.log('Logging in alkaa');
         setNavigaationVaihto({ ladataan: true, kirjautunut: false });
         let loginni = await login(kayttaja, salasana);
         if (loginni === 'auth/user-not-found' || loginni === 'auth/wrong-password') {
@@ -59,19 +60,19 @@ export default function App() {
           AsyncStorage.setItem(kayttajaKey, kayttaja);
           AsyncStorage.setItem(salasanaKey, salasana);
           setNavigaationVaihto({ ladataan: false, kirjautunut: true });
-          console.log("Logging in loppui");
+          console.log('Logging in loppui');
           // console.log(firebase.auth().currentUser)
         }
       },
       signOut: async () => {
-        console.log("Logging out alkaa");
+        console.log('Logging out alkaa');
         firebase.auth().signOut();
         await AsyncStorage.removeItem(kayttajaKey);
         await AsyncStorage.removeItem(salasanaKey);
         setNavigaationVaihto({ ladataan: false, kirjautunut: false });
-        console.log("Logging out loppuu");
+        console.log('Logging out loppuu');
         // console.log(firebase.auth().currentUser)
-      },
+      }
     }),
     []
   );
@@ -79,7 +80,7 @@ export default function App() {
   const loginOnStartup = async () => {
     let kayttaja = await AsyncStorage.getItem(kayttajaKey);
     let salasana = await AsyncStorage.getItem(salasanaKey);
-    console.log("AsyncStorage -> käyttäjä: " + kayttaja + ", salasana: " + salasana);
+    console.log('AsyncStorage -> käyttäjä: ' + kayttaja + ', salasana: ' + salasana);
     if (kayttaja != null && salasana != null) {
       authContext.signIn(kayttaja, salasana);
     } else {
@@ -89,7 +90,9 @@ export default function App() {
 
   const login = async (kayttaja, salasana) => {
     let error;
-    let userprom = await firebase.auth().signInWithEmailAndPassword(kayttaja, salasana)
+    let userprom = await firebase
+      .auth()
+      .signInWithEmailAndPassword(kayttaja, salasana)
       .catch(function (err) {
         error = err.code;
         console.log(error);
@@ -103,49 +106,47 @@ export default function App() {
 
     // console.log(userprom.user.uid)
     global.myUserData.uid = userprom.user.uid;
-    let idTokeni = await firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+    let idTokeni = await firebase.auth().currentUser.getIdToken(/* forceRefresh */ true);
     // console.log(idTokeni)
     global.myUserData.idToken = idTokeni;
     return 'meni läpi';
-  }
+  };
 
   async function UpdateLocation() {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
       }
-      let location = await (await Location.getCurrentPositionAsync({})).coords; 
-      global.myUserData.filters.myLocation = 
-      {
+      let location = await (await Location.getCurrentPositionAsync({})).coords;
+      global.myUserData.filters.myLocation = {
         latitude: location.latitude,
         longitude: location.longitude
-      }
+      };
       UpdateFirebase(location);
     })();
   }
 
   //tää menee endpointin kautta.
   function UpdateFirebase(newloc) {
-    
     let bodii = {
       uid: global.myUserData.uid,
       idToken: global.myUserData.idToken,
       data: {
         latitude: newloc.latitude,
-        longitude: newloc.longitude,
-      },
+        longitude: newloc.longitude
+      }
     };
-    fetch(global.url + "updateLocation", {
-      method: "POST",
+    fetch(global.url + 'updateLocation', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(bodii),
+      body: JSON.stringify(bodii)
     })
       .then((response) => response.json())
-      .then(_ => {
-        console.log("Updated location");
+      .then((_) => {
+        console.log('Updated location');
       })
       .catch((err) => {
         console.error(err);
@@ -153,7 +154,8 @@ export default function App() {
   }
 
   //Substacki tällä tai sitten luodaa vaa erillsiet sivut joissa on takaisin nappula että toi toolbari piilottuu
-  const ProfiiliSettingsStack = () => {
+  const ProfiiliSettingsStack = ({ navigation, route }) => {
+    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Profile" component={MyProfile} />
@@ -171,20 +173,30 @@ export default function App() {
   const MatchStack = ({ navigation, route }) => {
     // console.log('tämä on routen asdasd:')
     // console.log(route.state);
-    // console.log(route.state ? (route.state.routes.length > 0 ? false : true) : true)
-    // navigation.setOptions({ tabBarVisible: route.state ? (route.state.routes.length > 0 ? false : true) : true });
+    // console.log(route.state ? (route.state.index == 0 ? true : false) : true)
+    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
     return (
       <ListStack.Navigator>
+        {/* <ListStack.Screen name="Matches" component={Matches} options={{ headerShown: false }}/> */}
         <ListStack.Screen name="Matches" component={Matches} />
         <ListStack.Screen
           name="Chat"
           component={Chat}
           options={{
             headerRight: () => (
-              <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end", paddingRight: 120, width: 1050 }}>
-                <Button onPress={() => alert("This is a button!")} title="Tähän avatari" color="black" />
+              <View
+                style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', paddingRight: 120, width: 1050 }}
+              >
+                <Avatar
+                  onPress={() =>
+                    navigation.navigate('MatchProfile', { userMatchProfile: route.state.routes[1].params.chatti })
+                  }
+                  size="large"
+                  rounded
+                  source={{ uri: route.state.routes[1].params.photo }}
+                />
               </View>
-            ),
+            )
           }}
         />
         {/* <ListStack.Screen name="Lisää kuva" component={}/> */}
@@ -202,7 +214,8 @@ export default function App() {
   //   );
   // };
 
-  const SwipeStack = () => {
+  const SwipeStack = ({ navigation, route }) => {
+    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
     return (
       <ListStack.Navigator>
         <ListStack.Screen name="Swipes" component={SwipingPage} />
@@ -210,7 +223,6 @@ export default function App() {
       </ListStack.Navigator>
     );
   };
-
 
   const Sisalto = () => {
     return (
@@ -225,31 +237,32 @@ export default function App() {
                     let iconName;
                     let iconColor;
 
-                    if (route.name === "Matches") {
-                      iconName = "people";
+                    if (route.name === 'Matches') {
+                      iconName = 'people';
                       iconColor = navIconColor(focused);
-                    } else if (route.name === "Swipes") {
-                      iconName = "touch-app";
+                    } else if (route.name === 'Swipes') {
+                      iconName = 'touch-app';
                       iconColor = navIconColor(focused);
-                    } else if (route.name === "My Likes") {
-                      iconName = "event-available";
+                    } else if (route.name === 'My Likes') {
+                      iconName = 'event-available';
                       iconColor = navIconColor(focused);
-                    } else if (route.name === "Profile") {
-                      iconName = "person";
+                    } else if (route.name === 'Profile') {
+                      iconName = 'person';
                       iconColor = navIconColor(focused);
-                    } else if (route.name === "Login") {
-                      iconName = "security";
+                    } else if (route.name === 'Login') {
+                      iconName = 'security';
                       iconColor = navIconColor(focused);
                     }
 
                     // You can return any component that you like here!
                     return <Icon color={iconColor} size={28} name={iconName} />;
-                  },
+                  }
                 })}
                 tabBarOptions={{
+                  style: { position: 'absolute' },
                   activeTintColor: navBarTintColor,
                   showIcon: true,
-                  showLabel: false,
+                  showLabel: false
                 }}
               >
                 <Tab.Screen name="Matches" component={MatchStack} />
@@ -258,11 +271,11 @@ export default function App() {
                 <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
               </Tab.Navigator>
             ) : (
-                <Stack.Navigator>
-                  <ListStack.Screen name="Login" component={Startup} />
-                  <ListStack.Screen name="Rekisteröidy" component={Register} options={{ headerShown: false }} />
-                </Stack.Navigator>
-              )}
+              <Stack.Navigator>
+                <ListStack.Screen name="Login" component={Startup} />
+                <ListStack.Screen name="Rekisteröidy" component={Register} options={{ headerShown: false }} />
+              </Stack.Navigator>
+            )}
           </NavigationContainer>
           {/* position of flash can also be set bottom, left, right*/}
           <FlashMessage position="top" />
@@ -277,9 +290,5 @@ export default function App() {
   //   return <Sisalto />;
   // }
 
-  return (
-    <>
-      {navigaationVaihto.ladataan ? (<Text>Loading screeni tähän</Text>) : (<Sisalto />)}
-    </>
-  )
+  return <>{navigaationVaihto.ladataan ? <Text>Loading screeni tähän</Text> : <Sisalto />}</>;
 }
