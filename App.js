@@ -16,7 +16,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { Avatar } from 'react-native-elements';
 import { Button, View } from "react-native";
 import firebase from "firebase";
 import ViewLikers from "./components/ViewLikers.js";
