@@ -172,7 +172,7 @@ See the [open issues](https://github.com/jaanisavolainenhh/ohjelmistoprojekti2_f
 
 MeetHub project CI pipeline
 
-<img src="images/CI-Pipeline.png" alt="Logo" width="500" height="1000">
+<img src="images/CI-Pipeline.png" alt="Logo" width="1000" height="500">
 
 <!-- CONTRIBUTING -->
 ## Contributing
