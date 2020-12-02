@@ -18,7 +18,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Button, View } from "react-native";
 import firebase from "firebase";
-import ViewLikers from "./components/ViewLikers.js";
 import { Icon } from "react-native-elements";
 import { Provider } from "react-redux";
 import { store } from "./redux/index";
@@ -268,7 +267,6 @@ export default function App() {
               >
                 <Tab.Screen name="Matches" component={MatchStack} />
                 <Tab.Screen name="Swipes" component={SwipeStack} />
-                <Tab.Screen name="My Likes" component={ViewLikers} />
                 <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
               </Tab.Navigator>
             ) : (

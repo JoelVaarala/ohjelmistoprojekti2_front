@@ -1,59 +1,50 @@
-import React, {  useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Alert, FlatList, Text, View, TextInput, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 import firebase from 'firebase';
 import SortableList2 from './SortableList';
-// import auth from "@react-native-firebase/auth";
-// import firestore from "@react-native-firebase/firestore";
 import styles from '../styles';
 import { useFocusEffect } from '@react-navigation/native'
 
-//Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
-export default function EditProfile({ navigation, route }) {
-  //tagit
+export default function EditProfile() {
   const [tag, setTag] = useState('');
   const [tagList, setTagList] = useState([]);
   const [shouldShow, setShouldShow] = useState(false);
   const [pics, setPics] = React.useState([]);
-  //const [images, setImages] = useState({});
-  const [userTiedot, setUserTiedot] = useState({
+  const [user, setUser] = useState({
     age: 0,
     bio: '',
     name: ''
   });
 
-  //tallentaa kuvien muutokset SortableList-komponentissa
+  //saving changes in images in SortableList
   const callback = (childData) => {
     let images = childData
-      setPics(images)
-    console.log("CHILDDATA", images)
+    setPics(images)
   }
 
-  React.useEffect(() => {
-    console.log('useeffecti', userTiedot.bio)
-    HaeTiedot();
+  useEffect(() => {
+    getData();
   }, []);
 
-useFocusEffect(
-  React.useCallback(() => {
-    return () => {
-      TallennaData();
-    }
-  })
-)
-  function TallennaData() {
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        saveData();
+      }
+    })
+  )
 
-   
+  function saveData() {
     let body = {
       idToken: global.myUserData.idToken,
       uid: global.myUserData.uid,
       data: {
-        bio: userTiedot.bio,
+        bio: user.bio,
         tags: tagList,
         images: pics,
       },
     };
-    console.log(body);
     fetch(global.url + 'profileUpdate', {
       method: 'POST',
       headers: {
@@ -67,48 +58,23 @@ useFocusEffect(
       .catch((err) => console.error(err));
   }
 
-  // function HaeKayttajanTiedot_autoupdate() {
-  //   let ref = firestore().collection("users").doc(auth().currentUser.uid)
-  //   ref.onSnapshot((querySnapshot) => {
-  //     let iäkäs = querySnapshot.data().age
-  //     // console.log('user ika : ', iäkäs) // prints 23 tai new value
-  //     setUserTiedot({
-  //      age: (querySnapshot.data().age),
-  //      bio: (querySnapshot.data().bio),
-  //      name: (querySnapshot.data().displayName)
-  //     })
-  //     setTagList(querySnapshot.data().tags)
-  //   })
-
-  // }
-
-  const HaeTiedot = async () => {
+  const getData = async () => {
     const ref = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid);
     const doc = await ref.get();
     if (!doc.exists) {
-      console.log('document not found');
     } else {
       setPics(doc.data().images);
-      console.log('KUVAT', pics);
-      console.log('success HERE HERE ::::', doc.data());
-      setUserTiedot({
+      setUser({
         age: doc.data().age,
         bio: doc.data().bio,
         name: doc.data().displayName
       });
       setTagList(doc.data().tags);
-
-      //  const UUSI = Object.assign({}, pics)
-      // console.log("KDKDKDKKDK", UUSI)
-      // setImages(UUSI)
-      // console.log("ölölölölö",images)
     }
   };
 
   function CreateSortableList() {
-    //Tällä saadaan päiviettyä nää shitit oikeasti statesta.
-    // return <SwipeCards vaihtoehdot={swipettavat} />;
-    return <SortableList2 kuvat={pics} order={Object.keys(pics)} parentCallback={callback} />;
+    return <SortableList2 images={pics} order={Object.keys(pics)} parentCallback={callback} />;
   }
 
   const addTag = () => {
@@ -118,47 +84,39 @@ useFocusEffect(
   };
 
   const deleteItemById = (index) => {
-    Alert.alert('Poista tagi', 'Haluatko varmasti poistaa tagin?', [
-      { text: 'Peruuta', onPress: () => console.log('Käyttäjä peruutti'), style: 'cancel' },
+    Alert.alert('Delete a tag', 'Are you sure you want to delete?', [
+      { text: 'Cancel', onPress: () => console.log('User cancelled'), style: 'cancel' },
       { text: 'OK', onPress: () => setTagList(tagList.filter((itemi, indexi) => indexi !== index)) }
     ]);
   };
 
   return (
-    <ScrollView>
-      <View style={[styles.flexOne, styles.background]}>
+    <ScrollView style={[styles.flexOne, styles.background]}>
+      <View>
         <View style={[styles.container, styles.containerCenter, styles.marginTopThirty]}>
           <Text style={[styles.editProfileText, styles.myProfileUserText]}>
-            {userTiedot.name}, {userTiedot.age}
+            {user.name}, {user.age}
           </Text>
         </View>
         <View style={{ paddingTop: 10, justifyContent: 'center', alignItems: 'center', flex: 4 }}>
           <CreateSortableList />
-          {/* <Icon reverse name="image" />
-      <Text style={styles.title}>Add a picture</Text> */}
         </View>
-
         <View style={styles.flexOne}>
           <Text style={[styles.containerCenter, styles.title, styles]}>Bio :</Text>
           <View style={styles.editProfileBioTextArea}>
             <TextInput
-              defaultValue={userTiedot.bio}
+              defaultValue={user.bio}
               style={styles.editProfileTextArea}
               multiline={true}
               numberOfLines={3}
               blurOnSubmit={true}
               maxLength={500}
               onEndEditing={(e) => {
-                setUserTiedot({ ...userTiedot, bio: e.nativeEvent.text })
+                setUser({ ...user, bio: e.nativeEvent.text })
               }}
             />
           </View>
         </View>
-        {/* meillä ei oo asuinpaikkaa nyt */}
-        {/* <Text style={styles.text}>Asuinpaikka: </Text>
-      <View style={styles.textAreaContainer}> 
-        <TextInput {styles.editProfileTextArea} placeholder='Asuinpaikka' />
-      </View> */}
         <View style={styles.omatContainerit}>
           <View>
             <Text style={styles.title}>Your tags :</Text>
