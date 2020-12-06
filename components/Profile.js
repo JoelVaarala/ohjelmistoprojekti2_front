@@ -1,26 +1,31 @@
 import React from 'react';
-import { Text, View, Image, ScrollView } from 'react-native';
-import { Avatar, ListItem, Overlay, Button, ThemeProvider, ButtonGroup, Icon, Tooltip } from 'react-native-elements';
+import { Text, View } from 'react-native';
+import { Avatar, ListItem, Button, ThemeProvider, ButtonGroup, Icon, Tooltip } from 'react-native-elements';
 import { showMessage } from 'react-native-flash-message';
 import Carousel2 from './Carousel';
 import firebase from 'firebase';
-// import firestore from "@react-native-firebase/firestore";
-// import auth from "@react-native-firebase/auth";
 import styles from '../styles';
 
-//Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
+
+// identical fetches in different funcs : 
+//
+// var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
+
+
+// User's tags, bio, name and photos. Name and age cant be changed
 export default function Profile({ navigation, route }, props) {
   const [user, setUser] = React.useState({
-    name: 'nimi',
-    age: 'ikä',
+    name: 'name',
+    age: 'age',
     bio: 'bio'
   });
+  // Event data
   const [event, setEvent] = React.useState({
-    name: 'nimi',
+    name: 'name',
     bio: 'bio'
   });
 
-  const [osallistujat, setOsallistujat] = React.useState([]);
+  const [attendees, setAttendees] = React.useState([]);
 
   const [peoplesWhoWantToJoin, setPeoplesWhoWantToJoin] = React.useState([]);
 
@@ -32,9 +37,10 @@ export default function Profile({ navigation, route }, props) {
   const [eventInfo, setEventInfo] = React.useState({
     participiants: [{ images: ['https://randomuser.me/api/portraits/med/women/1.jpg'] }]
   });
-  // true -> display user __ false -> display event
+
+  // true -> display user , false -> display event
   const [view, setView] = React.useState(true);
-  const buttons = ['Osallistujat', 'Jonossa'];
+  const buttons = ['Attendees', 'Waiting'];
 
   const [selectedIndex, setSelectedIndex] = React.useState({ main: 0 });
 
@@ -49,31 +55,24 @@ export default function Profile({ navigation, route }, props) {
     }
   };
 
-  // match dokkari id joka tulee navigoinnin yhteydessä kun siity chatistä profiiliin
+  // match doc id, that comes trough navigation from chat
   let doc = route.params.userMatchProfile;
   // CurrentUser
-  let cur_uid = firebase.auth().currentUser.uid;
+  let cur_uid = firebase.auth().currentUser.uid;  // ---------- HOX HOX replace auth() call 
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      //console.log("Listener")
-      //console.log(firebase.auth().currentUser)
-      //setPics();
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
 
   React.useEffect(() => {
-    //console.log('useEffect chat.js saatu id : ' , props)
-    haeTiedot();
-    //console.log("Current user id = ", firebase.auth().currentUser.uid);
-    console.log('Profile.js useEfect (route.params.userMatchProfile) = ', route.params.userMatchProfile);
+    fetchMatchData();
   }, []);
 
-  //haetaan infot firebasesta
-
-  async function haeTiedot() {
+  // Fetch match data from firebase
+  async function fetchMatchData() {
     const find = await firebase.firestore().collection('matches').doc(doc);
     find.onSnapshot((query) => {
       let matchType = '';
@@ -86,156 +85,136 @@ export default function Profile({ navigation, route }, props) {
       setType(matchType);
       let user = '';
       if (matchType == 'user') {
-        console.log('MatchType === user');
         setType('User');
         query.data().users.forEach((element) => {
-          console.log('forEach users in match when match type == user', element);
           if (element != cur_uid) {
             user = element;
           }
         });
-        haeUser(user);
+        fetchUser(user);
 
       } else if (matchType == "event") {
-        console.log("MatchType === event");
         setType("Event");
-        //setOsallistujat(query.data().users);
 
-        haeEvent();
-        HaeHakijat();
-        HaeOsallistujat();
+        fecthEvent();
+        fetchApplicants();
+        fetchAttendees();
       }
     });
   }
 
-  async function haeUser(user) {
+  async function fetchUser(user) {
     const ref = await firebase.firestore().collection('users').doc(user);
     ref.onSnapshot((qr) => {
-      // tiedot viedään userStateen
+      // user data to userState
       let name_f = qr.data().displayName;
       let age_f = qr.data().age;
       let bio_f = qr.data().bio;
       setUser({ name: name_f, age: age_f, bio: bio_f });
-      console.log('id from haeUser : ', qr.id);
       setPics(qr.data().images);
     });
   }
 
-  async function haeEvent() {
+  async function fecthEvent() {
     const ref = await firebase.firestore().collection('events').doc(route.params.userMatchProfile);
     ref.onSnapshot((qr) => {
-      // tiedot viedään userStateen
+      // event data to eventState
       let name_f = qr.data().displayName;
       let bio_f = qr.data().bio;
-      //let osallistujat_f = qr.data().
+
       setEvent({ name: name_f, bio: bio_f });
       setView(false);
-      console.log('id from haeEvent : ', qr.id);
     });
   }
 
-  async function HaeHakijat() {
-    console.log("Haetaan hakijat")
+  async function fetchApplicants() {
+
     var peopleWhoLikedMe = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("usersThatLikedMe").get();
-    var lol = peopleWhoLikedMe.data().swipes;
+    var likers = peopleWhoLikedMe.data().swipes;
     var peopleInQueue = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("mySwipes").get();
     peopleInQueue = peopleInQueue.data().swipes;
     var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
     usersAlreadyInEvent = usersAlreadyInEvent.data().users;
-    console.log(usersAlreadyInEvent);
-    let temppia = [];
-    //miksei vaa
-    lol.forEach((element) => {
-      temppia.push(element.user);
+    let peopleWhoSwiped = [];
+
+    likers.forEach((element) => {
+      peopleWhoSwiped.push(element.user);
     });
 
-    console.log("jotakin",temppia);
-    temppia = temppia.filter(function (el) {
+    peopleWhoSwiped = peopleWhoSwiped.filter(function (el) {
       return !usersAlreadyInEvent.includes(el);
     });
-    console.log(temppia);
 
-    var lopulliset = [];
-    if (temppia.length !== 0) {
-      console.log("Enemmän ku 0");
+
+    var waitingToJoin = [];
+    if (peopleWhoSwiped.length !== 0) {
       var query = await firebase.firestore()
         .collection("users")
-        .where(firebase.firestore.FieldPath.documentId(), "in", temppia)
+        .where(firebase.firestore.FieldPath.documentId(), "in", peopleWhoSwiped)
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
 
-            var asd = doc.data();
-            asd.uid = doc.id;
-            lopulliset.push(doc.data());
+            var result = doc.data();
+            result.uid = doc.id;
+            waitingToJoin.push(doc.data());
           });
         });
     }
-    console.log("Lopulliset hakijat", lopulliset);
-    setPeoplesWhoWantToJoin(lopulliset);
-
+    setPeoplesWhoWantToJoin(waitingToJoin);
   }
 
-  async function HaeOsallistujat()
-  {
-    console.log("Route",route.params.chet);
+  async function fetchAttendees() {
     var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
-    let osallistujalista = [];
-    osallistujalista = usersAlreadyInEvent.data().users;
-    console.log("osallistujalista", osallistujalista);
-    let lopulliset = [];
-    if (osallistujalista.length !== 0) {
-      console.log("Enemmän ku 0");
+    let attendeeList = [];
+    attendeeList = usersAlreadyInEvent.data().users;
+
+    let confirmedAttendees = [];
+    if (attendeeList.length !== 0) {
+
       var query = await firebase.firestore()
         .collection("users")
-        .where(firebase.firestore.FieldPath.documentId(), "in", osallistujalista)
+        .where(firebase.firestore.FieldPath.documentId(), "in", attendeeList)
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
 
-            var asd = doc.data();
-            asd.uid = doc.id;
-            
-            lopulliset.push(doc.data());
+            var userData = doc.data();
+            userData.uid = doc.id;
+
+            confirmedAttendees.push(doc.data());
           });
         });
     }
-    osallistujat.forEach(element => {
-      if(element.images.length === 0)
-      {
-        element.images.append("https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg");
+    attendees.forEach(element => {
+      if (element.images.length === 0) {
+        element.images.append("https://randomuser.me/api/portraits/med/women/1.jpg");
       }
     });
-    console.log("lopullinen osallistujalista", lopulliset)
-    setOsallistujat(lopulliset);
-
+    setAttendees(confirmedAttendees);
   }
 
 
-  function Accept(accepted, uid)
-  {
-    console.log(accepted,uid)
+  function Accept(accepted, uid) {
+    console.log(accepted, uid)
   }
 
-  function Kick(uid)
-  {
-     //unmatchataan
+  function Kick(uid) {
+    //unmatch
   }
 
 
-  function LaiskaValinta()
-  {
-    if(selectedIndex.main === 0)
+  function LazyChoice() {
+    if (selectedIndex.main === 0) {
+      return Attending()
+    }
+    return Applicants();
+  }
+
+  // Only event owner have button to "kick" persons
+  function Applicants() {
     {
-      return Osallistuajt()
-    } 
-    return Hakijat();
-  }
 
-  //ainoastaan eventin omistaja näkee buttonin jolla voi kickata osallistujan
-  function Hakijat() {
-    {
-      //console.log("jooh", osallistujat)
       return peoplesWhoWantToJoin.map((l, i) => (
         <ListItem key={i} bottomDivider>
           <Avatar source={{ uri: l.images[0] }} />
@@ -257,7 +236,7 @@ export default function Profile({ navigation, route }, props) {
                 color: "red",
               }}
             />
-                        <Button //tää on kicki button
+            <Button //tää on kicki button
               type="outline"
               raised={true}
               onPress={() => Accept(false, l.uid)}
@@ -273,10 +252,9 @@ export default function Profile({ navigation, route }, props) {
     }
   }
 
-  function Osallistuajt() {
+  function Attending() {
     {
-      //console.log("jooh", osallistujat)
-      return osallistujat.map((l, i) => (
+      return attendees.map((l, i) => (
         <ListItem key={i} bottomDivider>
           <Avatar source={{ uri: l.images[0] }} />
           <ListItem.Content>
@@ -304,15 +282,15 @@ export default function Profile({ navigation, route }, props) {
     }
   }
 
-  // Matchin poisto funkari
-  const removeMatch = (asd, qwe) => {
+  // removeMatch function
+  const removeMatch = (match, id) => {
     let url = global.url + 'removeMatch';
     let bodi = {
       idToken: global.myUserData.idToken,
       data: {
-        match: asd
+        match: match
       },
-      uid: qwe
+      uid: id
     };
 
     console.log(bodi);
@@ -327,8 +305,7 @@ export default function Profile({ navigation, route }, props) {
     })
       .then((response) => response.json())
       .then((res) => {
-        console.log('.then res ->', res);
-        console.log('MATCHIN POISTO FUNKKARI LÄPI');
+        console.log('match deleted')
       })
       .catch((err) => console.error(err));
     showUnavaible();
@@ -337,7 +314,6 @@ export default function Profile({ navigation, route }, props) {
   const showDeleted = (asd, qwe) => {
     showMessage({
       message: 'Match deleted',
-      //description: "this is unfortunate",
       description: qwe,
       type: 'default',
       duration: 1850,
@@ -349,7 +325,7 @@ export default function Profile({ navigation, route }, props) {
   const showUnavaible = (asd, qwe) => {
     showMessage({
       message: 'Match delete unsuccessful',
-      description: 'moi',
+      description: 'something went wrong',
       type: 'default',
       duration: 1850,
       backgroundColor: 'pink',
@@ -358,20 +334,14 @@ export default function Profile({ navigation, route }, props) {
   };
 
   const deleteRoute = () => {
-    let asd = route.params.userMatchProfile;
-    let qwe = cur_uid;
-    showDeleted(asd, qwe);
-    removeMatch(asd, qwe);
+    let userMatchProfile = route.params.userMatchProfile;
+    let currentUserId = cur_uid;
+    showDeleted(userMatchProfile, currentUserId);
+    removeMatch(userMatchProfile, currentUserId);
     navigation.popToTop();
   };
 
-  const log = () => {
-    //navigation.navigate("Matches");
-    //showDeleted();
-  };
 
-  //<Icon name="dots-vertical" type='material-community' color='#FFA500'/>
-  //<Text onPress={log} style={{color: 'grey', fontWeight: 'bold'}}>Unmatch</Text>
   return (
     <View style={[styles.alignItemsCenter, styles.background]}>
       <View style={{ marginLeft: '80%', alignItems: 'flex-start' }}>
@@ -411,13 +381,12 @@ export default function Profile({ navigation, route }, props) {
             kuvat={pics}
             style={
               styles.flexOne
-              //styles.carouselImageSize
             }
           />
         </View>
       ) : (
-        <View>{/* Tähän eventille kuva systeemit, kun eventin tiedoista niitä alkaa löytymään*/}</View>
-      )}
+          <View>{/* Here event pics eventually */}</View>
+        )}
 
       <View style={styles.flexThree}>
         {view ? (
@@ -441,13 +410,12 @@ export default function Profile({ navigation, route }, props) {
                   containerStyle={[styles.background, styles.heightForty]}
                 />
               </ThemeProvider>
-              <LaiskaValinta></LaiskaValinta>
+              <LazyChoice />
             </View>
           )}
 
       </View>
 
-      {/* <ScrollView>{view ? (<Text>true</Text>) : (<Text>false</Text>)} </ScrollView> */}
     </View>
   );
 }
