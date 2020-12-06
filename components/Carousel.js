@@ -1,14 +1,14 @@
 import * as React from "react";
-import { Text, View, SafeAreaView, Dimensions, Image } from "react-native";
+import { View, SafeAreaView, Dimensions, Image } from "react-native";
 import Carousel from "react-native-snap-carousel";
-//import firestore from "@react-native-firebase/firestore";
 import styles from "../styles";
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get("window");
 
+// Photo carousel component
 export default class App extends React.Component {
+
   constructor(props, { navigation, route }) {
-    //console.log(' LOOK HERE   ',props.kuvat)
     super(props);
     this.state = {
       activeIndex: 0,
@@ -32,7 +32,6 @@ export default class App extends React.Component {
             layout={"default"}
             ref={(ref) => (this.carousel = ref)}
             data={this.props.kuvat}
-            //data={this.props.kuvat}
             sliderWidth={viewportWidth}
             itemWidth={viewportWidth * 0.5}
             sliderHeight={viewportHeight}
