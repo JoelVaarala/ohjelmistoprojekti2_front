@@ -37,10 +37,38 @@ const EventReducer = (state, action) => {
     } 
 }
 
+export const userData = (value) => {
+    return {
+        type: "addUid",
+        item: value
+    }
+}
+
+export const test = (value) => {
+    return {
+        type: "test",
+        item: value
+    }
+}
+
+const UserReducer = (state, action) => {
+    if(state === undefined){
+        state = [];
+    }
+    switch(action.type){
+        case "addUid":
+            return state.concat(action.item);
+        case "test":
+            return state.concat(action.item);
+        default:
+            return state;
+    }
+}
 // root reducer
 // if need more than 1 reducer add here
 export const rootReducer = combineReducers({
     EventReducer,
+    UserReducer
 })
 
 // store, wrapattu koko Appin ympärille <Provider> avulla -> mahdollistaa storen olevan saatavilla kaikista komponenteista käsin

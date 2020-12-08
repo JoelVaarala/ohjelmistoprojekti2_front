@@ -18,8 +18,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View } from "react-native";
 import firebase from "firebase";
 import { Icon } from "react-native-elements";
-import { Provider } from "react-redux";
-import { store } from "../redux/index";
+import { connect } from "react-redux";
+import { store, test, userData } from "../redux/index";
 import FlashMessage from "react-native-flash-message";
 import * as Location from "expo-location";
 import "./Globaalit";
@@ -28,13 +28,12 @@ import { AuthContext } from "./AuthContext";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
-// firebase.initializeApp(global.firebaseConfig);
 
 // tällä pääsee eroon Setting a timer warningista, mihin ei ole ratkaisua react nativen puolella tällä hetkellä https://github.com/facebook/react-native/issues/12981
 // YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
 // YellowBox.ignoreWarnings(['']);
 
-export default function Navigation() {
+function Navigation1() {
 
   // If loading is true, loadingscreen will be displayed. If loggedIn is true, apps content will be displayed, else login page will be displayed
   const [navigationChange, setNavigationChange] = React.useState({ loading: true, loggedIn: false });
@@ -44,6 +43,8 @@ export default function Navigation() {
 
   //Tämä hoitaa kirjautumisen ja initializen appii, kutsutaan vain kerran ja tässä.
   React.useEffect(() => {
+    store.dispatch(test('OOO'))
+    console.log(store.getState().UserReducer)
     loginOnStartup();
   }, []);
 
@@ -264,3 +265,11 @@ export default function Navigation() {
 
   return <>{navigationChange.loading ? <Text>Loading screen here</Text> : <AppContent />}</>;
 }
+
+const mapStateToProps = (state) => ({
+    UserReducer: state.UserReducer,
+  });
+  // Component connects to reducer and receives params state, action and main function
+  const Navigation = connect(mapStateToProps, { userData, test })(Navigation1);
+  // Export default const above instead of "main function"
+  export default Navigation;
