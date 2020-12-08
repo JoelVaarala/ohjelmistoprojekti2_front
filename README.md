@@ -120,7 +120,7 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-1. 1.	Make folder for the project
+1. Make folder for the project
    ```sh
    $ mkdir <Folder name>
    ```
