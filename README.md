@@ -18,59 +18,58 @@ updateLocation (post) | input| Output | User updates users location.
 opentest (post) | input| Output | Endpoint to manually get/update helsinki open api events
 
 # Add_Event
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # AuthContext
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Carousel
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Chat
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # EditProfile
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Globaalit
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Matches
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # MyProfile
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Register
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Settings
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # SortableList
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Startup
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # SwipeCards
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # SwipingPage
-Endpoint | Input | Output | Description
+Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
-
 
