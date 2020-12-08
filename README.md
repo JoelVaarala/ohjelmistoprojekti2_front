@@ -1,4 +1,4 @@
-  <h3 align="center">MeetHub</h3>
+  <h1 align="center">MeetHub</h1>
 
   <p align="center">
     <br />
@@ -122,18 +122,18 @@ This is an example of how to list things you need to use the software and how to
 
 1. 1.	Make folder for the project
    ```sh
-   mkdir <Folder name>
+   $ mkdir <Folder name>
    ```
 2. Git clone both repositories to the folder
    ```sh
-   git clone https://github.com/jaanisavolainenhh/ohjelmistoprojekti2_front.git
-   git clone https://github.com/jaanisavolainenhh/ohjelmistoprojekti2_back.git
+   $ git clone https://github.com/jaanisavolainenhh/ohjelmistoprojekti2_front.git
+   $ git clone https://github.com/jaanisavolainenhh/ohjelmistoprojekti2_back.git
 
    ```
 3. Install NPM packages to both repository folders
    ```sh
-   cd ohjelmistoprojekti2_front && npm install
-   cd ohjelmistoprojekti2_back && npm install
+   $ cd ohjelmistoprojekti2_front && npm install
+   $ cd ohjelmistoprojekti2_back && npm install
 
    ```
 
@@ -141,24 +141,25 @@ This is an example of how to list things you need to use the software and how to
 
 ## Usage
 
-Home
-In home screen user can see events that he/she has swiped right on Swipes screen.
-User can go to chat with other users that are going to the same events
+<h3>Matches</h3><br>
+In Matches screen user can see events that he/she has swiped right on Swipes screen.
+User can also see his/her own made events.
+User can go to chat with other users that are going to the same events.
 
-Chat
-In Chat screen user can write messages with other users that are going to same events.
+<h3>Chat</h3><br>
+In Chat screen user can write messages with other users that are going to the same events.
 
-Swipes
+<h3>Swipes</h3><br>
 In Swipes screen there is event cards that user can swipe. If user wants to go to the event, then he/she has to swipe right and if user is not interested then he/she has to swipe left.
 
 User can also choose what kind of events he/she wants to go. 
 User can choose to go Open, Public or Private events.
 Public events are events that anyone can join, and private events are events that user himself/herself has done and can choose who can join to their private events.
 
-Edit profile
+<h3>Edit profile</h3><br>
 In Edit profile screen user can choose his/her own profile picture, write to the bio what kind of person he/she is and add tags for what kind of activities/events he/she is interested in.
 
-Settings
+<h3>Settings</h3><br>
 In Settings screen user can choose what kind of person he/she is interested in.
 
 
