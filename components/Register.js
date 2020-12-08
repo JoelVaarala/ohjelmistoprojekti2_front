@@ -7,23 +7,25 @@ import styles from "../styles";
 import {AuthContext} from './AuthContext';
 
 export default function Register() {
-  const [kayttajaTiedot, setKayttajaTiedot] = React.useState({ email: "", password: "", age: 1, displayName: "", gender: "male" });
-  const [naytasalasana, setNaytaSalasana] = React.useState(true);
-  const [salasanaIcon, setSalasanaIcon] = React.useState("eye");
+
+  const [userdata, setUserdata] = React.useState({ email: "", password: "", age: 1, displayName: "", gender: "male" });
+  const [hidePassword, setHidePassword] = React.useState(true);
+  const [passwordIcon, setPasswordIcon] = React.useState("eye");
+  // this is the date shown in datepicker
   const [date, setDate] = React.useState(Date.now());
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  // you van find this function in App.js
   const { signIn } = React.useContext(AuthContext);
-
-  //sukupuolen ButtonGorup valinnat
+  // gender options for ButtonGorup
   const buttons = ["Man", "Woman", "Other"];
 
-  //tällä muutetaan valitun syntymäajan päivämäärä unix ajaksi
+  // converts the datepickers date into unix age when new date is selected
   React.useEffect(() => {
-    let unixIka = Math.floor(date / 1000);
-    inputChanged("age", unixIka);
+    let unixAge = Math.floor(date / 1000);
+    inputChanged("age", unixAge);
   }, [date]);
 
-  // muutetaan ButtonGroupisa palautuneen valinnan indexi tallennettavaksi sukupuoleksi ja focusataan valittu buttoni
+  // converts the index of ButtonGroup to gender value
   function genderConvert(name, value) {
     let gender;
     if (value === 0) {
@@ -33,36 +35,34 @@ export default function Register() {
     } else if (value === 2) {
       gender = "other";
     }
-    console.log(gender);
     setSelectedIndex(value);
     inputChanged(name, gender);
   }
 
   function inputChanged(inputName, inputValue) {
-    setKayttajaTiedot({ ...kayttajaTiedot, [inputName]: inputValue });
+    setUserdata({ ...userdata, [inputName]: inputValue });
   }
 
-  //funkkari näyttämään/piilottamaan salasana inputkentässä
-  function naytasalasanaVaihto() {
-    if (naytasalasana) {
-      setNaytaSalasana(false);
-      setSalasanaIcon("eye-with-line");
+  // this function hides/shows the password and changes the icon
+  function changePasswordVisibility() {
+    if (hidePassword) {
+      setHidePassword(false);
+      setPasswordIcon("eye-with-line");
     } else {
-      setNaytaSalasana(true);
-      setSalasanaIcon("eye");
+      setHidePassword(true);
+      setPasswordIcon("eye");
     }
   }
 
-  //salasanainputin iconi
-  function iconi() {
-    return <Entypo name={salasanaIcon} size={30} onPress={() => naytasalasanaVaihto()} />;
+  // returns correct icon for password field
+  function icon() {
+    return <Entypo name={passwordIcon} size={30} onPress={() => changePasswordVisibility()} />;
   }
 
-  //lähetetään rekisteröinti tiedot backiin, joka luo uuden käyttäjän ja tälle tarvittavat documentit yms.
+  // send userdata to backend, where new user is registered. attempts to signin afterwards
   function registerUser() {
-    let validi = validointi();
-    if (!validi) {
-      console.log('ei mennyt läpi');
+    let valid = validation();
+    if (!valid) {
       return;
     }
 
@@ -72,49 +72,43 @@ export default function Register() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(kayttajaTiedot),
+      body: JSON.stringify(userdata),
     })
       .then((response) => response.json())
       .then((res) => {
         if (res.result === 'rekisteörinti onnistui') {
-          // navigation.goBack();
-          signIn(kayttajaTiedot.email, kayttajaTiedot.password);
+          signIn(userdata.email, userdata.password);
         } else if (res.result === 'rekisteörinti epäonnistui:Error: The email address is improperly formatted.'){
-          Alert.alert('Sähköpostin formatointi pielessä.');
+          Alert.alert('Email address is improperly formatted');
         } else if (res.result === 'rekisteörinti epäonnistui:Error: The email address is already in use by another account.') {
-          Alert.alert('Sähköposti on jo käytössä');
+          Alert.alert('Email address is already in use');
         } else {
           console.log(res.result);
         }
       })
       .catch((err) => {
-        Alert.alert(err);
-        console.error(err)});
+        console.error(err);
+      });
   }
 
-  function validointi() {
-    let minIka = new Date();
-    minIka = minIka.setFullYear(minIka.getFullYear() - 18);
-    let raja = Math.floor(minIka / 1000);
-    if (kayttajaTiedot.password.length < 6) {
-      Alert.alert('Salasana on liian lyhyt, salasanan tulee olla vähintään 6 merkkiä pitkä');
+  // checks if password, age and name are valid
+  function validation() {
+    let minAge = new Date();
+    minAge = minAge.setFullYear(minAge.getFullYear() - 18);
+    minAge = Math.floor(minAge / 1000);
+    if (userdata.password.length < 6) {
+      Alert.alert('Password must be atleast 6 characters long');
       return false;
-    } else if (kayttajaTiedot.age > raja) {
-      Alert.alert('Olet alaikäinen, ikäraja on 18 vuotta');
+    } else if (userdata.age > minAge) {
+      Alert.alert('You are under 18');
       return false;
-    } else if (kayttajaTiedot.displayName === '') {
-      Alert.alert('Nimi puuttuu')
+    } else if (userdata.displayName === '') {
+      Alert.alert('Name is missing')
       return false;
     }
-    console.log('kaikki ok')
     return true;
   }
-  //TODO
-  //labelStyle inputeissa ja itsetehdyt Text "lablet" samalla tyylillä tulevaisuudessa jostain StyleSheatista
-  //muuta css hömpötystä
-  //salasanalle checki, onko vähintään 6 merkkiä
-  //sähköpostile checki, onko legit syntaxi
-  //checki, onnistuiko rekisteröinti, jos onnistui -> loginpage ja kirjaudu automaattisesti
+
   return (
     <ScrollView style={(styles.flexOne, styles.paddingTop)}>
       <Text style={[styles.alignSelfCenter, styles.registerUserTitle]}>Register user</Text>
@@ -122,25 +116,25 @@ export default function Register() {
         label="Email"
         placeholder="matti.matikainen@gmail.com"
         onChangeText={(value) => inputChanged("email", value)}
-        value={kayttajaTiedot.email}
+        value={userdata.email}
       />
       <Input
         label="Password"
         placeholder="Must have atleast 6 characters"
-        secureTextEntry={naytasalasana}
+        secureTextEntry={hidePassword}
         onChangeText={(value) => inputChanged("password", value)}
-        value={kayttajaTiedot.password}
-        rightIcon={iconi}
+        value={userdata.password}
+        rightIcon={icon}
       />
       <Input
         label="Name"
         placeholder="Matti Matikainen"
         onChangeText={(value) => inputChanged("displayName", value)}
-        value={kayttajaTiedot.displayName}
+        value={userdata.displayName}
       />
 
       <View style={styles.marginLeftTen}>
-        <Text //jos on joku parempi label systeemi, saa muuttaa tämän
+        <Text 
           style={styles.registerUserText}
         >
           Birthdate
@@ -150,7 +144,7 @@ export default function Register() {
       </View>
 
       <View style={[styles.marginLeftTen, styles.paddingTopTen]}>
-        <Text //jos on joku parempi label systeemi, saa muuttaa tämän
+        <Text 
           style={styles.registerUserText}
         >
           Gender
@@ -163,14 +157,8 @@ export default function Register() {
           containerStyle={styles.heightForty}
         />
 
-        {/* <RadioGroup // muuta setWidthHeight 'useNativeDriver: true' falseksi node moduulissa react-native-radio-button-group/lib/Circle.js, muuten tulee errori: Style property 'height' is not supported by native animated module
-                    horizontal
-                    options={genderOptions}
-                    onChange={(value) => inputChanged('gender', value.id)}
-                // circleStyle={ styles.registerRadioGroup // tällä voi muutella radiopylpyrän tyyliä }
-                /> */}
       </View>
-      <Button onPress={() => registerUser()} title="Register user" containerStyle={styles.registerUserButton} />
+      <Button onPress={() => registerUser()} title="Register" containerStyle={styles.registerUserButton} />
     </ScrollView>
   );
 }
