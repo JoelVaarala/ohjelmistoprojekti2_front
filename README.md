@@ -17,23 +17,37 @@ event (put) | input| Output | User updates a existing event
 updateLocation (post) | input| Output | User updates users location.
 opentest (post) | input| Output | Endpoint to manually get/update helsinki open api events
 
+
 # Add_Event
+Blaa blaa blaa, blaa blaa blaa.
+Blaa :)
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
+Props | Type | Optional | Description
+------------ | ------------- |  ------------- | -------------
+
 # AuthContext
+Blaa blaa blaa, blaa blaa blaa.
+Blaa :)
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Carousel
+Blaa blaa blaa, blaa blaa blaa.
+Blaa :)
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Chat
+Blaa blaa blaa, blaa blaa blaa.
+Blaa :)
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # EditProfile
+Blaa blaa blaa, blaa blaa blaa.
+Blaa :)
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
@@ -72,4 +86,5 @@ Function | Input | Output | Description
 # SwipingPage
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+
 
