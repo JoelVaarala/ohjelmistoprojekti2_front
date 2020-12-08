@@ -56,11 +56,11 @@ MeetHub is a team project of Haaga-Helia’s Software project II -course 2020.
 
 MeetHub is fullstack mobile application where users can create and join different kind of events. Users can swipe public and private events that interests them the most.
 
-With this application you can:
-•	Join different kind of event by swiping event cards
-•	Create your own public/private event
-•	Add event tags that interests you
-•	Chat with other users from same event
+With this application you can:<br>
+* Join different kind of event by swiping event cards
+* Create your own public/private event
+*	Add event tags that interests you
+*	Chat with other users from same event
 
 REST API provided by MyHelsinki is used in this project. 
 http://open-api.myhelsinki.fi/
