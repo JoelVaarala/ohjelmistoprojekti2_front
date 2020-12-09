@@ -29,247 +29,241 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 
-// tällä pääsee eroon Setting a timer warningista, mihin ei ole ratkaisua react nativen puolella tällä hetkellä https://github.com/facebook/react-native/issues/12981
-// YellowBox.ignoreWarnings(['Setting a timer', 'Animated']);
-// YellowBox.ignoreWarnings(['']);
+// with this you can get rid of 'Setting a timer...' warnings, no solution found yet https://github.com/facebook/react-native/issues/12981
+YellowBox.ignoreWarnings(['Setting a timer']);
 
-function Navigation1() {
+function Navigations() {
 
-  // If loading is true, loadingscreen will be displayed. If loggedIn is true, apps content will be displayed, else login page will be displayed
-  const [navigationChange, setNavigationChange] = React.useState({ loading: true, loggedIn: false });
-  // key for AsyncStorage
-  const emailKey = 'email';
-  const passwordKey = 'password';
+    // If loading is true, loadingscreen will be displayed. If loggedIn is true, apps content will be displayed, else login page will be displayed
+    const [navigationChange, setNavigationChange] = React.useState({ loading: true, loggedIn: false });
+    // keys for AsyncStorage
+    const emailKey = 'email';
+    const passwordKey = 'password';
 
-  //Tämä hoitaa kirjautumisen ja initializen appii, kutsutaan vain kerran ja tässä.
-  React.useEffect(() => {
-    store.dispatch(test('OOO'))
-    console.log(store.getState().UserReducer)
-    loginOnStartup();
-  }, []);
+    React.useEffect(() => {
+        loginOnStartup();
+    }, []);
 
-  //Tämä contexti hallinnoi sisäänkirjautumisflowta
-  const authContext = React.useMemo(
-    () => ({
-      // attempts to sign in with login info and saves them to AsyncStorage if sign in was successful
-      signIn: async (email, password) => {
-        setNavigationChange({ loading: true, loggedIn: false });
-        let loginResponse = await login(email, password);
-        if (loginResponse === 'auth/user-not-found' || loginResponse === 'auth/wrong-password') {
-          Alert.alert('Wrong email or password');
-          setNavigationChange({ loading: false, loggedIn: false });
-        } else if (loginResponse === 'meni läpi') {
-          AsyncStorage.setItem(emailKey, email);
-          AsyncStorage.setItem(passwordKey, password);
-          setNavigationChange({ loading: false, loggedIn: true });
+    // this adds sign in and sing out functions to Authcontext, so you can use then in different components and switch between navigation layouts 
+    const authContext = React.useMemo(
+        () => ({
+            // attempts to sign in with login info and saves them to AsyncStorage if sign in was successful, if not, allerts the user for why sign in wasnt successful
+            signIn: async (email, password) => {
+                setNavigationChange({ loading: true, loggedIn: false });
+                let loginResponse = await login(email, password);
+                if (loginResponse === 'Wrong email or password') {
+                    Alert.alert('Wrong email or password');
+                    setNavigationChange({ loading: false, loggedIn: false });
+                } else if (loginResponse === 'No acces to location') {
+                    Alert.alert('You must give access to location');
+                    setNavigationChange({ loading: false, loggedIn: false });
+                } else if (loginResponse === 'Success') {
+                    AsyncStorage.setItem(emailKey, email);
+                    AsyncStorage.setItem(passwordKey, password);
+                    setNavigationChange({ loading: false, loggedIn: true });
+                }
+            },
+            // signs out current user and removes login info from AsyncStorage
+            signOut: async () => {
+                firebase.auth().signOut();
+                await AsyncStorage.removeItem(emailKey);
+                await AsyncStorage.removeItem(passwordKey);
+                setNavigationChange({ loading: false, loggedIn: false });
+            }
+        }),
+        []
+    );
+
+    // tries to login when app is opened if you have signed in previously
+    const loginOnStartup = async () => {
+        let email = await AsyncStorage.getItem(emailKey);
+        let password = await AsyncStorage.getItem(passwordKey);
+        if (email != null && password != null) {
+            authContext.signIn(email, password);
+        } else {
+            setNavigationChange({ loading: false, loggedIn: false });
         }
-      },
-      // signs out current user and removes login info from AsyncStorage
-      signOut: async () => {
-        firebase.auth().signOut();
-        await AsyncStorage.removeItem(emailKey);
-        await AsyncStorage.removeItem(passwordKey);
-        setNavigationChange({ loading: false, loggedIn: false });
-      }
-    }),
-    []
-  );
-
-  const loginOnStartup = async () => {
-    let email = await AsyncStorage.getItem(emailKey);
-    let password = await AsyncStorage.getItem(passwordKey);
-    if (email != null && password != null) {
-      authContext.signIn(email, password);
-    } else {
-      setNavigationChange({ loading: false, loggedIn: false });
-    }
-  };
-
-  const login = async (kayttaja, salasana) => {
-    let error;
-    let userprom = await firebase
-      .auth()
-      .signInWithEmailAndPassword(kayttaja, salasana)
-      .catch(function (err) {
-        error = err.code;
-        console.log(error);
-        console.log(err);
-      });
-    if (error) {
-      return error;
-    }
-    UpdateLocation();
-
-    global.myUserData.uid = userprom.user.uid;
-    let idTokeni = await firebase.auth().currentUser.getIdToken(/* forceRefresh */ true);
-    // console.log(idTokeni)
-    global.myUserData.idToken = idTokeni;
-    return 'meni läpi';
-  };
-
-  async function UpdateLocation() {
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-      }
-      let location = await (await Location.getCurrentPositionAsync({})).coords;
-      global.myUserData.filters.myLocation = {
-        latitude: location.latitude,
-        longitude: location.longitude
-      };
-      UpdateFirebase(location);
-    })();
-  }
-
-  //tää menee endpointin kautta.
-  function UpdateFirebase(newloc) {
-    let bodii = {
-      uid: global.myUserData.uid,
-      idToken: global.myUserData.idToken,
-      data: {
-        latitude: newloc.latitude,
-        longitude: newloc.longitude
-      }
     };
-    fetch(global.url + 'updateLocation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(bodii)
-    })
-      .then((response) => response.json())
-      .then((_) => {
-        console.log('Updated location');
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
 
-  //Substacki tällä tai sitten luodaa vaa erillsiet sivut joissa on takaisin nappula että toi toolbari piilottuu
-  const ProfiiliSettingsStack = ({ navigation, route }) => {
-    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
-    return (
-      <ListStack.Navigator>
-        <ListStack.Screen name="Profile" component={MyProfile} />
-        <ListStack.Screen name="Settings" component={Settings} />
-        <ListStack.Screen name="Add_Event" component={Add_Event} />
-        {
-          /* <ListStack.Screen name="Lisää kuva" component={} /> */
-          <ListStack.Screen name="EditProfile" component={EditProfile} />
+    // login function
+    const login = async (email, password) => {
+        let error;
+        // try to login using given email and password
+        let userPromise = await firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password)
+            .catch(function (err) {
+                error = err.code;
+                console.log(error);
+                console.log(err);
+            });
+        // if signing in results in error (wrong email or password) returns the error
+        if (error === 'auth/user-not-found' || error === 'auth/wrong-password') {
+            return 'Wrong email or password';
         }
-        <ListStack.Screen name="FullProfile" component={Profile} />
-      </ListStack.Navigator>
-    );
-  };
 
-  const MatchStack = ({ navigation, route }) => {
-    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
-    return (
-      <ListStack.Navigator>
-        <ListStack.Screen name="Matches" component={Matches} />
-        <ListStack.Screen
-          name="Chat"
-          component={Chat}
-          options={{
-            headerRight: () => (
-              <View
-                style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', paddingRight: 120, width: 1050 }}
-              >
-                <Avatar
-                  onPress={() =>
-                    navigation.navigate('MatchProfile', { userMatchProfile: route.state.routes[1].params.chatti })
-                  }
-                  size="large"
-                  rounded
-                  source={{ uri: route.state.routes[1].params.photo }}
+        let LocUpdate = await UpdateLocation();
+        if (LocUpdate === 'No acces to location') {
+            return 'No acces to location';
+        }
+
+        global.myUserData.uid = userPromise.user.uid;
+        let idToken = await firebase.auth().currentUser.getIdToken(true);
+        global.myUserData.idToken = idToken;
+        return 'Success';
+    };
+
+    //check if app has access to location info and gets it
+    async function UpdateLocation() {
+        let { status } = await Location.requestPermissionsAsync();
+        if (status !== 'granted') {
+            return 'No acces to location';
+        }
+        let location = await (await Location.getCurrentPositionAsync({})).coords;
+        global.myUserData.filters.myLocation = {
+            latitude: location.latitude,
+            longitude: location.longitude
+        };
+        UpdateFirebase(location);
+        return 'Location updated'
+    }
+
+    // send new location info to backend
+    function UpdateFirebase(newloc) {
+        let locationData = {
+            uid: global.myUserData.uid,
+            idToken: global.myUserData.idToken,
+            data: {
+                latitude: newloc.latitude,
+                longitude: newloc.longitude
+            }
+        };
+        fetch(global.url + 'updateLocation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(locationData)
+        })
+            .then((response) => response.json())
+            .then((_) => {
+                console.log('Updated location');
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+
+    // navigation stacks
+
+    const ProfiiliSettingsStack = ({ navigation, route }) => {
+        // with this bottomtab navigationbar is only shown on the first page of the navigation stack
+        navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
+        return (
+            <ListStack.Navigator>
+                <ListStack.Screen name="Profile" component={MyProfile} />
+                <ListStack.Screen name="Settings" component={Settings} />
+                <ListStack.Screen name="Add_Event" component={Add_Event} />
+                <ListStack.Screen name="EditProfile" component={EditProfile} />
+                <ListStack.Screen name="FullProfile" component={Profile} />
+            </ListStack.Navigator>
+        );
+    };
+
+    const MatchStack = ({ navigation, route }) => {
+        navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
+        return (
+            <ListStack.Navigator>
+                <ListStack.Screen name="Matches" component={Matches} />
+                <ListStack.Screen
+                    name="Chat"
+                    component={Chat}
+                    options={{
+                        // this shows your matches picture in the chat and leads to tehir profile
+                        headerRight: () => (
+                            <View
+                                style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', paddingRight: 120, width: 1050 }}
+                            >
+                                <Avatar
+                                    onPress={() =>
+                                        navigation.navigate('MatchProfile', { userMatchProfile: route.state.routes[1].params.chatti })
+                                    }
+                                    size="large"
+                                    rounded
+                                    source={{ uri: route.state.routes[1].params.photo }}
+                                />
+                            </View>
+                        )
+                    }}
                 />
-              </View>
-            )
-          }}
-        />
-        <ListStack.Screen name="MatchProfile" component={Profile} />
-      </ListStack.Navigator>
-    );
-  };
+                <ListStack.Screen name="MatchProfile" component={Profile} />
+            </ListStack.Navigator>
+        );
+    };
 
-  const SwipeStack = ({ navigation, route }) => {
-    navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
-    return (
-      <ListStack.Navigator>
-        <ListStack.Screen name="Swipes" component={SwipingPage} />
-        <ListStack.Screen name="Matchprofile" component={Profile} />
-      </ListStack.Navigator>
-    );
-  };
+    const SwipeStack = ({ navigation, route }) => {
+        navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
+        return (
+            <ListStack.Navigator>
+                <ListStack.Screen name="Swipes" component={SwipingPage} />
+                <ListStack.Screen name="Matchprofile" component={Profile} />
+            </ListStack.Navigator>
+        );
+    };
 
-  const AppContent = () => {
-    return (
-      <AuthContext.Provider value={authContext}>
-          <NavigationContainer theme={myTheme}>
-            {navigationChange.loggedIn ? (
-              <Tab.Navigator
-                swipeEnabled={false}
-                screenOptions={({ route }) => ({
-                  tabBarIcon: ({ focused, color, size }) => {
-                    let iconName;
-                    let iconColor;
+    // content of the app
+    const AppContent = () => {
+        return (
+            <AuthContext.Provider value={authContext}>
+                <NavigationContainer theme={myTheme}>
+                    {navigationChange.loggedIn ? ( // shows apps content or login page depending on login status
+                        <Tab.Navigator
+                            screenOptions={({ route }) => ({
+                                tabBarIcon: ({ focused }) => {
+                                    let iconName;
+                                    let iconColor;
 
-                    if (route.name === 'Matches') {
-                      iconName = 'people';
-                      iconColor = navIconColor(focused);
-                    } else if (route.name === 'Swipes') {
-                      iconName = 'touch-app';
-                      iconColor = navIconColor(focused);
-                    } else if (route.name === 'My Likes') {
-                      iconName = 'event-available';
-                      iconColor = navIconColor(focused);
-                    } else if (route.name === 'Profile') {
-                      iconName = 'person';
-                      iconColor = navIconColor(focused);
-                    } else if (route.name === 'Login') {
-                      iconName = 'security';
-                      iconColor = navIconColor(focused);
-                    }
+                                    if (route.name === 'Matches') {
+                                        iconName = 'people';
+                                        iconColor = navIconColor(focused);
+                                    } else if (route.name === 'Swipes') {
+                                        iconName = 'touch-app';
+                                        iconColor = navIconColor(focused);
+                                    } else if (route.name === 'Profile') {
+                                        iconName = 'person';
+                                        iconColor = navIconColor(focused);
+                                    }
+                                    return <Icon color={iconColor} size={28} name={iconName} />;
+                                }
+                            })}
+                            tabBarOptions={{
+                                showLabel: false
+                            }}
+                        >
+                            <Tab.Screen name="Matches" component={MatchStack} />
+                            <Tab.Screen name="Swipes" component={SwipeStack} />
+                            <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
+                        </Tab.Navigator>
+                    ) : (
+                            <Stack.Navigator>
+                                <ListStack.Screen name="Login" component={Login} />
+                                <ListStack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+                            </Stack.Navigator>
+                        )}
+                </NavigationContainer>
+                <FlashMessage position="top" />
+            </AuthContext.Provider>
+        );
+    };
 
-                    // You can return any component that you like here!
-                    return <Icon color={iconColor} size={28} name={iconName} />;
-                  }
-                })}
-                tabBarOptions={{
-                  style: { position: 'absolute' },
-                  activeTintColor: navBarTintColor,
-                  showIcon: true,
-                  showLabel: false
-                }}
-              >
-                <Tab.Screen name="Matches" component={MatchStack} />
-                <Tab.Screen name="Swipes" component={SwipeStack} />
-                {/* <Tab.Screen name="My Likes" component={ViewLikers} /> */}
-                <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
-              </Tab.Navigator>
-            ) : (
-              <Stack.Navigator>
-                <ListStack.Screen name="Login" component={Login} />
-                <ListStack.Screen name="Register" component={Register} options={{ headerShown: false }} />
-              </Stack.Navigator>
-            )}
-          </NavigationContainer>
-          {/* position of flash can also be set bottom, left, right*/}
-          <FlashMessage position="top" />
-      </AuthContext.Provider>
-    );
-  };
-
-  return <>{navigationChange.loading ? <Text>Loading screen here</Text> : <AppContent />}</>;
+    //while signing in or out, shows loading screen
+    return <>{navigationChange.loading ? <Text>Loading screen here</Text> : <AppContent />}</>;
 }
 
 const mapStateToProps = (state) => ({
     UserReducer: state.UserReducer,
-  });
-  // Component connects to reducer and receives params state, action and main function
-  const Navigation = connect(mapStateToProps, { userData, test })(Navigation1);
-  // Export default const above instead of "main function"
-  export default Navigation;
+});
+// Component connects to reducer and receives params state, action and main function
+const Navigation = connect(mapStateToProps, { userData, test })(Navigations);
+// Export default const above instead of "main function"
+export default Navigation;
