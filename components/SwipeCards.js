@@ -1,44 +1,37 @@
 import React, { Component } from "react";
-import { Text, View, Image, TouchableOpacity, TimePickerAndroid } from "react-native";
-import { color } from "react-native-reanimated";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import SwipeCards from "react-native-swipe-cards";
-import { Icon, Avatar } from "react-native-elements";
+import { Icon } from "react-native-elements";
 import styles from "../styles";
-import { getCoordinateKeys, getDistance } from 'geolib';
+import { getDistance } from 'geolib';
 
 class Card extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nimi: props.text, // Mikä tämä on???
       tagit: this.separatedTags(),
       distance: this.calculateDistance(),
       time: this.timeUntillEvent(),
     };
-    // console.log("Card prop");
-    //  console.log(props);
   }
 
-
+  // Calculate the time when event is starting from now
   timeUntillEvent() {
     let time = "";
     if('eventStart' in this.props){
        
-        //time = new Date("2020-11-16T14:35:00.000Z");  // test ISO-string
         time = new Date(this.props.eventStart);
         let now = new Date();
-        let aika = Math.floor((time - now) / 60e3)
+        let comparisonTime = Math.floor((time - now) / 60e3)
         
-        if(aika < 60){
-          time = aika.toString() + " min"
-          console.log(time)
-        }else if (aika >= 60 && aika < 1440){
-          time = Math.round(aika/60).toString() + " hours"
-          console.log(time)
-        }else if (aika >= 1440){
-          time = Math.round(aika/60/24).toString() + " days"
-          console.log(time)  
+        if(comparisonTime < 60){
+          time = comparisonTime.toString() + " min"
+        }else if (comparisonTime >= 60 && comparisonTime < 1440){
+          time = Math.round(comparisonTime/60).toString() + " hours"
+        }else if (comparisonTime >= 1440){
+          time = Math.round(comparisonTime/60/24).toString() + " days"  
         }else{
+          // "Default incase event lacks valid starting time"
           time = "unavaible"
         }
     }
@@ -57,6 +50,7 @@ class Card extends React.Component {
       return "less than";
   }
 
+  // returns tags in more displayable form for the card
   separatedTags() {
     let tags = this.props.tags.join(", ");
     return tags;
@@ -67,9 +61,9 @@ class Card extends React.Component {
       <View style={styles.flexOne}>
         <View style={[{ backgroundColor: this.props.backgroundColor }]}>
           <TouchableOpacity>
-            <Image source={{ uri: this.props.images[0] }} style={styles.card} />
+            <Image source={{ uri: this.props.images[0] }} style={styles.card} /> 
             <View style={styles.cardContainer}>
-              <Image source={require("../pictures/darkish.png")} style={styles.shadowImage} />
+              <Image source={require("../pictures/darkish.png")} style={styles.shadowImage} /> 
               <View style={styles.swipesUserInfosContainer}>
                 {this.props.isEvent ? (
                   <Text style={styles.swipesUserInfo}>{this.props.displayName} in {this.state.time} </Text>
@@ -109,40 +103,28 @@ class NoMoreCards extends Component {
   }
 }
 
-// korttien data on tässä
+// Card data
 export default class extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      cards: props.vaihtoehdot,
+      cards: props.options,
     };
-    console.log("///");
-    console.log("///");
-    console.log("///");
-    console.log("///");
-    console.log("///");
-    console.log("///");
-    console.log(this.props);
   }
 
-  // konsoliin tieto mihin swipettiin
-  //lähetetään bäkkiin tieto että swipettiin tälle, parametreinä, swipeäjä ja swipettäjä + suunta.
+  // Swipe actions
   handleYup(card) {
-    console.log(card);
-    // this.PostSwipe(true)
     PostSwipe(true, card);
   }
   handleNope(card) {
     PostSwipe(false, card);
-    // PostSwipe(false)
   }
   handleMaybe(card) {
     console.log(`Maybe for ${card.text}`);
   }
 
   onClickHandler(){
-    console.log("ASdadsadasd")
+    // if needed long press triggers this
   }
 
   render() {
@@ -166,28 +148,24 @@ export default class extends React.Component {
   }
 }
 
+// Posts swiping result to backend, params swipe directions and user id
 function PostSwipe(liked, user) {
-  //Connectaa endpointiin, lähettää parametrinä omat hakutoiveet. Vaihtoehtona että bäkki itse noutas firebasesta mutta ei kai tarpeen?
   let myData = {
     data: {
       liked: liked,
-      target: user.uid, //korjaa findSwipeablesin blabla vanhaan.
-      isEvent: false, //tarviko tätä, eiks swipe nyt bäkissä automaattisesti katsonut et onks user vai event
+      target: user.uid,
+      isEvent: false, 
       swipeAs: null,
     },
     uid: global.myUserData.uid,
     idToken: global.myUserData.idToken,
   };
-  console.log("Swiped " + liked + " for " + user);
-  console.log(JSON.stringify(myData));
 
   fetch(global.url + "swipe", {
-    // fetch("http://192.168.56.1:5001/ohpro2-f30e5/us-central1/swipe" , {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    // body: JSON.stringify(body)
     body: JSON.stringify(myData),
   })
     .then((response) => response.json())
@@ -195,5 +173,4 @@ function PostSwipe(liked, user) {
       console.log(data);
     })
     .catch((err) => console.error(err));
-  //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
 }
