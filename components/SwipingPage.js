@@ -6,7 +6,7 @@ import * as Location from 'expo-location';
 import styles from '../styles';
 
 // User's tags, bio, name and photos. Name and age cant be changed
-export default function SwipingPage({ navigation, route }) {
+export default function SwipingPage({ navigation }) {
 
   const [swipeableFilter, setSwipeableFilter] = React.useState([]);
   const [swipeables, setSwipeables] = React.useState([]);

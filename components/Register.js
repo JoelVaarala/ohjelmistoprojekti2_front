@@ -14,7 +14,7 @@ export default function Register() {
   // this is the date shown in datepicker
   const [date, setDate] = React.useState(Date.now());
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  // you van find this function in App.js
+  // you can find this function in Navigation.js
   const { signIn } = React.useContext(AuthContext);
   // gender options for ButtonGorup
   const buttons = ["Man", "Woman", "Other"];

@@ -12,7 +12,7 @@ export default function Login({ navigation }) {
   // pw: secretPassword
   const [user, setUser] = React.useState("user@example.com");
   const [password, setPassword] = React.useState("secretPassword");
-  // you van find this function in App.js
+  // you can find this function in Navigation.js
   const { signIn } = React.useContext(AuthContext);
 
   return (
