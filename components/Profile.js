@@ -1,53 +1,36 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Avatar, ListItem, Button, ThemeProvider, ButtonGroup, Icon, Tooltip } from 'react-native-elements';
+import { Text, View, Image, ScrollView } from 'react-native';
+import { Avatar, ListItem, Overlay, Button, ThemeProvider, ButtonGroup, Icon, Tooltip } from 'react-native-elements';
 import { showMessage } from 'react-native-flash-message';
 import Carousel2 from './Carousel';
 import firebase from 'firebase';
+// import firestore from "@react-native-firebase/firestore";
+// import auth from "@react-native-firebase/auth";
 import styles from '../styles';
 
-
-// identical fetches in different funcs : 
-//
-// var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
-
-
-// User's tags, bio, name and photos. Name and age cant be changed
+//Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function Profile({ navigation, route }, props) {
   const [user, setUser] = React.useState({
     name: 'name',
-    age: 'age',
+    age: "-1",
     bio: 'bio'
   });
-  // Event data
   const [event, setEvent] = React.useState({
     name: 'name',
     bio: 'bio'
   });
 
-  const [attendees, setAttendees] = React.useState([]);
-
+  const [participiants, setParticipiants] = React.useState([]);
   const [peoplesWhoWantToJoin, setPeoplesWhoWantToJoin] = React.useState([]);
-
   // type can be used to define if mathc is user vs event
   const [type, setType] = React.useState('');
-
   const [pics, setPics] = React.useState([]);
-
   const [eventInfo, setEventInfo] = React.useState({
     participiants: [{ images: ['https://randomuser.me/api/portraits/med/women/1.jpg'] }]
   });
-
-  // true -> display user , false -> display event
-  const [view, setView] = React.useState(true);
-  const buttons = ['Attendees', 'Waiting'];
-
+  const [view, setView] = React.useState(true); // true -> display user __ false -> display event
+  const buttons = ['Participiants', 'Queued'];
   const [selectedIndex, setSelectedIndex] = React.useState({ main: 0 });
-
-  function updateIndex(name, value) {
-    setSelectedIndex({ ...selectedIndex, [name]: value });
-    console.log(name + ': ' + value);
-  }
 
   const theme = {
     colors: {
@@ -55,25 +38,19 @@ export default function Profile({ navigation, route }, props) {
     }
   };
 
-  // match doc id, that comes trough navigation from chat
-  let doc = route.params.userMatchProfile;
-  // CurrentUser
-  let cur_uid = firebase.auth().currentUser.uid;  // ---------- HOX HOX replace auth() call 
+  function updateIndex(name, value) {
+    setSelectedIndex({ ...selectedIndex, [name]: value });
+    console.log(name + ': ' + value);
+  }
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-    });
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
-  }, [navigation]);
-
-  React.useEffect(() => {
-    fetchMatchData();
+    getProfileInformation();
+    console.log('Profile.js useEfect (route.params.userMatchProfile) = ', route.params.userMatchProfile);
   }, []);
 
-  // Fetch match data from firebase
-  async function fetchMatchData() {
-    const find = await firebase.firestore().collection('matches').doc(doc);
+
+  async function getProfileInformation() {
+    const find = await firebase.firestore().collection('matches').doc(route.params.userMatchProfile);
     find.onSnapshot((query) => {
       let matchType = '';
       // CHECK : without this try-catch, after deleting match this function is triggered to search for deleted match document and causes crash
@@ -85,136 +62,142 @@ export default function Profile({ navigation, route }, props) {
       setType(matchType);
       let user = '';
       if (matchType == 'user') {
+        console.log('MatchType === user');
         setType('User');
         query.data().users.forEach((element) => {
-          if (element != cur_uid) {
+          console.log('forEach users in match when match type == user', element);
+          if (element != firebase.auth().currentUser.uid) {
             user = element;
           }
         });
-        fetchUser(user);
-
+        getUser(user);
       } else if (matchType == "event") {
+        console.log("MatchType === event");
         setType("Event");
-
-        fecthEvent();
-        fetchApplicants();
-        fetchAttendees();
+        getEvent();
+        getPeopleWhoWantToJoin();
+        getParticipiants();
       }
     });
   }
 
-  async function fetchUser(user) {
+  //get user data
+  async function getUser(user) {
     const ref = await firebase.firestore().collection('users').doc(user);
     ref.onSnapshot((qr) => {
-      // user data to userState
+      // tiedot viedään userStateen
       let name_f = qr.data().displayName;
       let age_f = qr.data().age;
       let bio_f = qr.data().bio;
       setUser({ name: name_f, age: age_f, bio: bio_f });
+      console.log('id from haeUser : ', qr.id);
       setPics(qr.data().images);
     });
   }
 
-  async function fecthEvent() {
+  //get event data
+  async function getEvent() {
     const ref = await firebase.firestore().collection('events').doc(route.params.userMatchProfile);
     ref.onSnapshot((qr) => {
-      // event data to eventState
+      // tiedot viedään userStateen
       let name_f = qr.data().displayName;
       let bio_f = qr.data().bio;
-
+      //let osallistujat_f = qr.data().
       setEvent({ name: name_f, bio: bio_f });
       setView(false);
+      console.log('id from haeEvent : ', qr.id);
     });
   }
 
-  async function fetchApplicants() {
-
+  async function getPeopleWhoWantToJoin() {
     var peopleWhoLikedMe = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("usersThatLikedMe").get();
-    var likers = peopleWhoLikedMe.data().swipes;
-    var peopleInQueue = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("mySwipes").get();
-    peopleInQueue = peopleInQueue.data().swipes;
+    var usersThatSwipedOnMe = peopleWhoLikedMe.data().swipes;
     var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
     usersAlreadyInEvent = usersAlreadyInEvent.data().users;
-    let peopleWhoSwiped = [];
-
-    likers.forEach((element) => {
-      peopleWhoSwiped.push(element.user);
+    let usersThatSwipedOnMeHelperArray = [];
+    usersThatSwipedOnMe.forEach((element) => {
+      usersThatSwipedOnMeHelperArray.push(element.user);
     });
 
-    peopleWhoSwiped = peopleWhoSwiped.filter(function (el) {
+    usersThatSwipedOnMeHelperArray = usersThatSwipedOnMeHelperArray.filter(function (el) {
       return !usersAlreadyInEvent.includes(el);
     });
 
-
-    var waitingToJoin = [];
-    if (peopleWhoSwiped.length !== 0) {
+    var finaldPeopleWhoWantToJoin = [];
+    if (usersThatSwipedOnMeHelperArray.length !== 0) {
+      //console.log("Enemmän ku 0");
       var query = await firebase.firestore()
         .collection("users")
-        .where(firebase.firestore.FieldPath.documentId(), "in", peopleWhoSwiped)
+        .where(firebase.firestore.FieldPath.documentId(), "in", usersThatSwipedOnMeHelperArray)
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
-
-            var result = doc.data();
-            result.uid = doc.id;
-            waitingToJoin.push(doc.data());
+            var data = doc.data();
+            data.uid = doc.id;
+            finaldPeopleWhoWantToJoin.push(doc.data());
           });
         });
     }
-    setPeoplesWhoWantToJoin(waitingToJoin);
+    setPeoplesWhoWantToJoin(finaldPeopleWhoWantToJoin);
   }
 
-  async function fetchAttendees() {
+  async function getParticipiants()
+  {
     var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
-    let attendeeList = [];
-    attendeeList = usersAlreadyInEvent.data().users;
-
-    let confirmedAttendees = [];
-    if (attendeeList.length !== 0) {
-
+    let participiantList = [];
+    participiantList = usersAlreadyInEvent.data().users;
+    let finalParticipiantList = [];
+    if (participiantList.length !== 0) {
+      console.log("Enemmän ku 0");
       var query = await firebase.firestore()
         .collection("users")
-        .where(firebase.firestore.FieldPath.documentId(), "in", attendeeList)
+        .where(firebase.firestore.FieldPath.documentId(), "in", participiantList)
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
-
-            var userData = doc.data();
-            userData.uid = doc.id;
-
-            confirmedAttendees.push(doc.data());
+            var asd = doc.data();
+            asd.uid = doc.id;
+            finalParticipiantList.push(doc.data());
           });
         });
     }
-    attendees.forEach(element => {
-      if (element.images.length === 0) {
-        element.images.append("https://randomuser.me/api/portraits/med/women/1.jpg");
+    finalParticipiantList.forEach(element => {
+      if(element.images.length === 0)
+      {
+        element.images.append("https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg");
       }
     });
-    setAttendees(confirmedAttendees);
+    console.log("lopullinen osallistujalista", finalParticipiantList)
+    setParticipiants(finalParticipiantList);
   }
 
 
-  function Accept(accepted, uid) {
-    console.log(accepted, uid)
+  //Call /swipe endpoint where event swipes yes to user
+  function Accept(accepted, uid)
+  {
+    console.log(accepted,uid)
   }
 
-  function Kick(uid) {
-    //unmatch
+  //call /removematch endpoint where match unmatches target
+  function Kick(uid)
+  {
+     //unmatchataan
   }
 
-
-  function LazyChoice() {
-    if (selectedIndex.main === 0) {
-      return Attending()
-    }
-    return Applicants();
-  }
-
-  // Only event owner have button to "kick" persons
-  function Applicants() {
+  //selects which one list to show, participiants or peoplesinqueue
+  function LazyChoice()
+  {
+    if(selectedIndex.main === 0)
     {
+      return Participiants()
+    } 
+    return PeoplesInQueue();
+  }
 
+  //ainoastaan eventin omistaja näkee buttonin jolla voi kickata osallistujan
+  function PeoplesInQueue() {
+    {
+      //console.log("jooh", osallistujat)
       return peoplesWhoWantToJoin.map((l, i) => (
         <ListItem key={i} bottomDivider>
           <Avatar source={{ uri: l.images[0] }} />
@@ -236,7 +219,7 @@ export default function Profile({ navigation, route }, props) {
                 color: "red",
               }}
             />
-            <Button //tää on kicki button
+                        <Button //tää on kicki button
               type="outline"
               raised={true}
               onPress={() => Accept(false, l.uid)}
@@ -252,9 +235,10 @@ export default function Profile({ navigation, route }, props) {
     }
   }
 
-  function Attending() {
+  function Participiants() {
     {
-      return attendees.map((l, i) => (
+      //console.log("jooh", osallistujat)
+      return participiants.map((l, i) => (
         <ListItem key={i} bottomDivider>
           <Avatar source={{ uri: l.images[0] }} />
           <ListItem.Content>
@@ -282,15 +266,15 @@ export default function Profile({ navigation, route }, props) {
     }
   }
 
-  // removeMatch function
-  const removeMatch = (match, id) => {
+  // Matchin poisto funkari
+  const removeMatch = (asd, qwe) => {
     let url = global.url + 'removeMatch';
     let bodi = {
       idToken: global.myUserData.idToken,
       data: {
-        match: match
+        match: asd
       },
-      uid: id
+      uid: qwe
     };
 
     console.log(bodi);
@@ -303,10 +287,6 @@ export default function Profile({ navigation, route }, props) {
       },
       body: JSON.stringify(bodi)
     })
-      .then((response) => response.json())
-      .then((res) => {
-        console.log('match deleted')
-      })
       .catch((err) => console.error(err));
     showUnavaible();
   };
@@ -314,6 +294,7 @@ export default function Profile({ navigation, route }, props) {
   const showDeleted = (asd, qwe) => {
     showMessage({
       message: 'Match deleted',
+      //description: "this is unfortunate",
       description: qwe,
       type: 'default',
       duration: 1850,
@@ -325,7 +306,7 @@ export default function Profile({ navigation, route }, props) {
   const showUnavaible = (asd, qwe) => {
     showMessage({
       message: 'Match delete unsuccessful',
-      description: 'something went wrong',
+      description: 'moi',
       type: 'default',
       duration: 1850,
       backgroundColor: 'pink',
@@ -334,10 +315,10 @@ export default function Profile({ navigation, route }, props) {
   };
 
   const deleteRoute = () => {
-    let userMatchProfile = route.params.userMatchProfile;
-    let currentUserId = cur_uid;
-    showDeleted(userMatchProfile, currentUserId);
-    removeMatch(userMatchProfile, currentUserId);
+    let userToDelete = route.params.userMatchProfile;
+    let myUID = firebase.auth().currentUser.uid;
+    showDeleted(userToDelete, myUID);
+    removeMatch(userToDelete, myUID);
     navigation.popToTop();
   };
 
@@ -381,13 +362,13 @@ export default function Profile({ navigation, route }, props) {
             kuvat={pics}
             style={
               styles.flexOne
+              //styles.carouselImageSize
             }
           />
         </View>
       ) : (
-          <View>{/* Here event pics eventually */}</View>
-        )}
-
+        <View>{/* Tähän eventille kuva systeemit, kun eventin tiedoista niitä alkaa löytymään*/}</View>
+      )}
       <View style={styles.flexThree}>
         {view ? (
           <View>
@@ -397,7 +378,6 @@ export default function Profile({ navigation, route }, props) {
             <Text style={styles.tagTextInput}>{user.bio}</Text>
           </View>
         ) : (
-
             <View>
               <Text style={styles.userTextStyle}>{event.name}</Text>
               <Text style={styles.userBioStyle}>{event.bio}</Text>
@@ -410,12 +390,10 @@ export default function Profile({ navigation, route }, props) {
                   containerStyle={[styles.background, styles.heightForty]}
                 />
               </ThemeProvider>
-              <LazyChoice />
+              <LazyChoice></LazyChoice>
             </View>
           )}
-
       </View>
-
     </View>
   );
 }
