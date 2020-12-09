@@ -38,19 +38,13 @@ export default function Profile({ navigation, route }, props) {
     }
   };
 
-
   function updateIndex(name, value) {
     setSelectedIndex({ ...selectedIndex, [name]: value });
     console.log(name + ': ' + value);
   }
 
-
-
-
   React.useEffect(() => {
-    //console.log('useEffect chat.js saatu id : ' , props)
     getProfileInformation();
-    //console.log("Current user id = ", firebase.auth().currentUser.uid);
     console.log('Profile.js useEfect (route.params.userMatchProfile) = ', route.params.userMatchProfile);
   }, []);
 
@@ -116,21 +110,15 @@ export default function Profile({ navigation, route }, props) {
   }
 
   async function getPeopleWhoWantToJoin() {
-    console.log("Haetaan hakijat")
     var peopleWhoLikedMe = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("usersThatLikedMe").get();
     var usersThatSwipedOnMe = peopleWhoLikedMe.data().swipes;
-    //var peopleInQueue = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("mySwipes").get();
-    //peopleInQueue = peopleInQueue.data().swipes;
     var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
     usersAlreadyInEvent = usersAlreadyInEvent.data().users;
-    //console.log(usersAlreadyInEvent);
     let usersThatSwipedOnMeHelperArray = [];
-    //miksei vaa
     usersThatSwipedOnMe.forEach((element) => {
       usersThatSwipedOnMeHelperArray.push(element.user);
     });
 
-    //console.log("jotakin",temppia);
     usersThatSwipedOnMeHelperArray = usersThatSwipedOnMeHelperArray.filter(function (el) {
       return !usersAlreadyInEvent.includes(el);
     });
@@ -155,34 +143,32 @@ export default function Profile({ navigation, route }, props) {
 
   async function getParticipiants()
   {
-    console.log("Route",route.params.chet);
     var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
-    let osallistujalista = [];
-    osallistujalista = usersAlreadyInEvent.data().users;
-    console.log("osallistujalista", osallistujalista);
-    let lopulliset = [];
-    if (osallistujalista.length !== 0) {
+    let participiantList = [];
+    participiantList = usersAlreadyInEvent.data().users;
+    let finalParticipiantList = [];
+    if (participiantList.length !== 0) {
       console.log("Enemmän ku 0");
       var query = await firebase.firestore()
         .collection("users")
-        .where(firebase.firestore.FieldPath.documentId(), "in", osallistujalista)
+        .where(firebase.firestore.FieldPath.documentId(), "in", participiantList)
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
             var asd = doc.data();
             asd.uid = doc.id;
-            lopulliset.push(doc.data());
+            finalParticipiantList.push(doc.data());
           });
         });
     }
-    participiants.forEach(element => {
+    finalParticipiantList.forEach(element => {
       if(element.images.length === 0)
       {
         element.images.append("https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg");
       }
     });
-    console.log("lopullinen osallistujalista", lopulliset)
-    setParticipiants(lopulliset);
+    console.log("lopullinen osallistujalista", finalParticipiantList)
+    setParticipiants(finalParticipiantList);
   }
 
 
@@ -301,11 +287,6 @@ export default function Profile({ navigation, route }, props) {
       },
       body: JSON.stringify(bodi)
     })
-      .then((response) => response.json())
-      .then((res) => {
-        console.log('.then res ->', res);
-        console.log('MATCHIN POISTO FUNKKARI LÄPI');
-      })
       .catch((err) => console.error(err));
     showUnavaible();
   };
@@ -334,10 +315,10 @@ export default function Profile({ navigation, route }, props) {
   };
 
   const deleteRoute = () => {
-    let asd = route.params.userMatchProfile;
-    let qwe = firebase.auth().currentUser.uid;
-    showDeleted(asd, qwe);
-    removeMatch(asd, qwe);
+    let userToDelete = route.params.userMatchProfile;
+    let myUID = firebase.auth().currentUser.uid;
+    showDeleted(userToDelete, myUID);
+    removeMatch(userToDelete, myUID);
     navigation.popToTop();
   };
 
