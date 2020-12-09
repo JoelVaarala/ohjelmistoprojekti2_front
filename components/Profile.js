@@ -32,16 +32,18 @@ export default function Profile({ navigation, route }, props) {
   const buttons = ['Participiants', 'Queued'];
   const [selectedIndex, setSelectedIndex] = React.useState({ main: 0 });
 
-  function updateIndex(name, value) {
-    setSelectedIndex({ ...selectedIndex, [name]: value });
-    console.log(name + ': ' + value);
-  }
-
   const theme = {
     colors: {
       primary: 'black'
     }
   };
+
+
+  function updateIndex(name, value) {
+    setSelectedIndex({ ...selectedIndex, [name]: value });
+    console.log(name + ': ' + value);
+  }
+
 
 
 
@@ -75,12 +77,9 @@ export default function Profile({ navigation, route }, props) {
           }
         });
         getUser(user);
-
       } else if (matchType == "event") {
         console.log("MatchType === event");
         setType("Event");
-        //setOsallistujat(query.data().users);
-
         getEvent();
         getPeopleWhoWantToJoin();
         getParticipiants();
@@ -88,6 +87,7 @@ export default function Profile({ navigation, route }, props) {
     });
   }
 
+  //get user data
   async function getUser(user) {
     const ref = await firebase.firestore().collection('users').doc(user);
     ref.onSnapshot((qr) => {
@@ -101,6 +101,7 @@ export default function Profile({ navigation, route }, props) {
     });
   }
 
+  //get event data
   async function getEvent() {
     const ref = await firebase.firestore().collection('events').doc(route.params.userMatchProfile);
     ref.onSnapshot((qr) => {
@@ -117,43 +118,39 @@ export default function Profile({ navigation, route }, props) {
   async function getPeopleWhoWantToJoin() {
     console.log("Haetaan hakijat")
     var peopleWhoLikedMe = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("usersThatLikedMe").get();
-    var lol = peopleWhoLikedMe.data().swipes;
-    var peopleInQueue = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("mySwipes").get();
-    peopleInQueue = peopleInQueue.data().swipes;
+    var usersThatSwipedOnMe = peopleWhoLikedMe.data().swipes;
+    //var peopleInQueue = await firebase.firestore().collection("events").doc(route.params.userMatchProfile).collection("swipes").doc("mySwipes").get();
+    //peopleInQueue = peopleInQueue.data().swipes;
     var usersAlreadyInEvent = await firebase.firestore().collection("matches").doc(route.params.userMatchProfile).get();
     usersAlreadyInEvent = usersAlreadyInEvent.data().users;
-    console.log(usersAlreadyInEvent);
-    let temppia = [];
+    //console.log(usersAlreadyInEvent);
+    let usersThatSwipedOnMeHelperArray = [];
     //miksei vaa
-    lol.forEach((element) => {
-      temppia.push(element.user);
+    usersThatSwipedOnMe.forEach((element) => {
+      usersThatSwipedOnMeHelperArray.push(element.user);
     });
 
-    console.log("jotakin",temppia);
-    temppia = temppia.filter(function (el) {
+    //console.log("jotakin",temppia);
+    usersThatSwipedOnMeHelperArray = usersThatSwipedOnMeHelperArray.filter(function (el) {
       return !usersAlreadyInEvent.includes(el);
     });
-    console.log(temppia);
 
-    var lopulliset = [];
-    if (temppia.length !== 0) {
-      console.log("Enemmän ku 0");
+    var finaldPeopleWhoWantToJoin = [];
+    if (usersThatSwipedOnMeHelperArray.length !== 0) {
+      //console.log("Enemmän ku 0");
       var query = await firebase.firestore()
         .collection("users")
-        .where(firebase.firestore.FieldPath.documentId(), "in", temppia)
+        .where(firebase.firestore.FieldPath.documentId(), "in", usersThatSwipedOnMeHelperArray)
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
-
             var asd = doc.data();
             asd.uid = doc.id;
-            lopulliset.push(doc.data());
+            finaldPeopleWhoWantToJoin.push(doc.data());
           });
         });
     }
-    console.log("Lopulliset hakijat", lopulliset);
-    setPeoplesWhoWantToJoin(lopulliset);
-
+    setPeoplesWhoWantToJoin(finaldPeopleWhoWantToJoin);
   }
 
   async function getParticipiants()
@@ -172,10 +169,8 @@ export default function Profile({ navigation, route }, props) {
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
-
             var asd = doc.data();
             asd.uid = doc.id;
-            
             lopulliset.push(doc.data());
           });
         });
@@ -188,21 +183,22 @@ export default function Profile({ navigation, route }, props) {
     });
     console.log("lopullinen osallistujalista", lopulliset)
     setParticipiants(lopulliset);
-
   }
 
 
+  //Call /swipe endpoint where event swipes yes to user
   function Accept(accepted, uid)
   {
     console.log(accepted,uid)
   }
 
+  //call /removematch endpoint where match unmatches target
   function Kick(uid)
   {
      //unmatchataan
   }
 
-
+  //selects which one list to show, participiants or peoplesinqueue
   function LazyChoice()
   {
     if(selectedIndex.main === 0)
@@ -345,13 +341,7 @@ export default function Profile({ navigation, route }, props) {
     navigation.popToTop();
   };
 
-  const log = () => {
-    //navigation.navigate("Matches");
-    //showDeleted();
-  };
 
-  //<Icon name="dots-vertical" type='material-community' color='#FFA500'/>
-  //<Text onPress={log} style={{color: 'grey', fontWeight: 'bold'}}>Unmatch</Text>
   return (
     <View style={[styles.alignItemsCenter, styles.background]}>
       <View style={{ marginLeft: '80%', alignItems: 'flex-start' }}>
@@ -398,7 +388,6 @@ export default function Profile({ navigation, route }, props) {
       ) : (
         <View>{/* Tähän eventille kuva systeemit, kun eventin tiedoista niitä alkaa löytymään*/}</View>
       )}
-
       <View style={styles.flexThree}>
         {view ? (
           <View>
@@ -408,7 +397,6 @@ export default function Profile({ navigation, route }, props) {
             <Text style={styles.tagTextInput}>{user.bio}</Text>
           </View>
         ) : (
-
             <View>
               <Text style={styles.userTextStyle}>{event.name}</Text>
               <Text style={styles.userBioStyle}>{event.bio}</Text>
@@ -424,10 +412,7 @@ export default function Profile({ navigation, route }, props) {
               <LazyChoice></LazyChoice>
             </View>
           )}
-
       </View>
-
-      {/* <ScrollView>{view ? (<Text>true</Text>) : (<Text>false</Text>)} </ScrollView> */}
     </View>
   );
 }
