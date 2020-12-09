@@ -132,8 +132,8 @@ export default function Profile({ navigation, route }, props) {
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
-            var asd = doc.data();
-            asd.uid = doc.id;
+            var data = doc.data();
+            data.uid = doc.id;
             finaldPeopleWhoWantToJoin.push(doc.data());
           });
         });
