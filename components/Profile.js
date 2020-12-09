@@ -30,7 +30,7 @@ export default function Profile({ navigation, route }, props) {
   });
   const [view, setView] = React.useState(true); // true -> display user __ false -> display event
   const buttons = ['Participiants', 'Queued'];
-  const [selectedIndex, setSelectedIndex] = React.useState({ main: 0 });
+  const [selectedIndex, setSelectedIndex] = React.useState( 0 );
 
   const theme = {
     colors: {
@@ -38,10 +38,6 @@ export default function Profile({ navigation, route }, props) {
     }
   };
 
-  function updateIndex(name, value) {
-    setSelectedIndex({ ...selectedIndex, [name]: value });
-    console.log(name + ': ' + value);
-  }
 
   React.useEffect(() => {
     getProfileInformation();
@@ -187,7 +183,7 @@ export default function Profile({ navigation, route }, props) {
   //selects which one list to show, participiants or peoplesinqueue
   function LazyChoice()
   {
-    if(selectedIndex.main === 0)
+    if(selectedIndex === 0)
     {
       return Participiants()
     } 
@@ -367,7 +363,7 @@ export default function Profile({ navigation, route }, props) {
           />
         </View>
       ) : (
-        <View>{/* Tähän eventille kuva systeemit, kun eventin tiedoista niitä alkaa löytymään*/}</View>
+        <View></View>
       )}
       <View style={styles.flexThree}>
         {view ? (
@@ -384,8 +380,8 @@ export default function Profile({ navigation, route }, props) {
               <ThemeProvider theme={theme}>
 
                 <ButtonGroup
-                  onPress={(value) => updateIndex("main", value)}
-                  selectedIndex={selectedIndex.main}
+                  onPress={(value) => setSelectedIndex(value)}
+                  selectedIndex={selectedIndex}
                   buttons={buttons}
                   containerStyle={[styles.background, styles.heightForty]}
                 />
