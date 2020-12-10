@@ -19,7 +19,7 @@ import { View } from "react-native";
 import firebase from "firebase";
 import { Icon } from "react-native-elements";
 import { connect } from "react-redux";
-import { store, test, userData } from "../redux/index";
+import { store, userData, addToken } from "../redux/index";
 import FlashMessage from "react-native-flash-message";
 import * as Location from "expo-location";
 import "./Globaalit";
@@ -107,8 +107,12 @@ function Navigations() {
             return 'No acces to location';
         }
 
+        //store.dispatch(userData(firebase.auth().currentUser.uid))
+        store.dispatch(userData(userPromise.user.uid))
+        
         global.myUserData.uid = userPromise.user.uid;
         let idToken = await firebase.auth().currentUser.getIdToken(true);
+        store.dispatch(addToken(idToken))
         global.myUserData.idToken = idToken;
         return 'Success';
     };
@@ -262,8 +266,9 @@ function Navigations() {
 
 const mapStateToProps = (state) => ({
     UserReducer: state.UserReducer,
+    TokenReducer: state.TokenReducer
 });
 // Component connects to reducer and receives params state, action and main function
-const Navigation = connect(mapStateToProps, { userData, test })(Navigations);
+const Navigation = connect(mapStateToProps, { userData, addToken })(Navigations);
 // Export default const above instead of "main function"
 export default Navigation;

@@ -3,7 +3,7 @@ import { Text, View, TextInput, FlatList, ScrollView, Alert } from "react-native
 import { Button } from "react-native-elements";
 import DatePicker from "react-native-date-picker";
 import { connect } from "react-redux";
-import { store, addEvent } from "../redux/index";
+import { store, userData, addToken } from "../redux/index";
 import styles from "../styles";
 import { showMessage } from "react-native-flash-message";
 import MapView, { Marker } from "react-native-maps";
@@ -297,6 +297,7 @@ function Add_Events({ navigation, route }, props) {
                 title="confirm address" 
                 onPress={() => setView(true)} 
               />
+              <Button title="log" onPress={() => console.log('This is uid from store : ' , store.getState().UserReducer, ' This is token from store :  ' , store.getState().TokenReducer)}/>
             </View>
           </View>)}
     </ScrollView>
@@ -305,9 +306,10 @@ function Add_Events({ navigation, route }, props) {
 
 // hox! Reducer not currently being used 
 const mapStateToProps = (state) => ({
-  EventReducer: state.EventReducer,
+  UserReducer: state.UserReducer,
+  TokenReducer: state.TokenReducer
 });
 // Component connects to reducer and receives params state, action and main function
-const Add_Event = connect(mapStateToProps, { addEvent })(Add_Events);
+const Add_Event = connect(mapStateToProps, { userData, addToken })(Add_Events);
 // Export default const above instead of "main function"
 export default Add_Event;

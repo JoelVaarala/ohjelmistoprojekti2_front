@@ -19,10 +19,14 @@ opentest (post) | input| Output | Endpoint to manually get/update helsinki open 
 
 
 # Add_Event
-Blaa blaa blaa, blaa blaa blaa.
-Blaa :)
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+sendEvent() | date(date), eventName(String), desccription(String), tags(Array) | - | POST - user created event based on user inputs.
+fetchAddress() | latitude, longitude | - | Fetches address information based on location coordinates, sets Address to be city and street for given coordinates.
+fethcCoordinates() | newAddress(String) | - | Updates marker on the map view to show newly searched location and updates Address to be latest selected location.
+showInvalid() | msg(String) | notification | User will be prompted with invalid input indicator if event validation criterias are not fullfilled.
+showSuccess() | - | - | Green indicator message for successfully created event.
+showFail() | - | - | Red indicator message to let user know that the event creation failed.
 
 Props | Type | Optional | Description
 ------------ | ------------- |  ------------- | -------------
@@ -34,16 +38,18 @@ Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Carousel
-Blaa blaa blaa, blaa blaa blaa.
-Blaa :)
+Component to display profile photos in scrollable "carousel" view
+
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Chat
-Blaa blaa blaa, blaa blaa blaa.
-Blaa :)
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+MessageToFirebase() | msg(Obj) | - | POST - latest message to firebase.
+getConversationsRealTime() | - | messages(Array) | Fetches and creates array including all of the messages from the conversation. Also sorts them according sender to which side are rendered.
+onSend() | messages(Array) | messages(Array) | Appends messages array by latest messages and updates GiftedChat to render newest message.
+
 
 # EditProfile
 Blaa blaa blaa, blaa blaa blaa.

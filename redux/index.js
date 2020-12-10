@@ -1,42 +1,9 @@
 import { combineReducers ,createStore} from 'redux';
 
-// actions, näitä actioneita kutsutaan komponenteissa
-// välittävät dispatchin avulla arvot storeen ja alla oleviin reducer functioihin -> stateen 
+// Actions
+// delivers data by using dispatch within components for the reducers and ultimately store
 
-export const addItem = (value) => {
-    return{
-        type: "ADD",
-        item: value
-    }
-}
-// Tämä käytössä, vastaan ottaa olion joka sisältää käyttäjän syöttämät tiedot
-export const addEvent = (value) => {
-    return {
-        type: "eventti",
-        payload: value 
-    }
-}
-
-
-// reducer, or multiple reducers 
-const EventReducer = (state, action) => {
-    //if(state === undefined){
-     //   state = []
-    //}
-    // for now empty state for every new event is fine
-    // possibly we can make different reducer for updates if needed / wanted
-    state=[]    
-    switch(action.type) {
-        case "ADD1":
-            return state.concat(action.item)
-            //return state.splice(1,0,action.item);
-        case "eventti":
-            return state.concat(action.payload);
-        default:
-            return state;
-    } 
-}
-
+// stores user id
 export const userData = (value) => {
     return {
         type: "addUid",
@@ -44,12 +11,17 @@ export const userData = (value) => {
     }
 }
 
-export const test = (value) => {
+// Takes token as input 
+export const addToken = (value) => {
     return {
-        type: "test",
+        type: "addToken",
         item: value
     }
 }
+
+
+// Reducers
+// includes logic and updates states
 
 const UserReducer = (state, action) => {
     if(state === undefined){
@@ -58,18 +30,29 @@ const UserReducer = (state, action) => {
     switch(action.type){
         case "addUid":
             return state.concat(action.item);
-        case "test":
+        default:
+            return state;
+    }
+}
+
+const TokenReducer = (state, action) => {
+    if(state === undefined){
+        state = [];
+    }
+    switch(action.type){
+        case "addToken":
             return state.concat(action.item);
         default:
             return state;
     }
 }
-// root reducer
-// if need more than 1 reducer add here
+
+
+// root reducer that has all individual reducers wrapped is easier to use with multiple classes
 export const rootReducer = combineReducers({
-    EventReducer,
-    UserReducer
+    UserReducer,
+    TokenReducer
 })
 
-// store, wrapattu koko Appin ympärille <Provider> avulla -> mahdollistaa storen olevan saatavilla kaikista komponenteista käsin
+// store, that has all the data is "wrapped around" main component of the app via <Provider> so all files have access to the store
 export const store = createStore(rootReducer)
