@@ -28,10 +28,7 @@ Props | Type | Optional | Description
 ------------ | ------------- |  ------------- | -------------
 
 # AuthContext
-Blaa blaa blaa, blaa blaa blaa.
-Blaa :)
-Function | Input | Output | Description
------------- | ------------- |  ------------- | -------------
+AuthContext allows access to SignIn() and SignOut() functions from Navigation.js to other components.
 
 # Carousel
 Blaa blaa blaa, blaa blaa blaa.
@@ -55,6 +52,12 @@ Function | Input | Output | Description
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
+# Login
+Login page where you can login or go register as a new user.
+Function | Input | Output | Description
+------------ | ------------- |  ------------- | -------------
+SignIn() | email (String), password (String) | none | Check Navigation from more info
+
 # Matches
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
@@ -63,7 +66,12 @@ Function | Input | Output | Description
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
+# Navigation
+Function | Input | Output | Description
+------------ | ------------- |  ------------- | -------------
+
 # Register
+Registering page for new users.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
@@ -72,10 +80,6 @@ Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # SortableList
-Function | Input | Output | Description
------------- | ------------- |  ------------- | -------------
-
-# Startup
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
