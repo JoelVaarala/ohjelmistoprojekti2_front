@@ -29,7 +29,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 
-// with this you can get rid of 'Setting a timer...' warnings, no solution found yet https://github.com/facebook/react-native/issues/12981
+// with this you can get rid of 'Setting a timer...' warnings, no solution found yet for this warning https://github.com/facebook/react-native/issues/12981
 YellowBox.ignoreWarnings(['Setting a timer']);
 
 function Navigations() {
@@ -156,7 +156,7 @@ function Navigations() {
 
     // navigation stacks
 
-    const ProfiiliSettingsStack = ({ navigation, route }) => {
+    const ProfileAndSettingsStack = ({ navigation, route }) => {
         // with this bottomtab navigationbar is only shown on the first page of the navigation stack
         navigation.setOptions({ tabBarVisible: route.state ? (route.state.index == 0 ? true : false) : true });
         return (
@@ -242,7 +242,7 @@ function Navigations() {
                         >
                             <Tab.Screen name="Matches" component={MatchStack} />
                             <Tab.Screen name="Swipes" component={SwipeStack} />
-                            <Tab.Screen name="Profile" component={ProfiiliSettingsStack} />
+                            <Tab.Screen name="Profile" component={ProfileAndSettingsStack} />
                         </Tab.Navigator>
                     ) : (
                             <Stack.Navigator>

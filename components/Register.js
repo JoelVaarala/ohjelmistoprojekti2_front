@@ -25,8 +25,12 @@ export default function Register() {
     inputChanged("age", unixAge);
   }, [date]);
 
+  function inputChanged(inputName, inputValue) {
+    setUserdata({ ...userdata, [inputName]: inputValue });
+  }
+
   // converts the index of ButtonGroup to gender value
-  function genderConvert(name, value) {
+  function genderConvert(value) {
     let gender;
     if (value === 0) {
       gender = "male";
@@ -36,11 +40,7 @@ export default function Register() {
       gender = "other";
     }
     setSelectedIndex(value);
-    inputChanged(name, gender);
-  }
-
-  function inputChanged(inputName, inputValue) {
-    setUserdata({ ...userdata, [inputName]: inputValue });
+    inputChanged("gender", gender);
   }
 
   // this function hides/shows the password and changes the icon
@@ -151,7 +151,7 @@ export default function Register() {
         </Text>
 
         <ButtonGroup
-          onPress={(value) => genderConvert("gender", value)}
+          onPress={(value) => genderConvert(value)}
           selectedIndex={selectedIndex}
           buttons={buttons}
           containerStyle={styles.heightForty}
