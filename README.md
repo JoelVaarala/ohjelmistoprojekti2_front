@@ -327,7 +327,7 @@ Function | Input | Output | Description
 timeUntillEvent() | - | String | Check Navigation for more info
 calculateDistance() | - | int | Calculate the time when event is starting from now
 separatedTags() | - | any | Returns tags in more displayable form for the card
-handleYup() card(any)  | boolean | User swipes card to the right and triggers PostSwipe() 
+handleYup() | card(any)  | boolean | User swipes card to the right and triggers PostSwipe() 
 handleNope() | card(any) | boolean | User swipes card to the left and triggers PostSwipe() 
 PostSwipe() | liked(any), user(any) | - | Posts swiping result to backend, params swipe directions and user id
 
