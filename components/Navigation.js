@@ -119,7 +119,7 @@ function Navigations() {
         if (status !== 'granted') {
             return 'No acces to location';
         }
-        let location = await (await Location.getCurrentPositionAsync({})).coords;
+        let location = (await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High })).coords;
         global.myUserData.filters.myLocation = {
             latitude: location.latitude,
             longitude: location.longitude
