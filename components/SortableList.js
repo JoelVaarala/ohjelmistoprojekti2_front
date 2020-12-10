@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Animated, Easing, StyleSheet, Text, Image, View, Dimensions, Platform, PickerIOS, } from 'react-native';
-import { onChange } from 'react-native-reanimated';
+import { Animated, Easing, StyleSheet, Image, View, Dimensions, Platform } from 'react-native';
 import SortableList from 'react-native-sortable-list';
 
 const window = Dimensions.get('window');
@@ -8,25 +7,21 @@ const window = Dimensions.get('window');
 export default class Horizontal extends Component {
 
   constructor(props) {
-    console.log(' LOOK HERE   ', props.kuvat)
     super(props);
     this.state = {
-      data: this.props.kuvat,
+      data: this.props.images,
       order: this.props.order,
     };
   }
 
   sendData = () => {
-    this.props.parentCallback(TallennaData(this.state.order, this.state.data))
+    this.props.parentCallback(saveData(this.state.order, this.state.data))
   }
 
   render() {
     let onChangeOrder = (nextOrder) => {
       this.setState({ order: nextOrder })
-      const ordar = nextOrder;
-      // console.log("jeejee", nextOrder)
-      const images = this.props.kuvat
-      //  console.log("ÖÖÖÖÖÖÖÖÖÖ", images)
+      const images = this.props.images
       return images;
     }
 
@@ -37,8 +32,7 @@ export default class Horizontal extends Component {
           style={styles.list}
           scrollEnabled={false}
           contentContainerStyle={styles.contentContainer}
-          data={this.props.kuvat}
-          // order={this.props.order}
+          data={this.props.images}
           onChangeOrder={onChangeOrder}
           onReleaseRow={this.sendData}
           renderRow={this._renderRow} />
@@ -97,7 +91,6 @@ class Row extends Component {
       }).start();
     }
   }
-
 
   render() {
     const { data, active } = this.props;
@@ -187,11 +180,8 @@ const styles = StyleSheet.create({
   },
 });
 
+function saveData(order, images) {
 
-function TallennaData(order, images) {
-
-  console.log(order)
-  console.log(images)
   const pictures = []
 
   for (let i = 0; i < images.length; i++) {
