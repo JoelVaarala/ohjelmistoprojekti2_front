@@ -77,6 +77,18 @@ login() | email (String), password (String) | String | Tries to login to firebas
 UpdateLocation() | - | String | Asks premission to users location and send location object to UpdateFirebase(). Returns confirmation or denial string depending if access was granted
 UpdateFirebase() | location (object) | - | Send users location to firebase. Location object has latitude and longitude attributes
 
+# Profile
+Function | Input | Output | Description
+------------ | ------------- |  ------------- | -------------
+getProfileInformation() |   |   |   Fetches current profiles informations: Profile information, event information and event particiapiants
+getUser() | user (String) | |  Fetches users profile data.
+getEvent() |  | |  Fetches events profile data using route params userMatchProfile parameter
+getPeopleWhoWantToJoin() | | | Fetches users that have swiped yes to event but are not swiped by event. Only called when profile type is event.
+getParticipiants() | | | Fetches users that are participiating to event. Only callen when profile type is event
+Accept() | accepted (boolean), uid (String) | | TBD: Function should swipe yes/no to user based on boolean as a event.
+Kick() | uid (String) | | TBD: Function unmatches target user with currently selected event.
+removeMatch() | target(String) , myUID(String) |  | Removes match (person-person match)
+
 # Register
 Registering page for new users.
 Function | Input | Output | Description
