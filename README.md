@@ -246,10 +246,13 @@ Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # EditProfile
-Blaa blaa blaa, blaa blaa blaa.
-Blaa :)
+Edit profile page shows users information: name, age, bio, tags and pictures. You can change bio and tags and the order of the images. First image is showing as your avatar to other users.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+getData() | - | - | Fetches user's settings from firebase
+saveData() | - | - | Posts user's settings. Fires every time screen goes out of focus.
+callBack() | childData (Array) | - | Callback is used for updating data from Sortablelist. When the order of images in Sortablelist change, callBack sends this information to the Edit profile page
+CreateSortableList() | - | SortableList-component | This function gets fresh data to Sortablelist
 
 # Globaalit
 Function | Input | Output | Description
@@ -266,8 +269,10 @@ Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # MyProfile
+MyProfile shows your name, age and avatar. Here you can move to Settings or Edit profile page, upload a new picture (not currently working) or move to create a new event.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+getData() | - | - | Fetches user's information: age, name and avatar picture from firebase. Fires every time screen becomes focused.
 
 # Navigation
 Handles authentication and different navigation views based on login status.
@@ -304,8 +309,12 @@ registerUser() | - | - | Tries to register new user. If registration is successf
 validation() | - | boolean | Validates if password, age and username is within given limits. Returns true if everyting is correct
 
 # Settings
+Settings page shows your filters for swipeable users and events in Swiping page. You can filter age, distance, gender and time and choose tags as filters. 
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+getData() | - | - | Fetches user's settings from firebase.
+saveData() | - | - | Posts user's settings. Fires every time screen goes out of focus.
+updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGroups button was pressed (main or sub) and value is the index
 
 # SortableList
 Function | Input | Output | Description

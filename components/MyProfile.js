@@ -5,36 +5,33 @@ import ImagePicker from 'react-native-image-picker';
 import firebase from 'firebase';
 import styles from '../styles';
 
-//Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function MyProfile({ navigation, route }) {
-  const [userTiedot, setUserTiedot] = useState({
+  const [user, setUser] = useState({
     age: 0,
     bio: '',
     name: '',
     pic: ''
   });
 
+  // Fetching data when screen becomes focused
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      HaeTiedot();
+     getData();
     });
     return unsubscribe;
   }, [navigation])
 
-  const HaeTiedot = async () => {
+  const getData = async () => {
     const ref = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid);
     const doc = await ref.get();
     if (!doc.exists) {
-      console.log('document not found');
     } else {
-      console.log('success HERE HERE ::::', doc.data());
-      setUserTiedot({
+      setUser({
         age: doc.data().age,
         bio: doc.data().bio,
         name: doc.data().displayName,
         pic: doc.data().images[0]
       });
-      console.log(doc.data());
     }
   };
 
@@ -46,6 +43,7 @@ export default function MyProfile({ navigation, route }) {
         path: 'images'
       }
     };
+
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -61,18 +59,18 @@ export default function MyProfile({ navigation, route }) {
   return (
     <View style={[styles.flexOne, styles.background]}>
       <View style={styles.myProfileAvatarContainer}>
-        {userTiedot.pic ? (
-          <Avatar size="xlarge" rounded source={{ uri: userTiedot.pic }} />
+        {user.pic ? (
+          <Avatar size="xlarge" rounded source={{ uri: user.pic }} />
         ) : (
-          //jos käyttäjällä ei ole kuvia, niin tulee tämä default pic
-          <Avatar
-            size="xlarge"
-            rounded
-            source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png' }}
-          />
-        )}
+            //default picture for users without picture
+            <Avatar
+              size="xlarge"
+              rounded
+              source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png' }}
+            />
+          )}
         <Text style={styles.myProfileUserText}>
-          {userTiedot.name}, {userTiedot.age}
+          {user.name}, {user.age}
         </Text>
       </View>
       <View style={styles.iconSpacing}>
