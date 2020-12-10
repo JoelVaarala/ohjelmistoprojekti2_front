@@ -312,7 +312,7 @@ Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # SwipeCards
-Registering page for new users.
+Swipe cards is a card component which contains information about other users and events
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 timeUntillEvent() | - | String | Check Navigation for more info
