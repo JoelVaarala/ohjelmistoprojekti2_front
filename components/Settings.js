@@ -13,14 +13,15 @@ export default function Settings() {
   const [tagList, setTagList] = useState([]);
   const { signOut } = React.useContext(AuthContext);
   const [shouldShow, setShouldShow] = useState(false);
-  const [showHoursOrDays, setShowHoursOrDays] = useState(false);
 
+  // Add tags to array state
   const addTag = () => {
     setTagList([...tagList, tag]);
     setTag('');
     setShouldShow(!shouldShow);
   };
 
+  // Delete tag by index
   const deleteItemById = (index) => {
     Alert.alert('Delete a tag', 'Are you sure you want to delete?', [
       { text: 'Cancel', onPress: () => console.log('User cancelled'), style: 'cancel' },
@@ -28,15 +29,16 @@ export default function Settings() {
     ]);
   };
 
-  //sliders
+  // Sliders
   const [lowAge, setLowAge] = useState(14);
   const [highAge, setHighAge] = useState(100);
   const [distance, setDistance] = useState(1);
   const [time, setTime] = useState(1);
 
-  //buttongroup
+  // Buttongroup
   const buttons = ['Men', 'Women', 'Other'];
   const [selectedIndex, setSelectedIndex] = React.useState({ main: [0] });
+  const [showHoursOrDays, setShowHoursOrDays] = useState(false);
 
   function updateIndex(name, value) {
     setSelectedIndex({ ...selectedIndex, [name]: value });
@@ -46,6 +48,7 @@ export default function Settings() {
     getData();
   }, []);
 
+  // Saving data when screen goes out of focus
   useFocusEffect(
     React.useCallback(() => {
       return () => {
@@ -89,6 +92,7 @@ export default function Settings() {
     }
   };
 
+  // Post users settings
   function saveData() {
 
     let timelimit;
