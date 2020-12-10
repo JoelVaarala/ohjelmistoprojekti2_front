@@ -39,7 +39,7 @@ export default function SwipingPage({ navigation }) {
     if (status !== 'granted') {
       setErrorMsg('Permission to access location was denied');
     }
-    let location = await (await Location.getCurrentPositionAsync({})).coords;
+    let location = (await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High })).coords;
     // connects to endpoint and sends desired data as params. 
     global.myUserData.filters.myLocation.latitude = location.latitude;       // --------- HOX HOX globals in use still
     global.myUserData.filters.myLocation.longitude = location.longitude;
