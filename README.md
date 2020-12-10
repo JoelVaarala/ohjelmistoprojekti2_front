@@ -63,6 +63,18 @@ Function | Input | Output | Description
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
+# Profile
+Function | Input | Output | Description
+------------ | ------------- |  ------------- | -------------
+getProfileInformation() |   |   |   Fetches current profiles informations: Profile information, event information and event particiapiants
+getUser() | user (String) | |  Fetches users profile data.
+getEvent() |  | |  Fetches events profile data using route params userMatchProfile parameter
+getPeopleWhoWantToJoin() | | | Fetches users that have swiped yes to event but are not swiped by event. Only called when profile type is event.
+getParticipiants() | | | Fetches users that are participiating to event. Only callen when profile type is event
+Accept() | accepted (boolean), uid (String) | | TBD: Function should swipe yes/no to user based on boolean as a event.
+Kick() | uid (String) | | TBD: Function unmatches target user with currently selected event.
+removeMatch() | target(String) , myUID(String) |  | Removes match (person-person match)
+
 # Register
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
