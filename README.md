@@ -117,5 +117,5 @@ Swiping page shows users and event you can match with by swiping left or right. 
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 fetchSwipeablesFromBackend() | - | - | Fetches all swipeables users and events from firebase based on users settings (gender, tags)
-updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGropuso button was pressed (main or sub) and value is the index
+updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGroups button was pressed (main or sub) and value is the index
 filterSwipes() | - | - | Filters users and events shown on SwipeCards based on selected ButtonGroups filters
