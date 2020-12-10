@@ -56,7 +56,7 @@ Function | Input | Output | Description
 Login page where you can login or go register as a new user.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
-SignIn() | email (String), password (String) | none | Check Navigation from more info
+SignIn() | email (String), password (String) | none | Check Navigation for more info
 
 # Matches
 Function | Input | Output | Description
