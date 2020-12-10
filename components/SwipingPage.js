@@ -5,21 +5,23 @@ import SwipeCards from './SwipeCards';
 import * as Location from 'expo-location';
 import styles from '../styles';
 
-//Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
-export default function SwipingPage({ navigation, route }) {
-  const [swipettavatFilter, setSwipettavatFilter] = React.useState([]);
-  const [swipettavat, setSwipettavat] = React.useState([]);
-  const [nykyinenSwipettava, setNykyinenSwipettava] = React.useState('');
-  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [0, 1, 2] });
-  const buttons = ['Users', 'Events', 'Both'];
-  const subButtons = ['Open', 'Public', 'Private'];
+export default function SwipingPage({ navigation }) {
 
-  //ratkaistava vielä se että swipettavat ei päivity swipecardsiin.
+  // here we save all swipeable users and events
+  const [swipeables, setSwipeables] = React.useState([]);
+  // here we save swipes that have been filtered 
+  const [swipeableFiltered, setSwipeableFiltered] = React.useState([]);
+  const [currentSwipeable, setCurrentSwipeable] = React.useState('');
+  // indexes for buttongroup
+  const [selectedIndex, setSelectedIndex] = React.useState({ main: 2, sub: [0, 1, 2] });
+  // buttons for ButtonGroup
+  const buttons = ['Users', 'Events', 'Both'];
+  // buttons for selectin event types
+  const subButtons = ['Open', 'Public', 'Private'];
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      //console.log(firebase.auth().currentUser)
-      HaeSwipettaviaBackista();
+      fetchSwipeablesFromBackend();
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -27,91 +29,80 @@ export default function SwipingPage({ navigation, route }) {
   }, [navigation]);
 
   React.useEffect(() => {
-    filterSwipet();
+    filterSwipes();
   }, [selectedIndex]);
 
-  async function HaeSwipettaviaBackista() {
+  // get all swipeable events and users
+  async function fetchSwipeablesFromBackend() {
+    // --- TODO: nämä reduxista 
     let { status } = await Location.requestPermissionsAsync();
     if (status !== 'granted') {
       setErrorMsg('Permission to access location was denied');
     }
     let location = await (await Location.getCurrentPositionAsync({})).coords;
-    //Connectaa endpointiin, lähettää parametrinä omat hakutoiveet. Vaihtoehtona että bäkki itse noutas firebasesta mutta ei kai tarpeen?
-    console.log('Hae swipettäviä');
-    global.myUserData.filters.myLocation.latitude = location.latitude;
+    // connects to endpoint and sends desired data as params. 
+    global.myUserData.filters.myLocation.latitude = location.latitude;       // --------- HOX HOX globals in use still
     global.myUserData.filters.myLocation.longitude = location.longitude;
 
-    let bodii = {
+    let filterData = {
       uid: global.myUserData.uid,
       idToken: global.myUserData.idToken,
       data: global.myUserData.filters
     };
+    // ---
 
-    console.log(bodii);
+    
     fetch(global.url + 'findSwipeables', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(bodii)
+      body: JSON.stringify(filterData)
     })
       .then((response) => response.json())
-      // .then(response => console.log(response))
       .then((data) => {
-        console.log('Find results:');
-        //console.log(data)
-        console.log(data.result);
-        setSwipettavat(data.result);
-        setSwipettavatFilter(data.result);
+        setSwipeables(data.result);
+        setSwipeableFiltered(data.result);
         {
-          data.result[0] && data.result[0].uid ? setNykyinenSwipettava(data.result[0].uid) : setNykyinenSwipettava('');
+          data.result[0] && data.result[0].uid ? setCurrentSwipeable(data.result[0].uid) : setCurrentSwipeable('');
         }
       })
       .catch((err) => console.error(err));
-    //palauttaa asynscista arrayn, sijoitetaan swipettaviin.
   }
 
-  function LuoSwipecardi() {
-    //Tällä saadaan päiviettyä nää shitit oikeasti statesta.
-    // return <SwipeCards vaihtoehdot={swipettavat} />;
-    return <SwipeCards vaihtoehdot={swipettavatFilter} />;
+  function CreateSwipeCard() {
+    // Updates data from states
+    return <SwipeCards options={swipeableFiltered} />;
   }
 
-  //Nämä ovat ButtonGroupille
+  // for ButtonGroup
   function updateIndex(name, value) {
     setSelectedIndex({ ...selectedIndex, [name]: value });
-    console.log(name + ': ' + value);
   }
 
-  function filterSwipet() {
-    let swipelista = [];
-    let eventSubs = ['open', 'public', 'private'];
-    let eventSublista = [];
-    //muutetaan selectedIndex.sub listan indexit vastaaviksi stringeiksi
+  // filters swipeables state using selected buttons
+  function filterSwipes() {
+    let swipelist = [];
+    // these match the event types (needs to be in lowercase)
+    let eventTypes = ['open', 'public', 'private'];
+    let eventSubList = [];
+    // switch selectedIndex.sub list index's to matching string list
     for (let i = 0; selectedIndex.sub.length > i; i++) {
-      eventSublista.push(eventSubs[selectedIndex.sub[i]]);
+      eventSubList.push(eventTypes[selectedIndex.sub[i]]);
     }
-    console.log(eventSublista);
-
+    // filter based on selected filters (selectedIndex.main= [users, events, both])
     if (selectedIndex.main == 0) {
-      swipelista = swipettavat.filter((item) => item.isEvent === false);
-      console.log('users lista');
-      console.log(swipelista);
+      swipelist = swipeables.filter((item) => item.isEvent === false);
     } else if (selectedIndex.main == 1) {
-
-      swipelista = swipettavat.filter((item) => item.isEvent === true).filter((item) => eventSublista.includes(item.eventType));
-      console.log("events lista");
-      console.log(swipelista);
+      swipelist = swipeables.filter((item) => item.isEvent === true).filter((item) => eventSubList.includes(item.eventType));
     } else if (selectedIndex.main == 2) {
-      let userit = swipettavat.filter((item) => item.isEvent === false);
-      let eventit = swipettavat
+      let users = swipeables.filter((item) => item.isEvent === false);
+      let events = swipeables
         .filter((item) => item.isEvent === true)
-        .filter((item) => eventSublista.includes(item.eventType));
-      swipelista = userit.concat(eventit);
-      console.log('Both lista');
-      console.log(swipelista);
+        .filter((item) => eventSubList.includes(item.eventType));
+      swipelist = users.concat(events);
     }
-    setSwipettavatFilter(swipelista);
+    setSwipeableFiltered(swipelist);
   }
 
   return (
@@ -142,25 +133,23 @@ export default function SwipingPage({ navigation, route }) {
       </ThemeProvider>
 
       <View style={[styles.justifyContentFlexStart, styles.marginTopThirty]}>
-        {/* <SwipeCards vaihtoehdot={swipettavat} /> */}
-        <LuoSwipecardi />
+        <CreateSwipeCard />
       </View>
       <View
         style={[styles.container, styles.flexDirectionRow, styles.justifyContentSpaceBetween, styles.alignItemsFlexEnd]}
       >
         <View style={styles.iconsPadding}>
-          {/* ONGELMA: näyttää edellisen swipettävän profiilin jos sivu ei ole ehtinyt päivittyä, ensin kokeiltu {match : swipettavat[0].uid} */}
 
-          {nykyinenSwipettava != '' ? (
+          {currentSwipeable != '' ? (
             <Icon
               size={27}
               reverse
               name="info"
-              onPress={() => navigation.navigate('Matchprofile', { match: nykyinenSwipettava })}
+              onPress={() => navigation.navigate('Matchprofile', { match: currentSwipeable })}
             />
           ) : (
-            <Icon size={27} reverse name="info" />
-          )}
+              <Icon size={27} reverse name="info" />
+            )}
         </View>
       </View>
     </View>
