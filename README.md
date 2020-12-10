@@ -53,7 +53,7 @@ Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
 # Login
-Login page where you can login or go register as a new user.
+Login page where you can login or go to Register to registeras a new user.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 signIn() | email (String), password (String) | - | Check Navigation for more info
@@ -75,7 +75,7 @@ signOut() | - | - | Signs user out, removes email and password from AsyncStorage
 loginOnStartup() | - | - | When the app open, starts signIn() if email and password is saved to AsyncStorage
 login() | email (String), password (String) | String | Tries to login to firebase using given email and password. Returns error string if email or password were wrong or access to location was denied, otherwise returns success string
 UpdateLocation() | - | String | Asks premission to users location and send location object to UpdateFirebase(). Returns confirmation or denial string depending if access was granted
-UpdateFirebase() | loaction (object) | - | Send users location to firebase. Location object has latitude and longitude attributes
+UpdateFirebase() | location (object) | - | Send users location to firebase. Location object has latitude and longitude attributes
 
 # Register
 Registering page for new users.
@@ -83,7 +83,7 @@ Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 signIn() | email (String), password (String) | - | Check Navigation for more info
 inputChanged() | inputName (String), inputValue (any) | - | Updates userdata states attributes with given intups. inputName is the name of the attribute you want to upadate and inputValue is the value
-genderConvert() | value (int) | - | Converst ButtonGroups selected buttons index to corresponding gender value and updates userdata states gender value
+genderConvert() | value (int) | - | Converts ButtonGroups selected buttons index to corresponding gender value and updates userdata states gender
 changePasswordVisibility() | - | - | Shows or hides password fields input
 registerUser() | - | - | Tries to register new user. If registration is successful, signs new user in
 validation() | - | boolean | Validates if password, age and username is within given limits. Returns true if everyting is correct
@@ -105,5 +105,5 @@ Swiping page shows users and event you can match with by swiping left or right. 
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 fetchSwipeablesFromBackend() | - | - | Fetches all swipeables users and events from firebase based on users settings (gender, tags)
-updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name (main or sub) and value is the index
-filterSwipes() | - | - | Filters users and events shown on SwipeCards based on selected ButtonGropu filters
+updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGropuso button was pressed (main or sub) and value is the index
+filterSwipes() | - | - | Filters users and events shown on SwipeCards based on selected ButtonGroups filters
