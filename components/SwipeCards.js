@@ -3,7 +3,7 @@ import { Text, View, Image, TouchableOpacity } from "react-native";
 import SwipeCards from "react-native-swipe-cards";
 import { Icon } from "react-native-elements";
 import styles from "../styles";
-import { getDistance } from 'geolib';
+import { getDistance } from "geolib";
 
 class Card extends React.Component {
   constructor(props) {
@@ -18,55 +18,56 @@ class Card extends React.Component {
   // Calculate the time when event is starting from now
   timeUntillEvent() {
     let time = "";
-    if('eventStart' in this.props){
-       
-        time = new Date(this.props.eventStart);
-        let now = new Date();
-        let comparisonTime = Math.floor((time - now) / 60e3)
-        
-        if(comparisonTime < 60){
-          time = comparisonTime.toString() + " min"
-        }else if (comparisonTime >= 60 && comparisonTime < 1440){
-          time = Math.round(comparisonTime/60).toString() + " hours"
-        }else if (comparisonTime >= 1440){
-          time = Math.round(comparisonTime/60/24).toString() + " days"  
-        }else{
-          // "Default incase event lacks valid starting time"
-          time = "unavaible"
-        }
+    if ("eventStart" in this.props) {
+      time = new Date(this.props.eventStart);
+      let now = new Date();
+      let comparisonTime = Math.floor((time - now) / 60e3);
+
+      if (comparisonTime < 60) {
+        time = comparisonTime.toString() + " min";
+      } else if (comparisonTime >= 60 && comparisonTime < 1440) {
+        time = Math.round(comparisonTime / 60).toString() + " hours";
+      } else if (comparisonTime >= 1440) {
+        time = Math.round(comparisonTime / 60 / 24).toString() + " days";
+      } else {
+        // "Default incase event lacks valid starting time"
+        time = "unavaible";
+      }
     }
     return time;
   }
-
-   calculateDistance() {
-    let distance = Math.round(getDistance(
-      { latitude: this.props.position.geopoint._latitude, longitude:  this.props.position.geopoint._longitude},
-      { latitude: global.myUserData.filters.myLocation.latitude, longitude: global.myUserData.filters.myLocation.longitude } 
-      )/1000);
-      // because distance is already rounded "less than km away" is displayed starting from even 1
-      if(distance>1)
-      return distance;
-      else
-      return "less than";
+  // Calculate the distance of the event to the user
+  calculateDistance() {
+    let distance = Math.round(
+      getDistance(
+        { latitude: this.props.position.geopoint._latitude, longitude: this.props.position.geopoint._longitude },
+        { latitude: global.myUserData.filters.myLocation.latitude, longitude: global.myUserData.filters.myLocation.longitude }
+      ) / 1000
+    );
+    // because distance is already rounded "less than km away" is displayed starting from even 1
+    if (distance > 1) return distance;
+    else return "less than";
   }
 
   // returns tags in more displayable form for the card
   separatedTags() {
     let tags = this.props.tags.join(", ");
     return tags;
-}
+  }
 
   render() {
     return (
       <View style={styles.flexOne}>
         <View style={[{ backgroundColor: this.props.backgroundColor }]}>
           <TouchableOpacity>
-            <Image source={{ uri: this.props.images[0] }} style={styles.card} /> 
+            <Image source={{ uri: this.props.images[0] }} style={styles.card} />
             <View style={styles.cardContainer}>
-              <Image source={require("../pictures/darkish.png")} style={styles.shadowImage} /> 
+              <Image source={require("../pictures/darkish.png")} style={styles.shadowImage} />
               <View style={styles.swipesUserInfosContainer}>
                 {this.props.isEvent ? (
-                  <Text style={styles.swipesUserInfo}>{this.props.displayName} in {this.state.time} </Text>
+                  <Text style={styles.swipesUserInfo}>
+                    {this.props.displayName} in {this.state.time}{" "}
+                  </Text>
                 ) : (
                   <Text style={styles.swipesUserInfo}>
                     {this.props.displayName} {this.props.age}
@@ -123,7 +124,7 @@ export default class extends React.Component {
     console.log(`Maybe for ${card.text}`);
   }
 
-  onClickHandler(){
+  onClickHandler() {
     // if needed long press triggers this
   }
 
@@ -154,7 +155,7 @@ function PostSwipe(liked, user) {
     data: {
       liked: liked,
       target: user.uid,
-      isEvent: false, 
+      isEvent: false,
       swipeAs: null,
     },
     uid: global.myUserData.uid,

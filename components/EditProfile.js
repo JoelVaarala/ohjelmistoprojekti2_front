@@ -17,7 +17,7 @@ export default function EditProfile() {
     name: ''
   });
 
-  //saving changes in images in SortableList
+  // Saving changes in images in SortableList
   const callback = (childData) => {
     let images = childData
     setPics(images)
@@ -27,6 +27,7 @@ export default function EditProfile() {
     getData();
   }, []);
 
+  // Saving data when screen goes out of focus
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -35,6 +36,7 @@ export default function EditProfile() {
     })
   )
 
+  // Post users information
   function saveData() {
     let body = {
       idToken: global.myUserData.idToken,
@@ -77,12 +79,14 @@ export default function EditProfile() {
     return <SortableList2 images={pics} order={Object.keys(pics)} parentCallback={callback} />;
   }
 
+  // Add tags to array state
   const addTag = () => {
     setTagList([...tagList, tag]);
     setTag('');
     setShouldShow(!shouldShow);
   };
 
+  // Delete tag by index
   const deleteItemById = (index) => {
     Alert.alert('Delete a tag', 'Are you sure you want to delete?', [
       { text: 'Cancel', onPress: () => console.log('User cancelled'), style: 'cancel' },

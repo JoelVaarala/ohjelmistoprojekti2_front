@@ -10,7 +10,7 @@ export default function Login({ navigation }) {
   // test users login info:
   // email: user@example.com
   // pw: secretPassword
-  const [user, setUser] = React.useState("user@example.com");
+  const [email, setEmail] = React.useState("user@example.com");
   const [password, setPassword] = React.useState("secretPassword");
   // you can find this function in Navigation.js
   const { signIn } = React.useContext(AuthContext);
@@ -21,8 +21,8 @@ export default function Login({ navigation }) {
         containerStyle={styles.paddingTopHundred}
         lable="E-mail"
         placeholder="E-mail"
-        onChangeText={(value) => setUser(value)}
-        value={user}
+        onChangeText={(value) => setEmail(value)}
+        value={email}
       />
       <Input
         lable="Password"
@@ -33,7 +33,7 @@ export default function Login({ navigation }) {
       />
       <Button
         buttonStyle={[styles.backgroundTheme, {marginBottom: 20}]}
-        onPress={() => signIn(user, password)}
+        onPress={() => signIn(email, password)}
         title="Login"
         containerStyle={styles.paddingHorizontalTen} />
       <Button

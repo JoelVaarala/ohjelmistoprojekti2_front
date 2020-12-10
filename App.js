@@ -10,12 +10,12 @@ import Navigation from "./components/Navigation";
 firebase.initializeApp(global.firebaseConfig);
 
 export default function App() {
-  
-    return (
-      // redux
-        <Provider store={store}>
-          <Navigation/>
-        </Provider>
-    );
+
+  return (
+    // redux
+    <Provider store={store}>
+      <Navigation />
+    </Provider>
+  );
 
 }
