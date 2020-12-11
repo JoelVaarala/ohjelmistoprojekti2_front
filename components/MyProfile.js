@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { Icon, Avatar, Button } from 'react-native-elements';
+import { store } from "../redux/index";
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'firebase';
 import styles from '../styles';
@@ -13,6 +14,8 @@ export default function MyProfile({ navigation, route }) {
     pic: ''
   });
 
+  let userID = store.getState().UserDataReducer[0].id;
+
   // Fetching data when screen becomes focused
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -22,7 +25,7 @@ export default function MyProfile({ navigation, route }) {
   }, [navigation])
 
   const getData = async () => {
-    const ref = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid);
+    const ref = firebase.firestore().collection('users').doc(userID);
     const doc = await ref.get();
     if (!doc.exists) {
     } else {

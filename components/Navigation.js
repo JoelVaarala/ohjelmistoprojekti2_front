@@ -19,7 +19,7 @@ import { View } from "react-native";
 import firebase from "firebase";
 import { Icon } from "react-native-elements";
 import { connect } from "react-redux";
-import { store, test, userData } from "../redux/index";
+import { store, addUid, addToken, addLatitude, addLongitude } from "../redux/index";
 import FlashMessage from "react-native-flash-message";
 import * as Location from "expo-location";
 import "./Globaalit";
@@ -106,10 +106,12 @@ function Navigations() {
         if (LocUpdate === 'No acces to location') {
             return 'No acces to location';
         }
-
-        global.myUserData.uid = userPromise.user.uid;
+        //store.dispatch(userData(firebase.auth().currentUser.uid))
+        store.dispatch(addUid(userPromise.user.uid))
+        
         let idToken = await firebase.auth().currentUser.getIdToken(true);
-        global.myUserData.idToken = idToken;
+        store.dispatch(addToken(idToken))
+     
         return 'Success';
     };
 
@@ -120,10 +122,9 @@ function Navigations() {
             return 'No acces to location';
         }
         let location = (await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High })).coords;
-        global.myUserData.filters.myLocation = {
-            latitude: location.latitude,
-            longitude: location.longitude
-        };
+        
+        store.dispatch(addLatitude(location.latitude))
+        store.dispatch(addLongitude(location.longitude))
         UpdateFirebase(location);
         return 'Location updated'
     }
@@ -131,14 +132,14 @@ function Navigations() {
     // send new location info to backend
     function UpdateFirebase(newloc) {
         let locationData = {
-            uid: global.myUserData.uid,
-            idToken: global.myUserData.idToken,
+            uid: store.getState().UserDataReducer[0].id,
+            idToken:  store.getState().UserDataReducer[0].token,
             data: {
                 latitude: newloc.latitude,
                 longitude: newloc.longitude
             }
         };
-        fetch(global.url + 'updateLocation', {
+        fetch(store.getState().DefaultReducer[0].url + 'updateLocation', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -261,9 +262,9 @@ function Navigations() {
 }
 
 const mapStateToProps = (state) => ({
-    UserReducer: state.UserReducer,
+    UserDataReducer: state.UserDataReducer,
 });
 // Component connects to reducer and receives params state, action and main function
-const Navigation = connect(mapStateToProps, { userData, test })(Navigations);
+const Navigation = connect(mapStateToProps, { addUid, addToken, addLatitude, addLongitude })(Navigations);
 // Export default const above instead of "main function"
 export default Navigation;

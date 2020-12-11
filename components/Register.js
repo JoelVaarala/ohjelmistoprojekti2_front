@@ -66,7 +66,7 @@ export default function Register() {
       return;
     }
 
-    let url = global.url + "register";
+    let url = store.getState().DefaultReducer[0].url + "register";
     fetch(url, {
       method: "POST",
       headers: {

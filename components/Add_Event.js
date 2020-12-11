@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Text, View, TextInput, FlatList, ScrollView, Alert } from "react-native";
 import { Button } from "react-native-elements";
 import DatePicker from "react-native-date-picker";
-import { connect } from "react-redux";
-import { store, addEvent } from "../redux/index";
+import { store } from "../redux/index";
 import styles from "../styles";
 import { showMessage } from "react-native-flash-message";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from 'expo-location';
 
-function Add_Events({ navigation, route }, props) {
+export default function Add_Events({ navigation, route }) {
 
   // States for event information
   const [eventName, setEventName] = useState("");
@@ -23,10 +22,15 @@ function Add_Events({ navigation, route }, props) {
   const [address, setAddress] = useState("loading location...");
   const [newAddress, setNewAddress] = useState("");
 
+  let latitude = store.getState().UserDataReducer[0].latitude;
+  let longitude = store.getState().UserDataReducer[0].longitude;
+  let userID = store.getState().UserDataReducer[0].id;
+  let userToken = store.getState().UserDataReducer[0].token;
+
   //const [modalVisible, setModalVisible] = useState(false);
   const [region, setRegion] = useState({
-    latitude: global.myUserData.filters.myLocation.latitude,
-    longitude: global.myUserData.filters.myLocation.longitude,
+    latitude: latitude,
+    longitude: longitude,
     latitudeDelta: 0.0322,
     longitudeDelta: 0.0221,
   });
@@ -48,7 +52,7 @@ function Add_Events({ navigation, route }, props) {
       Alert.alert('No permission to accesslocation');
     }
     else {
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
 
       setRegion({
         latitude: location.coords.latitude,
@@ -64,11 +68,11 @@ function Add_Events({ navigation, route }, props) {
 
   // Post new event
   const sendEvent = () => {
-    let url = global.url + "event";
+    let url = store.getState().DefaultReducer[0].url + "event";
 
     let bodi = {
-      idToken: global.myUserData.idToken, // HOX, this needs to be changed to actual current user instead of global
-      uid: global.myUserData.uid,
+      idToken: userToken, 
+      uid: userID,
       data: {
         eventType: "public",
         eventStart: date,
@@ -158,7 +162,7 @@ function Add_Events({ navigation, route }, props) {
 
   // fetch address data based on coordinates
   const fetchAddress = (la, lo) => {
-    let key = global.key;
+    let key = store.getState().DefaultReducer[0].key;
     let long = lo;
     let lat = la;
     const url = `http://www.mapquestapi.com/geocoding/v1/reverse?key=${key}&location=${lat},${long}&includeRoadMetadata=true&includeNearestIntersection=true`;
@@ -172,7 +176,7 @@ function Add_Events({ navigation, route }, props) {
 
   // fetch coordinates for new location search
   const fetchCoordinates = () => {
-    let key = global.key;
+    let key = store.getState().DefaultReducer[0].key;
     const url = `http://www.mapquestapi.com/geocoding/v1/address?key=${key}&location=${newAddress}`;
     fetch(url)
       .then((response) => response.json())
@@ -302,12 +306,3 @@ function Add_Events({ navigation, route }, props) {
     </ScrollView>
   );
 }
-
-// hox! Reducer not currently being used 
-const mapStateToProps = (state) => ({
-  EventReducer: state.EventReducer,
-});
-// Component connects to reducer and receives params state, action and main function
-const Add_Event = connect(mapStateToProps, { addEvent })(Add_Events);
-// Export default const above instead of "main function"
-export default Add_Event;

@@ -220,30 +220,32 @@ event (put) | input| Output | User updates a existing event
 updateLocation (post) | input| Output | User updates users location.
 opentest (post) | input| Output | Endpoint to manually get/update helsinki open api events
 
-
-# Add_Event
-Blaa blaa blaa, blaa blaa blaa.
-Blaa :)
-Function | Input | Output | Description
------------- | ------------- |  ------------- | -------------
-
 Props | Type | Optional | Description
 ------------ | ------------- |  ------------- | -------------
+
+# Add_Event
+Function | Input | Output | Description
+------------ | ------------- |  ------------- | -------------
+sendEvent() | date(date), eventName(String), desccription(String), tags(Array) | - | POST - user created event based on user inputs.
+fetchAddress() | latitude, longitude | - | Fetches address information based on location coordinates, sets Address to be city and street for given coordinates.
+fethcCoordinates() | newAddress(String) | - | Updates marker on the map view to show newly searched location and updates Address to be latest selected location.
+showInvalid() | msg(String) | - | User will be prompted with invalid input indicator if event validation criterias are not fullfilled.
+showSuccess() | - | - | Green indicator message for successfully created event.
+showFail() | - | - | Red indicator message to let user know that the event creation failed.
 
 # AuthContext
 AuthContext allows access to SignIn() and SignOut() functions from Navigation.js to other components.
 
 # Carousel
-Blaa blaa blaa, blaa blaa blaa.
-Blaa :)
-Function | Input | Output | Description
------------- | ------------- |  ------------- | -------------
+Component to display profile photos in scrollable "carousel" view
 
 # Chat
-Blaa blaa blaa, blaa blaa blaa.
-Blaa :)
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+MessageToFirebase() | msg(Obj) | - | POST - latest message to firebase.
+getConversationsRealTime() | - | messages(Array) | Fetches and creates array including all of the messages from the conversation. Also sorts them according sender to which side are rendered.
+onSend() | messages(Array) | messages(Array) | Appends messages array by latest messages and updates GiftedChat to render newest message.
+
 
 # EditProfile
 Edit profile page shows users information: name, age, bio, tags and pictures. You can change bio and tags and the order of the images. First image is showing as your avatar to other users.
@@ -255,8 +257,7 @@ callBack() | childData (Array) | - | Callback is used for updating data from Sor
 CreateSortableList() | - | SortableList-component | This function gets fresh data to Sortablelist
 
 # Globaalit
-Function | Input | Output | Description
------------- | ------------- |  ------------- | -------------
+Firebase configuration reference
 
 # Login
 Login page where you can login or go to Register to registeras a new user.
@@ -338,4 +339,11 @@ Function | Input | Output | Description
 fetchSwipeablesFromBackend() | - | - | Fetches all swipeables users and events from firebase based on users settings (gender, tags)
 updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGroups button was pressed (main or sub) and value is the index
 filterSwipes() | - | - | Filters users and events shown on SwipeCards based on selected ButtonGroups filters
+
+# Redux
+Redux handles data that should be accessable everywhere
+Reducer   |  Description
+--------  | -------------
+UserDataReducer | Includes user's id, token and coordinates
+DefaultReducer | Includes heroku url + other possible global type variables
 

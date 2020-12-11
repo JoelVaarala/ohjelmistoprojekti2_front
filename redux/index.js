@@ -1,75 +1,87 @@
 import { combineReducers ,createStore} from 'redux';
 
-// actions, näitä actioneita kutsutaan komponenteissa
-// välittävät dispatchin avulla arvot storeen ja alla oleviin reducer functioihin -> stateen 
-
-export const addItem = (value) => {
-    return{
-        type: "ADD",
-        item: value
-    }
-}
-// Tämä käytössä, vastaan ottaa olion joka sisältää käyttäjän syöttämät tiedot
-export const addEvent = (value) => {
-    return {
-        type: "eventti",
-        payload: value 
-    }
-}
+// Actions
+// delivers data by using dispatch within components for the reducers and ultimately store
 
 
-// reducer, or multiple reducers 
-const EventReducer = (state, action) => {
-    //if(state === undefined){
-     //   state = []
-    //}
-    // for now empty state for every new event is fine
-    // possibly we can make different reducer for updates if needed / wanted
-    state=[]    
-    switch(action.type) {
-        case "ADD1":
-            return state.concat(action.item)
-            //return state.splice(1,0,action.item);
-        case "eventti":
-            return state.concat(action.payload);
-        default:
-            return state;
-    } 
-}
-
-export const userData = (value) => {
+export const addUid = (value) => {
     return {
         type: "addUid",
         item: value
     }
 }
 
-export const test = (value) => {
+export const addToken = (value) => {
     return {
-        type: "test",
+        type: "addToken",
         item: value
     }
 }
 
-const UserReducer = (state, action) => {
+export const addLatitude = (value) => {
+    return {
+        type: "addLat",
+        item: value
+    }
+}
+
+export const addLongitude = (value) => {
+    return {
+        type: "addLon",
+        item: value
+    }
+}
+
+
+// Reducers
+// includes logic and updates states
+
+const UserDataReducer = (state, action) => {
     if(state === undefined){
-        state = [];
+        state = [{
+            id: "",
+            token: "",
+            latitude: "",
+            longitude: "",
+        }];
     }
     switch(action.type){
         case "addUid":
-            return state.concat(action.item);
-        case "test":
-            return state.concat(action.item);
+            state[0].id = action.item
+            return state;
+            //return state.concat(state[0].id = action.item);
+        case "addToken":
+            state[0].token = action.item
+            return state;
+        case "addLat":
+            state[0].latitude = action.item
+            return state;
+        case "addLon":
+            state[0].longitude = action.item
+            return state;
         default:
             return state;
     }
 }
-// root reducer
-// if need more than 1 reducer add here
+
+
+const DefaultReducer = (state, action) => {
+    if(state === undefined){
+        state = [{
+            url: "https://ohpro2.herokuapp.com/",
+            key: "GevdYMR6HG0TuzaUo55m0XVFtEXH9PAI",
+        }];
+    }
+    return state;
+}
+
+
+
+// root reducer that has all individual reducers wrapped is easier to use with multiple classes
 export const rootReducer = combineReducers({
-    EventReducer,
-    UserReducer
+    UserDataReducer,
+    DefaultReducer
 })
 
-// store, wrapattu koko Appin ympärille <Provider> avulla -> mahdollistaa storen olevan saatavilla kaikista komponenteista käsin
+// store, that has all the data is "wrapped around" main component of the app via <Provider> so all files have access to the store
 export const store = createStore(rootReducer)
