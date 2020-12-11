@@ -31,13 +31,32 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Using the application</a>
+    <li><a href="#using-the-application">Using the application</a>
       <ul>
         <li><a href="#home">Home</a></li>
         <li><a href="#chat">Chat</a></li>
         <li><a href="#swipes">Swipes</a></li>
         <li><a href="#edit-profile">Edit profile</a></li>
         <li><a href="#settings">Settings</a></li>
+      </ul>
+    </li>
+        <li><a href="#end-points-usage-in-backend">End points usage in Backend</a>
+      <ul>
+        <li><a href="#authcontext">AuthContext</a></li>
+        <li><a href="#carousel">Carousel</a></li>
+        <li><a href="#editprofile">EditProfile</a></li>
+        <li><a href="#globaalit">Globaalit</a></li>
+        <li><a href="#login">Login</a></li>
+        <li><a href="#matches">Matches</a></li>
+        <li><a href="#myprofile">MyProfile</a></li>
+        <li><a href="#navigation">Navigation</a></li>
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="#register">Register</a></li>
+        <li><a href="#settings">Settings</a></li>
+        <li><a href="#sortablelist">SortableList</a></li>
+        <li><a href="#swipecards">SwipeCards</a></li>
+        <li><a href="#swipingpage">SwipingPage</a></li>
+        <li><a href="#redux">Redux</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -140,7 +159,7 @@ This is an example of how to list things you need to use the software and how to
 
 
 
-## Usage
+## Using the application
 
 <h3>Matches</h3>
 In Matches screen user can see events that he/she has swiped right on Swipes screen.
@@ -163,46 +182,9 @@ In Edit profile screen user can choose his/her own profile picture, write to the
 <h3>Settings</h3>
 In Settings screen user can choose what kind of person he/she is interested in.
 
-
-<!-- ROADMAP -->
-## Roadmap
-
-See the [open issues](https://github.com/jaanisavolainenhh/ohjelmistoprojekti2_front/issues) for a list of proposed features (and known issues).
-
-<!-- Software architecture -->
-## Software architecture
-
-MeetHub projects' software architecture
-
-<img src="images/CI-Pipeline.png" alt="Logo" width="1000" height="500">
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-<!-- CONTRIBUTORS -->
-## Contributors
-
-* [Sang Pham](https://github.com/Chuaaang)
-* [Elina Piispanen](https://github.com/elinapiispanen)
-* [Jussi Salmela](https://github.com/JussiSal)
-* [Jaani Savolainen](https://github.com/jaanisavolainen)
-* [Joel Vaarala](https://github.com/JoelVaarala)
+## End points usage in Backend
 
 # ohjelmistoprojekti2_front
-
 
 # End points in Backend
 Endpoint | Input | Output | Description
@@ -347,3 +329,40 @@ Reducer   |  Description
 UserDataReducer | Includes user's id, token and coordinates
 DefaultReducer | Includes heroku url + other possible global type variables
 
+
+<!-- ROADMAP -->
+## Roadmap
+
+See the [open issues](https://github.com/jaanisavolainenhh/ohjelmistoprojekti2_front/issues) for a list of proposed features (and known issues).
+
+<!-- Software architecture -->
+## Software architecture
+
+MeetHub projects' software architecture
+
+<img src="images/CI-Pipeline.png" alt="Logo" width="1000" height="500">
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+<!-- CONTRIBUTORS -->
+## Contributors
+
+* [Sang Pham](https://github.com/Chuaaang)
+* [Elina Piispanen](https://github.com/elinapiispanen)
+* [Jussi Salmela](https://github.com/JussiSal)
+* [Jaani Savolainen](https://github.com/jaanisavolainen)
+* [Joel Vaarala](https://github.com/JoelVaarala)
