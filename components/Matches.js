@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, FlatList, ImageBackground, Image } from "react-native";
 import { Avatar, ListItem, Overlay, ThemeProvider, ButtonGroup } from "react-native-elements";
+import { store } from "../redux/index";
 import firebase from "firebase";
 import styles from "../styles";
 
@@ -13,6 +14,8 @@ export default function Matches({ navigation, route }) {
   const [overlay, setOverlay] = React.useState(true);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const buttons = ["Users", "Events", "My Events"];
+
+  let userID = store.getState().UserDataReducer[0].id;
 
   function filterMatchit() {
     let matchilista = [];
@@ -66,7 +69,7 @@ export default function Matches({ navigation, route }) {
 
   // FIXME, tämä päivittyy "automaattisesti"
   function getMyMatches_From_MyMatches() {
-    let ref = firebase.firestore().collection('users').doc(global.myUserData.myUserID).collection('MyMatches');
+    let ref = firebase.firestore().collection('users').doc(userID).collection('MyMatches');
     ref.onSnapshot((querySnapshot) => {
       // snapshot == capture sen hetkisestä rakenteesta
       let matchit = []; // voidaan asettaa halutut tiedot taulukkoon
@@ -80,8 +83,6 @@ export default function Matches({ navigation, route }) {
 
   const getMyMatches = async () => {
 
-    let currUser = await firebase.auth().currentUser.uid
-
     try {
       // this returns whole result of 'doc'
       //hakee messages/matches collectionista itemit
@@ -90,7 +91,7 @@ export default function Matches({ navigation, route }) {
       var query = await firebase
         .firestore()
         .collection("matches")
-        .where("users", "array-contains", currUser)
+        .where("users", "array-contains", userID)
         .get()
         .then(async function (querySnapshot) {
           querySnapshot.forEach(async function (doc) {
@@ -133,7 +134,7 @@ export default function Matches({ navigation, route }) {
       var query2 = await firebase
         .firestore()
         .collection("events")
-        .where("eventOwners", "array-contains", currUser)
+        .where("eventOwners", "array-contains", userID)
         .get()
         .then(async function (querySnapshot) {
           querySnapshot.forEach(async function (doc) {

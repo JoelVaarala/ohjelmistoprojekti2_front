@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, Image, ScrollView } from 'react-native';
 import { Avatar, ListItem, Overlay, Button, ThemeProvider, ButtonGroup, Icon, Tooltip } from 'react-native-elements';
 import { showMessage } from 'react-native-flash-message';
+import { store } from "../redux/index";
 import Carousel2 from './Carousel';
 import firebase from 'firebase';
 // import firestore from "@react-native-firebase/firestore";
@@ -31,6 +32,9 @@ export default function Profile({ navigation, route }, props) {
   const [view, setView] = React.useState(true); // true -> display user __ false -> display event
   const buttons = ['Participiants', 'Queued'];
   const [selectedIndex, setSelectedIndex] = React.useState( 0 );
+
+  let userID = store.getState().UserDataReducer[0].id;
+  let userToken = store.getState().UserDataReducer[0].token;
 
   const theme = {
     colors: {
@@ -62,7 +66,7 @@ export default function Profile({ navigation, route }, props) {
         setType('User');
         query.data().users.forEach((element) => {
           console.log('forEach users in match when match type == user', element);
-          if (element != firebase.auth().currentUser.uid) {
+          if (element != userID) {
             user = element;
           }
         });
@@ -121,7 +125,6 @@ export default function Profile({ navigation, route }, props) {
 
     var finaldPeopleWhoWantToJoin = [];
     if (usersThatSwipedOnMeHelperArray.length !== 0) {
-      //console.log("Enemmän ku 0");
       var query = await firebase.firestore()
         .collection("users")
         .where(firebase.firestore.FieldPath.documentId(), "in", usersThatSwipedOnMeHelperArray)
@@ -144,7 +147,6 @@ export default function Profile({ navigation, route }, props) {
     participiantList = usersAlreadyInEvent.data().users;
     let finalParticipiantList = [];
     if (participiantList.length !== 0) {
-      console.log("Enemmän ku 0");
       var query = await firebase.firestore()
         .collection("users")
         .where(firebase.firestore.FieldPath.documentId(), "in", participiantList)
@@ -163,7 +165,6 @@ export default function Profile({ navigation, route }, props) {
         element.images.append("https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg");
       }
     });
-    console.log("lopullinen osallistujalista", finalParticipiantList)
     setParticipiants(finalParticipiantList);
   }
 
@@ -190,10 +191,10 @@ export default function Profile({ navigation, route }, props) {
     return PeoplesInQueue();
   }
 
-  //ainoastaan eventin omistaja näkee buttonin jolla voi kickata osallistujan
+
+  // Only event owner sees kick button
   function PeoplesInQueue() {
     {
-      //console.log("jooh", osallistujat)
       return peoplesWhoWantToJoin.map((l, i) => (
         <ListItem key={i} bottomDivider>
           <Avatar source={{ uri: l.images[0] }} />
@@ -205,7 +206,7 @@ export default function Profile({ navigation, route }, props) {
             </View>
           </ListItem.Content>
           <View style={styles.viewLikersItemContent}>
-            <Button //tää on kicki button
+            <Button 
               type="outline"
               raised={true}
               onPress={() => Accept(true, l.uid)}
@@ -215,7 +216,7 @@ export default function Profile({ navigation, route }, props) {
                 color: "red",
               }}
             />
-                        <Button //tää on kicki button
+                        <Button 
               type="outline"
               raised={true}
               onPress={() => Accept(false, l.uid)}
@@ -233,7 +234,6 @@ export default function Profile({ navigation, route }, props) {
 
   function Participiants() {
     {
-      //console.log("jooh", osallistujat)
       return participiants.map((l, i) => (
         <ListItem key={i} bottomDivider>
           <Avatar source={{ uri: l.images[0] }} />
@@ -245,7 +245,7 @@ export default function Profile({ navigation, route }, props) {
             </View>
           </ListItem.Content>
           <View style={styles.viewLikersItemContent}>
-            <Button //tää on kicki button
+            <Button 
               type="outline"
               raised={true}
               onPress={() => Kick(l.uid)}
@@ -262,19 +262,17 @@ export default function Profile({ navigation, route }, props) {
     }
   }
 
-  // Matchin poisto funkari
-  const removeMatch = (asd, qwe) => {
-    let url = global.url + 'removeMatch';
+  
+  const removeMatch = (match, id) => {
+    let url = store.getState().DefaultReducer[0].url + 'removeMatch';
     let bodi = {
-      idToken: global.myUserData.idToken,
+      idToken: userToken,
       data: {
-        match: asd
+        match: match
       },
-      uid: qwe
+      uid: id
     };
 
-    console.log(bodi);
-    console.log(JSON.stringify(bodi));
 
     fetch(url, {
       method: 'POST',
@@ -312,9 +310,8 @@ export default function Profile({ navigation, route }, props) {
 
   const deleteRoute = () => {
     let userToDelete = route.params.userMatchProfile;
-    let myUID = firebase.auth().currentUser.uid;
-    showDeleted(userToDelete, myUID);
-    removeMatch(userToDelete, myUID);
+    showDeleted(userToDelete, userID);
+    removeMatch(userToDelete, userID);
     navigation.popToTop();
   };
 

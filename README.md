@@ -220,6 +220,8 @@ event (put) | input| Output | User updates a existing event
 updateLocation (post) | input| Output | User updates users location.
 opentest (post) | input| Output | Endpoint to manually get/update helsinki open api events
 
+Props | Type | Optional | Description
+------------ | ------------- |  ------------- | -------------
 
 # Add_Event
 Function | Input | Output | Description
@@ -227,21 +229,15 @@ Function | Input | Output | Description
 sendEvent() | date(date), eventName(String), desccription(String), tags(Array) | - | POST - user created event based on user inputs.
 fetchAddress() | latitude, longitude | - | Fetches address information based on location coordinates, sets Address to be city and street for given coordinates.
 fethcCoordinates() | newAddress(String) | - | Updates marker on the map view to show newly searched location and updates Address to be latest selected location.
-showInvalid() | msg(String) | notification | User will be prompted with invalid input indicator if event validation criterias are not fullfilled.
+showInvalid() | msg(String) | - | User will be prompted with invalid input indicator if event validation criterias are not fullfilled.
 showSuccess() | - | - | Green indicator message for successfully created event.
 showFail() | - | - | Red indicator message to let user know that the event creation failed.
-
-Props | Type | Optional | Description
------------- | ------------- |  ------------- | -------------
 
 # AuthContext
 AuthContext allows access to SignIn() and SignOut() functions from Navigation.js to other components.
 
 # Carousel
 Component to display profile photos in scrollable "carousel" view
-
-Function | Input | Output | Description
------------- | ------------- |  ------------- | -------------
 
 # Chat
 Function | Input | Output | Description
@@ -261,8 +257,7 @@ callBack() | childData (Array) | - | Callback is used for updating data from Sor
 CreateSortableList() | - | SortableList-component | This function gets fresh data to Sortablelist
 
 # Globaalit
-Function | Input | Output | Description
------------- | ------------- |  ------------- | -------------
+Firebase configuration reference
 
 # Login
 Login page where you can login or go to Register to registeras a new user.
@@ -344,4 +339,11 @@ Function | Input | Output | Description
 fetchSwipeablesFromBackend() | - | - | Fetches all swipeables users and events from firebase based on users settings (gender, tags)
 updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGroups button was pressed (main or sub) and value is the index
 filterSwipes() | - | - | Filters users and events shown on SwipeCards based on selected ButtonGroups filters
+
+# Redux
+Redux handles data that should be accessable everywhere
+Reducer   |  Description
+--------  | -------------
+UserDataReducer | Includes user's id, token and coordinates
+DefaultReducer | Includes heroku url + other possible global type variables
 

@@ -3,6 +3,7 @@ import { Text, View, Image, TouchableOpacity } from "react-native";
 import SwipeCards from "react-native-swipe-cards";
 import { Icon } from "react-native-elements";
 import styles from "../styles";
+import { store } from "../redux/index";
 import { getDistance } from "geolib";
 
 class Card extends React.Component {
@@ -41,7 +42,7 @@ class Card extends React.Component {
     let distance = Math.round(
       getDistance(
         { latitude: this.props.position.geopoint._latitude, longitude: this.props.position.geopoint._longitude },
-        { latitude: global.myUserData.filters.myLocation.latitude, longitude: global.myUserData.filters.myLocation.longitude }
+        { latitude: store.getState().UserDataReducer[0].latitude, longitude: store.getState().UserDataReducer[0].longitude }
       ) / 1000
     );
     // because distance is already rounded "less than km away" is displayed starting from even 1
@@ -158,11 +159,11 @@ function PostSwipe(liked, user) {
       isEvent: false,
       swipeAs: null,
     },
-    uid: global.myUserData.uid,
-    idToken: global.myUserData.idToken,
+    uid: store.getState().UserDataReducer[0].id,
+    idToken: store.getState().UserDataReducer[0].token,
   };
 
-  fetch(global.url + "swipe", {
+  fetch(store.getState().DefaultReducer[0].url + "swipe", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

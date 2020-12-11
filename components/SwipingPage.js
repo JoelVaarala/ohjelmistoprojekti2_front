@@ -2,6 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { Icon, ButtonGroup, ThemeProvider } from 'react-native-elements';
 import SwipeCards from './SwipeCards';
+import { connect } from "react-redux";
+import { store } from "../redux/index";
 import * as Location from 'expo-location';
 import styles from '../styles';
 
@@ -19,6 +21,11 @@ export default function SwipingPage({ navigation }) {
   // buttons for selectin event types
   const subButtons = ['Open', 'Public', 'Private'];
 
+  let userID = store.getState().UserDataReducer[0].id;
+  let userToken = store.getState().UserDataReducer[0].token;
+  let user_latitude = store.getState().UserDataReducer[0].latitude;
+  let user_longitude = store.getState().UserDataReducer[0].longitude;
+
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchSwipeablesFromBackend();
@@ -34,25 +41,36 @@ export default function SwipingPage({ navigation }) {
 
   // get all swipeable events and users
   async function fetchSwipeablesFromBackend() {
-    // --- TODO: nämä reduxista 
-    let { status } = await Location.requestPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-    }
-    let location = (await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High })).coords;
-    // connects to endpoint and sends desired data as params. 
-    global.myUserData.filters.myLocation.latitude = location.latitude;       // --------- HOX HOX globals in use still
-    global.myUserData.filters.myLocation.longitude = location.longitude;
 
     let filterData = {
-      uid: global.myUserData.uid,
-      idToken: global.myUserData.idToken,
-      data: global.myUserData.filters
+      uid: userID,
+      idToken: userToken,
+      data: {
+        tags: ["perunat", "testitagi"
+        ],
+        minAge: 18,
+        maxAge: 500,
+        distance: 50000.3,
+        lookingFor: [
+          "events",
+          "users"
+        ],
+        genders: [
+          "male",
+          "female",
+          "other"
+        ],
+        eventsInXHours: 3,
+        myLocation: {
+          latitude: user_latitude,
+          longitude: user_longitude
+        }
+    
+      }
     };
-    // ---
 
     
-    fetch(global.url + 'findSwipeables', {
+    fetch(store.getState().DefaultReducer[0].url + 'findSwipeables', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -155,3 +173,4 @@ export default function SwipingPage({ navigation }) {
     </View>
   );
 }
+

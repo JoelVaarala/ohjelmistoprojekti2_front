@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
+import { store } from "../redux/index";
 import firebase from 'firebase';
 import styles from '../styles';
 
@@ -10,6 +11,8 @@ export default function Chat(props) {
   const [messages, setMessages] = useState([]);
   let profilePic = props.route.params.photo;  // ------------HOX HOX switch props... to reducer possibly
  
+  let userID = store.getState().UserDataReducer[0].id;
+  let userToken = store.getState().UserDataReducer[0].token;
 
   function MessageToFirebase(msg) {
     //https://firebase.google.com/docs/auth/admin/verify-id-tokens#web
@@ -20,11 +23,11 @@ export default function Chat(props) {
         message: msg,
         match: props.route.params.chatti 
       },
-      uid: global.myUserData.uid,
-      idToken: global.myUserData.idToken
+      uid: userID,
+      idToken: userToken
     };
     // Post message
-    fetch(global.url + 'message', {
+    fetch(store.getState().DefaultReducer[0].url + 'message', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -56,7 +59,7 @@ export default function Chat(props) {
       querySnapshot.forEach((doc) => {
         // Check if sender / receiver to know if rendered right or left
         let sender = doc.data().sender;
-        if (doc.data().sender == firebase.auth().currentUser.uid) {    // -----------HOX HOX replace firebase.auth with reducer call for user.uid
+        if (doc.data().sender == userID) {    
           sender = 'side';
         }
 

@@ -3,6 +3,7 @@ import { Alert, ScrollView, SafeAreaView, Text, View, TextInput, FlatList } from
 import { ButtonGroup, ThemeProvider, Button } from 'react-native-elements';
 import RangeSlider from 'rn-range-slider';
 import firebase from 'firebase';
+import { store } from "../redux/index";
 import styles from '../styles';
 import { AuthContext } from './AuthContext';
 import { useFocusEffect } from '@react-navigation/native'
@@ -13,6 +14,9 @@ export default function Settings() {
   const [tagList, setTagList] = useState([]);
   const { signOut } = React.useContext(AuthContext);
   const [shouldShow, setShouldShow] = useState(false);
+
+  let userID = store.getState().UserDataReducer[0].id;
+  let userToken = store.getState().UserDataReducer[0].token;
 
   // Add tags to array state
   const addTag = () => {
@@ -62,7 +66,7 @@ export default function Settings() {
     let ref = firebase
       .firestore()
       .collection('users')
-      .doc(firebase.auth().currentUser.uid)
+      .doc(userID)
       .collection('filters')
       .doc('myFilters');
     const doc = await ref.get();
@@ -113,8 +117,8 @@ export default function Settings() {
     }
 
     let body = {
-      idToken: global.myUserData.idToken,
-      uid: global.myUserData.uid,
+      idToken: userToken,
+      uid: userID,
       data: {
         minAge: lowAge,
         maxAge: highAge,
@@ -126,7 +130,7 @@ export default function Settings() {
       }
     };
 
-    fetch(global.url + 'filtersUpdate', {
+    fetch(store.getState().DefaultReducer[0].url + 'filtersUpdate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

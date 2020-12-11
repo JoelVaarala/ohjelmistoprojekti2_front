@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Alert, FlatList, Text, View, TextInput, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 import firebase from 'firebase';
+import { store } from "../redux/index";
 import SortableList2 from './SortableList';
 import styles from '../styles';
 import { useFocusEffect } from '@react-navigation/native'
@@ -16,6 +17,9 @@ export default function EditProfile() {
     bio: '',
     name: ''
   });
+
+  let userID = store.getState().UserDataReducer[0].id;
+  let userToken = store.getState().UserDataReducer[0].token;
 
   // Saving changes in images in SortableList
   const callback = (childData) => {
@@ -39,15 +43,15 @@ export default function EditProfile() {
   // Post users information
   function saveData() {
     let body = {
-      idToken: global.myUserData.idToken,
-      uid: global.myUserData.uid,
+      idToken: userToken,
+      uid: userID,
       data: {
         bio: user.bio,
         tags: tagList,
         images: pics,
       },
     };
-    fetch(global.url + 'profileUpdate', {
+    fetch(store.getState().DefaultReducer[0].url + 'profileUpdate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -61,7 +65,7 @@ export default function EditProfile() {
   }
 
   const getData = async () => {
-    const ref = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid);
+    const ref = firebase.firestore().collection('users').doc(userID);
     const doc = await ref.get();
     if (!doc.exists) {
     } else {
