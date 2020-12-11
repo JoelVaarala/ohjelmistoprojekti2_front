@@ -40,7 +40,7 @@
         <li><a href="#settings">Settings</a></li>
       </ul>
     </li>
-        <li><a href="#end-points-usage-in-backend">End points usage in Backend</a>
+        <li><a href="#api-calls">API calls</a>
       <ul>
         <li><a href="#authcontext">AuthContext</a></li>
         <li><a href="#carousel">Carousel</a></li>
