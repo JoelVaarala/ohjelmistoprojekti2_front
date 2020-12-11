@@ -243,8 +243,11 @@ Function | Input | Output | Description
 signIn() | email (String), password (String) | - | Check Navigation for more info
 
 ### Matches
+Matches page shows you your current matches and you can filter them by users, events and events that you have created. Pressing a match opens chat with the match (privae caht with users or public chat for events).
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+getMyMatches() | - | - | Fetches all users matches. Also fetches evets user owns to separate state.
+filterMatches() | - | - | Filters and shows matches based on selected filters from ButtonGroup
 
 ### MyProfile
 MyProfile shows your name, age and avatar. Here you can move to Settings or Edit profile page, upload a new picture (not currently working) or move to create a new event.
