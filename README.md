@@ -182,8 +182,6 @@ In Edit profile screen user can choose his/her own profile picture, write to the
 <h3>Settings</h3>
 In Settings screen user can choose what kind of person he/she is interested in.
 
-## End points usage in Backend
-
 ## ohjelmistoprojekti2_front
 
 ## End points in Backend
