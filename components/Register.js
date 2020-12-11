@@ -76,13 +76,10 @@ export default function Register() {
     })
       .then((response) => response.json())
       .then((res) => {
-        if (res.result === 'rekisteörinti onnistui') {
+        if (res.result === 'New user created') {
           signIn(userdata.email, userdata.password);
-        } else if (res.result === 'rekisteörinti epäonnistui:Error: The email address is improperly formatted.'){
-          Alert.alert('Email address is improperly formatted');
-        } else if (res.result === 'rekisteörinti epäonnistui:Error: The email address is already in use by another account.') {
-          Alert.alert('Email address is already in use');
         } else {
+          Alert.alert(res.result);
           console.log(res.result);
         }
       })

@@ -5,6 +5,7 @@ import { store } from "../redux/index";
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'firebase';
 import styles from '../styles';
+import { connect } from 'react-redux';
 
 export default function MyProfile({ navigation, route }) {
   const [user, setUser] = useState({
