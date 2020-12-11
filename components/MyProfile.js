@@ -4,6 +4,7 @@ import { Icon, Avatar, Button } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'firebase';
 import styles from '../styles';
+import { connect } from 'react-redux';
 
 //Käyttäjän tagit, bio ja kuvat. Nimeä ja ikää ei voi vaihtaa
 export default function MyProfile({ navigation, route }) {
