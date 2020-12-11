@@ -200,9 +200,6 @@ event (put) | input| Output | User updates a existing event
 updateLocation (post) | input| Output | User updates users location.
 opentest (post) | input| Output | Endpoint to manually get/update helsinki open api events
 
-Props | Type | Optional | Description
------------- | ------------- |  ------------- | -------------
-
 ### Add_Event
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
@@ -307,10 +304,10 @@ Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 timeUntillEvent() | - | String | Check Navigation for more info
 calculateDistance() | - | int | Calculate the time when event is starting from now
-separatedTags() | - | any | Returns tags in more displayable form for the card
-handleYup() | card(any)  | boolean | User swipes card to the right and triggers PostSwipe() 
-handleNope() | card(any) | boolean | User swipes card to the left and triggers PostSwipe() 
-PostSwipe() | liked(any), user(any) | - | Posts swiping result to backend, params swipe directions and user id
+separatedTags() | - | String | Returns tags in more displayable form for the card
+handleYup() | card(Object)  | - | User wants to attend the event and swipes the card to the right
+handleNope() | card(Object) | - | User doesn't wants to attend the event and swipes the card to the left
+PostSwipe() | liked(Object), user(Object) | - | Posts swiping result to backend, params swipe directions and user id
 
 ### SwipingPage
 Swiping page shows users and event you can match with by swiping left or right. You can filter if you want to be shown users, events or both and what types of events you want to see. Pressing the info button you will be redirected to the users or events profile.
