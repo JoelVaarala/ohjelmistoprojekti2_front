@@ -121,29 +121,17 @@ export default class extends React.Component {
   handleNope(card) {
     PostSwipe(false, card);
   }
-  handleMaybe(card) {
-    console.log(`Maybe for ${card.text}`);
-  }
-
-  onClickHandler() {
-    // if needed long press triggers this
-  }
 
   render() {
     // If you want a stack of cards instead of one-per-one view, activate stack mode
-    // stack={true}
     return (
       <SwipeCards
         cards={this.state.cards}
-        // loop={false}
-        //cardRemoved={this.cardRemoved.bind(this)}
         useNativeDriver={true}
         renderCard={(cardData) => <Card {...cardData} />}
         renderNoMoreCards={() => <NoMoreCards />}
         handleYup={this.handleYup}
         handleNope={this.handleNope}
-        handleMaybe={this.handleMaybe}
-        onClickHandler={this.onClickHandler}
         hasMaybeAction
       />
     );
