@@ -184,9 +184,9 @@ In Settings screen user can choose what kind of person he/she is interested in.
 
 ## End points usage in Backend
 
-# ohjelmistoprojekti2_front
+## ohjelmistoprojekti2_front
 
-# End points in Backend
+## End points in Backend
 Endpoint | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 message (post) | input| Output | User sends a message to another user or event
@@ -205,7 +205,7 @@ opentest (post) | input| Output | Endpoint to manually get/update helsinki open 
 Props | Type | Optional | Description
 ------------ | ------------- |  ------------- | -------------
 
-# Add_Event
+### Add_Event
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 sendEvent() | date(date), eventName(String), desccription(String), tags(Array) | - | POST - user created event based on user inputs.
@@ -215,13 +215,13 @@ showInvalid() | msg(String) | - | User will be prompted with invalid input indic
 showSuccess() | - | - | Green indicator message for successfully created event.
 showFail() | - | - | Red indicator message to let user know that the event creation failed.
 
-# AuthContext
+### AuthContext
 AuthContext allows access to SignIn() and SignOut() functions from Navigation.js to other components.
 
-# Carousel
+### Carousel
 Component to display profile photos in scrollable "carousel" view
 
-# Chat
+### Chat
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 MessageToFirebase() | msg(Obj) | - | POST - latest message to firebase.
@@ -229,7 +229,7 @@ getConversationsRealTime() | - | messages(Array) | Fetches and creates array inc
 onSend() | messages(Array) | messages(Array) | Appends messages array by latest messages and updates GiftedChat to render newest message.
 
 
-# EditProfile
+### EditProfile
 Edit profile page shows users information: name, age, bio, tags and pictures. You can change bio and tags and the order of the images. First image is showing as your avatar to other users.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
@@ -241,23 +241,23 @@ CreateSortableList() | - | SortableList-component | This function gets fresh dat
 # Globaalit
 Firebase configuration reference
 
-# Login
+### Login
 Login page where you can login or go to Register to registeras a new user.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 signIn() | email (String), password (String) | - | Check Navigation for more info
 
-# Matches
+### Matches
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
-# MyProfile
+### MyProfile
 MyProfile shows your name, age and avatar. Here you can move to Settings or Edit profile page, upload a new picture (not currently working) or move to create a new event.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 getData() | - | - | Fetches user's information: age, name and avatar picture from firebase. Fires every time screen becomes focused.
 
-# Navigation
+### Navigation
 Handles authentication and different navigation views based on login status.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
@@ -268,7 +268,7 @@ login() | email (String), password (String) | String | Tries to login to firebas
 UpdateLocation() | - | String | Asks premission to users location and send location object to UpdateFirebase(). Returns confirmation or denial string depending if access was granted
 UpdateFirebase() | location (object) | - | Send users location to firebase. Location object has latitude and longitude attributes
 
-# Profile
+### Profile
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 getProfileInformation() |   |   |   Fetches current profiles informations: Profile information, event information and event particiapiants
@@ -280,7 +280,7 @@ Accept() | accepted (boolean), uid (String) | | TBD: Function should swipe yes/n
 Kick() | uid (String) | | TBD: Function unmatches target user with currently selected event.
 removeMatch() | target(String) , myUID(String) |  | Removes match (person-person match)
 
-# Register
+### Register
 Registering page for new users.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
@@ -291,7 +291,7 @@ changePasswordVisibility() | - | - | Shows or hides password fields input
 registerUser() | - | - | Tries to register new user. If registration is successful, signs new user in
 validation() | - | boolean | Validates if password, age and username is within given limits. Returns true if everyting is correct
 
-# Settings
+### Settings
 Settings page shows your filters for swipeable users and events in Swiping page. You can filter age, distance, gender and time and choose tags as filters. 
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
@@ -299,11 +299,11 @@ getData() | - | - | Fetches user's settings from firebase.
 saveData() | - | - | Posts user's settings. Fires every time screen goes out of focus.
 updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGroups button was pressed (main or sub) and value is the index
 
-# SortableList
+### SortableList
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 
-# SwipeCards
+### SwipeCards
 Swipe cards is a card component which contains information about other users and events
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
@@ -314,7 +314,7 @@ handleYup() | card(any)  | boolean | User swipes card to the right and triggers 
 handleNope() | card(any) | boolean | User swipes card to the left and triggers PostSwipe() 
 PostSwipe() | liked(any), user(any) | - | Posts swiping result to backend, params swipe directions and user id
 
-# SwipingPage
+### SwipingPage
 Swiping page shows users and event you can match with by swiping left or right. You can filter if you want to be shown users, events or both and what types of events you want to see. Pressing the info button you will be redirected to the users or events profile.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
@@ -322,7 +322,7 @@ fetchSwipeablesFromBackend() | - | - | Fetches all swipeables users and events f
 updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGroups button was pressed (main or sub) and value is the index
 filterSwipes() | - | - | Filters users and events shown on SwipeCards based on selected ButtonGroups filters
 
-# Redux
+### Redux
 Redux handles data that should be accessable everywhere
 Reducer   |  Description
 --------  | -------------
