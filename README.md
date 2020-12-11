@@ -41,7 +41,7 @@
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#ci-pipeline">Project CI Pipeline</a></li>
+    <li><a href="#Software-architecture">Project CI Pipeline</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contributors">Contributors</a></li>
@@ -169,10 +169,10 @@ In Settings screen user can choose what kind of person he/she is interested in.
 
 See the [open issues](https://github.com/jaanisavolainenhh/ohjelmistoprojekti2_front/issues) for a list of proposed features (and known issues).
 
-<!-- CI-Pipeline -->
-## CI Pipeline
+<!-- Software architecture -->
+## Software architecture
 
-MeetHub project CI pipeline
+MeetHub projects' software architecture
 
 <img src="images/CI-Pipeline.png" alt="Logo" width="1000" height="500">
 
