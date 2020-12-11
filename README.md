@@ -151,10 +151,10 @@ User can go to chat with other users that are going to the same events.
 In Chat screen user can write messages with other users that are going to the same events.
 
 <h3>Swipes</h3>
-In Swipes screen there is event cards that user can swipe. If user wants to go to the event, then he/she has to swipe right and if user is not interested then he/she has to swipe left. <br>
+In Swipes screen there is event cards that user can swipe. If user wants to go to the event, then he/she has to swipe right and if user is not interested then he/she has to swipe left. <br><br>
 
-User can also choose what kind of events he/she wants to go.<br>
-User can choose to go Open, Public or Private events.<br>
+User can also choose what kind of events he/she wants to go.<br><br>
+User can choose to go Open, Public or Private events.<br><br>
 Public events are events that anyone can join, and private events are events that user himself/herself has done and can choose who can join to their private events.
 
 <h3>Edit profile</h3>
