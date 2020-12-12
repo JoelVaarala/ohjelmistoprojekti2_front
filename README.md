@@ -246,8 +246,19 @@ signIn() | email (String), password (String) | - | Check Navigation for more inf
 Matches page shows you your current matches and you can filter them by users, events and events that you have created. Pressing a match opens chat with the match (privae caht with users or public chat for events).
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
-getMyMatches() | - | - | Fetches all users matches. Also fetches evets user owns to separate state.
+getMyMatches() | - | - | Fetches all users matches. Also fetches evets user owns to separate state. Creates new match objects from data
 filterMatches() | - | - | Filters and shows matches based on selected filters from ButtonGroup
+```
+// match object ex.
+{
+    "matchid": "qREmoPw72NRHB2JA6uBCKJyuWhY2",
+    "bio": "Cool guy",
+    "name": "John Doe",
+    "matchType": "user",
+    "avatar_url"; "https://randomuser.me/api/portraits/med/women/1.jpg"
+    }
+}
+```
 
 ### MyProfile
 MyProfile shows your name, age and avatar. Here you can move to Settings or Edit profile page, upload a new picture (not currently working) or move to create a new event.
@@ -319,6 +330,7 @@ Function | Input | Output | Description
 fetchSwipeablesFromBackend() | - | - | Fetches all swipeables users and events from firebase based on users settings (gender, tags)
 updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGroups button was pressed (main or sub) and value is the index
 filterSwipes() | - | - | Filters users and events shown on SwipeCards based on selected ButtonGroups filters
+
 
 ### Redux
 Redux handles data that should be accessable everywhere

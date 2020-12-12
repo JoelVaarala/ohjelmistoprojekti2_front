@@ -102,15 +102,16 @@ function Navigations() {
             return 'Wrong email or password';
         }
 
-        let LocUpdate = await UpdateLocation();
-        if (LocUpdate === 'No acces to location') {
-            return 'No acces to location';
-        }
         //store.dispatch(userData(firebase.auth().currentUser.uid))
         store.dispatch(addUid(userPromise.user.uid))
         
         let idToken = await firebase.auth().currentUser.getIdToken(true);
-        store.dispatch(addToken(idToken))
+        store.dispatch(addToken(idToken));
+
+        let LocUpdate = await UpdateLocation();
+        if (LocUpdate === 'No acces to location') {
+            return 'No acces to location';
+        }
      
         return 'Success';
     };
