@@ -19,10 +19,9 @@ import { View } from "react-native";
 import firebase from "firebase";
 import { Icon } from "react-native-elements";
 import { connect } from "react-redux";
-import { store, addUid, addToken, addLatitude, addLongitude } from "../redux/index";
+import { store, addUid, addToken, addLatitude, addLongitude, addName } from "../redux/index";
 import FlashMessage from "react-native-flash-message";
 import * as Location from "expo-location";
-import "./Globaalit";
 import { AuthContext } from "./AuthContext";
 
 const Tab = createBottomTabNavigator();
@@ -106,9 +105,9 @@ function Navigations() {
         if (LocUpdate === 'No acces to location') {
             return 'No acces to location';
         }
-        //store.dispatch(userData(firebase.auth().currentUser.uid))
+
         store.dispatch(addUid(userPromise.user.uid))
-        
+        store.dispatch(addName(userPromise.user.displayName))
         let idToken = await firebase.auth().currentUser.getIdToken(true);
         store.dispatch(addToken(idToken))
      
@@ -265,6 +264,6 @@ const mapStateToProps = (state) => ({
     UserDataReducer: state.UserDataReducer,
 });
 // Component connects to reducer and receives params state, action and main function
-const Navigation = connect(mapStateToProps, { addUid, addToken, addLatitude, addLongitude })(Navigations);
+const Navigation = connect(mapStateToProps, { addUid, addName, addToken, addLatitude, addLongitude })(Navigations);
 // Export default const above instead of "main function"
 export default Navigation;

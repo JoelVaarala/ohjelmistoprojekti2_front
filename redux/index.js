@@ -18,6 +18,13 @@ export const addToken = (value) => {
     }
 }
 
+export const addName = (value) => {
+    return {
+        type: "addName",
+        item: value
+    }
+}
+
 export const addLatitude = (value) => {
     return {
         type: "addLat",
@@ -39,6 +46,7 @@ export const addLongitude = (value) => {
 const UserDataReducer = (state, action) => {
     if(state === undefined){
         state = [{
+            name: "",
             id: "",
             token: "",
             latitude: "",
@@ -52,6 +60,9 @@ const UserDataReducer = (state, action) => {
             //return state.concat(state[0].id = action.item);
         case "addToken":
             state[0].token = action.item
+            return state;
+        case "addName":
+            state[0].name = action.item
             return state;
         case "addLat":
             state[0].latitude = action.item

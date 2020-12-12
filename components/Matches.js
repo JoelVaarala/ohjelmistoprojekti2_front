@@ -108,7 +108,7 @@ export default function Matches({ navigation, route }) {
               // väärä nimi matchille (otti taulusta sattumanvaraisen nimen joka oli eri kuin käyttäjän uid)
               // fixed --> nyt vertaa element != nykyisen käyttäjän nimi
               asd.displayNames.forEach((element) => {
-                if (element != firebase.auth().currentUser.displayName) chatname = element;
+                if (element != store.getState().UserDataReducer[0].name) chatname = element;
               });
             }
             //temparray.push(doc.data())
