@@ -225,12 +225,12 @@ onSend() | messages(Array) | messages(Array) | Appends messages array by latest 
 
 
 ### EditProfile
-Edit profile page shows users information: name, age, bio, tags and pictures. You can change bio and tags and the order of the images. First image is showing as your avatar to other users.
+Edit profile page shows your information: name, age, bio, tags and pictures. You can change bio and tags and the order of the images. First image is showing as your avatar to other users.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 getData() | - | - | Fetches user's settings from firebase
 saveData() | - | - | Posts user's settings. Fires every time screen goes out of focus.
-callBack() | childData (Array) | - | Callback is used for updating data from Sortablelist. When the order of images in Sortablelist change, callBack sends this information to the Edit profile page
+callBack() | childData (Array) | - | Callback is used for updating data from child component (Sortablelist). When the order of images in Sortablelist change, callBack sends this information to the Edit profile page
 CreateSortableList() | - | SortableList-component | This function gets fresh data to Sortablelist
 
 # Globaalit
@@ -250,7 +250,7 @@ getMyMatches() | - | - | Fetches all users matches. Also fetches evets user owns
 filterMatches() | - | - | Filters and shows matches based on selected filters from ButtonGroup
 
 ### MyProfile
-MyProfile shows your name, age and avatar. Here you can move to Settings or Edit profile page, upload a new picture (not currently working) or move to create a new event.
+MyProfile shows your name, age and avatar. Here you can move to Settings or Edit profile page, upload a new picture (not currently working) or go to create a new event.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 getData() | - | - | Fetches user's information: age, name and avatar picture from firebase. Fires every time screen becomes focused.
@@ -298,8 +298,11 @@ saveData() | - | - | Posts user's settings. Fires every time screen goes out of 
 updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGroups button was pressed (main or sub) and value is the index
 
 ### SortableList
+Sortable list is a component which allows you to change the order of your images.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+sendData() | - | - | Fires saveData-function with order and data states and then sends this information to parent component (Edit profile)
+saveData() | order (Array), images (Array) | pictures (Array) | Puts the images in the right order
 
 ### SwipeCards
 Swipe cards is a card component which contains information about other users and events
