@@ -3,7 +3,7 @@ import React from "react";
 import firebase from "firebase";
 import { Provider } from "react-redux";
 import { store } from "./redux/index";
-import "./components/Globaalit";
+import "./components/Config";
 import Navigation from "./components/Navigation";
 
 // connect to firebase

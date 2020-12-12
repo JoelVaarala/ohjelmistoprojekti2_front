@@ -64,9 +64,10 @@ export default function Matches({ navigation }) {
             if (matchData.matchtype == 'event') {
               chatname = matchData.displayNames[0];
             } else {
+
               // compares which of the names in match belongs to user and which belongs to the match we want to show
               matchData.displayNames.forEach((element) => {
-                if (element != firebase.auth().currentUser.displayName) chatname = element;
+                if (element != store.getState().UserDataReducer[0].name) chatname = element;
               });
             }
             temporaryArray.push({
