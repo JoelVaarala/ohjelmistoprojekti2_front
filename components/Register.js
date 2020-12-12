@@ -3,6 +3,7 @@ import { Alert, View, ScrollView } from "react-native";
 import { Input, Button, Text, ButtonGroup } from "react-native-elements";
 import DatePicker from "react-native-date-picker";
 import { Entypo } from "@expo/vector-icons";
+import { store } from "../redux/index";
 import styles from "../styles";
 import {AuthContext} from './AuthContext';
 

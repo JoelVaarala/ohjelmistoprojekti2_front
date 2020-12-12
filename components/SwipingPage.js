@@ -2,9 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Icon, ButtonGroup, ThemeProvider } from 'react-native-elements';
 import SwipeCards from './SwipeCards';
-import { connect } from "react-redux";
 import { store } from "../redux/index";
-import * as Location from 'expo-location';
 import styles from '../styles';
 import firebase from 'firebase';
 
@@ -51,6 +49,7 @@ export default function SwipingPage({ navigation }) {
       .collection('filters')
       .doc('myFilters');
       const doc = await ref.get();
+      console.log(doc.data());
       if(!doc.exists){
       }else {
         filters = doc.data()

@@ -29,7 +29,7 @@ const Stack = createStackNavigator();
 const ListStack = createStackNavigator();
 
 // with this you can get rid of 'Setting a timer...' warnings, no solution found yet for this warning https://github.com/facebook/react-native/issues/12981
-YellowBox.ignoreWarnings(['Setting a timer']);
+YellowBox.ignoreWarnings(['']);
 
 function Navigations() {
 
