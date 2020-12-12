@@ -19,7 +19,7 @@ export default function MyProfile({ navigation, route }) {
   // Fetching data when screen becomes focused
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-     getData();
+      getData();
     });
     return unsubscribe;
   }, [navigation])
