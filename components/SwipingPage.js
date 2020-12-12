@@ -65,7 +65,6 @@ export default function SwipingPage({ navigation }) {
           latitude: user_latitude,
           longitude: user_longitude
         }
-    
       }
     };
 

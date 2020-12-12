@@ -233,7 +233,7 @@ saveData() | - | - | Posts user's settings. Fires every time screen goes out of 
 callBack() | childData (Array) | - | Callback is used for updating data from child component (Sortablelist). When the order of images in Sortablelist change, callBack sends this information to the Edit profile page
 CreateSortableList() | - | SortableList-component | This function gets fresh data to Sortablelist
 
-# Globaalit
+## Config
 Firebase configuration reference
 
 ### Login
