@@ -5,7 +5,6 @@ import { store } from "../redux/index";
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'firebase';
 import styles from '../styles';
-import { connect } from 'react-redux';
 
 export default function MyProfile({ navigation, route }) {
   const [user, setUser] = useState({
@@ -20,7 +19,7 @@ export default function MyProfile({ navigation, route }) {
   // Fetching data when screen becomes focused
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-     getData();
+      getData();
     });
     return unsubscribe;
   }, [navigation])

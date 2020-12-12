@@ -32,7 +32,7 @@ class Card extends React.Component {
         time = Math.round(comparisonTime / 60 / 24).toString() + " days";
       } else {
         // "Default incase event lacks valid starting time"
-        time = "unavaible";
+        time = "unavailable";
       }
     }
     return time;

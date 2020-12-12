@@ -40,7 +40,7 @@
         <li><a href="#settings">Settings</a></li>
       </ul>
     </li>
-        <li><a href="#end-points-usage-in-backend">End points usage in Backend</a>
+        <li><a href="#api-calls">API calls</a>
       <ul>
         <li><a href="#authcontext">AuthContext</a></li>
         <li><a href="#carousel">Carousel</a></li>
@@ -182,7 +182,7 @@ In Edit profile screen user can choose his/her own profile picture, write to the
 <h3>Settings</h3>
 In Settings screen user can choose what kind of person he/she is interested in.
 
-## ohjelmistoprojekti2_front
+## API calls
 
 ## End points in Backend
 Endpoint | Input | Output | Description
@@ -199,9 +199,6 @@ event (post) | input| Output | User create a new event
 event (put) | input| Output | User updates a existing event
 updateLocation (post) | input| Output | User updates users location.
 opentest (post) | input| Output | Endpoint to manually get/update helsinki open api events
-
-Props | Type | Optional | Description
------------- | ------------- |  ------------- | -------------
 
 ### Add_Event
 Function | Input | Output | Description
@@ -228,12 +225,12 @@ onSend() | messages(Array) | messages(Array) | Appends messages array by latest 
 
 
 ### EditProfile
-Edit profile page shows users information: name, age, bio, tags and pictures. You can change bio and tags and the order of the images. First image is showing as your avatar to other users.
+Edit profile page shows your information: name, age, bio, tags and pictures. You can change bio and tags and the order of the images. First image is showing as your avatar to other users.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 getData() | - | - | Fetches user's settings from firebase
 saveData() | - | - | Posts user's settings. Fires every time screen goes out of focus.
-callBack() | childData (Array) | - | Callback is used for updating data from Sortablelist. When the order of images in Sortablelist change, callBack sends this information to the Edit profile page
+callBack() | childData (Array) | - | Callback is used for updating data from child component (Sortablelist). When the order of images in Sortablelist change, callBack sends this information to the Edit profile page
 CreateSortableList() | - | SortableList-component | This function gets fresh data to Sortablelist
 
 ## Config
@@ -246,11 +243,14 @@ Function | Input | Output | Description
 signIn() | email (String), password (String) | - | Check Navigation for more info
 
 ### Matches
+Matches page shows you your current matches and you can filter them by users, events and events that you have created. Pressing a match opens chat with the match (privae caht with users or public chat for events).
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+getMyMatches() | - | - | Fetches all users matches. Also fetches evets user owns to separate state.
+filterMatches() | - | - | Filters and shows matches based on selected filters from ButtonGroup
 
 ### MyProfile
-MyProfile shows your name, age and avatar. Here you can move to Settings or Edit profile page, upload a new picture (not currently working) or move to create a new event.
+MyProfile shows your name, age and avatar. Here you can move to Settings or Edit profile page, upload a new picture (not currently working) or go to create a new event.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 getData() | - | - | Fetches user's information: age, name and avatar picture from firebase. Fires every time screen becomes focused.
@@ -298,8 +298,11 @@ saveData() | - | - | Posts user's settings. Fires every time screen goes out of 
 updateIndex() | name (String), value (int) | - | Updates selected ButtonGroups indexes to state. name refers to which ButtonGroups button was pressed (main or sub) and value is the index
 
 ### SortableList
+Sortable list is a component which allows you to change the order of your images.
 Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
+sendData() | - | - | Fires saveData-function with order and data states and then sends this information to parent component (Edit profile)
+saveData() | order (Array), images (Array) | pictures (Array) | Puts the images in the right order
 
 ### SwipeCards
 Swipe cards is a card component which contains information about other users and events
@@ -307,10 +310,10 @@ Function | Input | Output | Description
 ------------ | ------------- |  ------------- | -------------
 timeUntillEvent() | - | String | Check Navigation for more info
 calculateDistance() | - | int | Calculate the time when event is starting from now
-separatedTags() | - | any | Returns tags in more displayable form for the card
-handleYup() | card(any)  | boolean | User swipes card to the right and triggers PostSwipe() 
-handleNope() | card(any) | boolean | User swipes card to the left and triggers PostSwipe() 
-PostSwipe() | liked(any), user(any) | - | Posts swiping result to backend, params swipe directions and user id
+separatedTags() | - | String | Returns tags in more displayable form for the card
+handleYup() | card(Object)  | - | User wants to attend the event and swipes the card to the right
+handleNope() | card(Object) | - | User doesn't wants to attend the event and swipes the card to the left
+PostSwipe() | liked(Object), user(Object) | - | Posts swiping result to backend, params swipe directions and user id
 
 ### SwipingPage
 Swiping page shows users and event you can match with by swiping left or right. You can filter if you want to be shown users, events or both and what types of events you want to see. Pressing the info button you will be redirected to the users or events profile.
