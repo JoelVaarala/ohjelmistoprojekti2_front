@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { store } from "../redux/index";
 import * as Location from 'expo-location';
 import styles from '../styles';
+import firebase from 'firebase';
 
 export default function SwipingPage({ navigation }) {
 
@@ -42,25 +43,30 @@ export default function SwipingPage({ navigation }) {
   // get all swipeable events and users
   async function fetchSwipeablesFromBackend() {
 
+    let filters
+    const ref = firebase
+      .firestore()
+      .collection('users')
+      .doc(userID)
+      .collection('filters')
+      .doc('myFilters');
+      const doc = await ref.get();
+      if(!doc.exists){
+      }else {
+        filters = doc.data()
+      }
+
     let filterData = {
       uid: userID,
       idToken: userToken,
       data: {
-        tags: ["perunat", "testitagi"
-        ],
-        minAge: 18,
-        maxAge: 500,
-        distance: 50000.3,
-        lookingFor: [
-          "events",
-          "users"
-        ],
-        genders: [
-          "male",
-          "female",
-          "other"
-        ],
-        eventsInXHours: 3,
+        tags: filters.tags,
+        minAge: filters.minAge,
+        maxAge: filters.maxAge,
+        distance: filters.distance,
+        lookingFor: filters.lookingFor,
+        genders: filters.genders,
+        eventsInXHours: filters.eventsInXHours,
         myLocation: {
           latitude: user_latitude,
           longitude: user_longitude
@@ -68,7 +74,7 @@ export default function SwipingPage({ navigation }) {
       }
     };
 
-    
+
     fetch(store.getState().DefaultReducer[0].url + 'findSwipeables', {
       method: 'POST',
       headers: {
